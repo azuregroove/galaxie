@@ -21,6 +21,20 @@ Aktualizovat na konci každého sezení.
     (jediná chyba v testu = Google Fonts blokované v cloudovém sandboxu)
   - README.md (instalace, spuštění), ZDROJE.md (licence, citace, konstanty)
 
+- 2026-09-29 (noc, PC): **plná data exoplanet ověřena v aplikaci**
+  - `py pipeline\exoplanety.py` proběhl: 6 372 planet, 4 779 systémů (4 751 se vzdáleností), max 8 500 pc, JSON 747 kB
+  - build OK; v prohlížeči bez JS chyb, hledání „trappist-1 e“ → karta TRAPPIST-1 (40,5 ly / 12,4 pc, 7 planet)
+  - výkon: renderer.render ≈ 0,6 ms/snímek (GTX 1050 Ti), 191 draw calls, 65 k bodů vč. pozadí
+  - lokální git repo založeno, commit Etapy 1, remote origin = github.com/azuregroove/galaxie
+- 2026-09-29 (noc): **kontrola souřadnic černých děr proti SIMBADu** – `pipeline/overit_simbad.py`
+  (CDS Sesame přes zrcadlo CfA; server CDS má neúplný řetězec certifikátů pro Python na Windows)
+  - položky „wiki“ sedí do ~1″ (GS 2000+25 6,5″, Swift J1727.8-1613 41″ – pro mapu zanedbatelné)
+  - **HD 130298 ověřena: odchylka 0,7″** (SIMBAD 14 49 33,77 −56 25 38,5)
+  - polohy z katalogových označení se liší o 0,02–1,03° (nejvíc GRO J1719-24 = V2293 Oph 1,03°,
+    GS 1354-64 0,49°, GRS 1009-45 0,48°, GX 339-4 0,33°, XTE J1550-564 0,23°, MAXI J1305-704 0,17°)
+  - SIMBAD nenajde OGLE-2011-BLG-0462 a hvězdy NGC 3201 (#21859, #12560 – obě mají souřadnice středu kupy)
+  - Gaia BH1–3 SIMBAD zná jen pod čísly Gaia DR3 průvodců (v mapování skriptu)
+
 ## Rozhodnutí
 - Web veřejně na GitHub Pages (účet azuregroove), později PWA a mobilní aplikace přes Capacitor
 - Stavba v Claude Code, plánování a rešerše v projektu v aplikaci Claude
@@ -37,25 +51,27 @@ Aktualizovat na konci každého sezení.
   10 buildů/h (neplatí pro vlastní Actions workflow)
 
 ## Známé nedostatky
-- **V public/data je jen testovací výřez exoplanet (67 systémů)** – plná data stáhne `py pipeline\exoplanety.py`
-  na PC (z cloudu je NASA archiv blokovaný); aplikace ukazuje štítek „výřez dat“
-- HD 130298: souřadnice zpaměti, neověřené; 11 černých děr má polohu z katalogového označení
+- Z cloudu jsou NASA archiv i CDS/SIMBAD blokované – stahování a kontroly dat jen na PC
+- 11 černých děr má polohu z katalogového označení (odchylka až 1°) – **zatím neopraveno** v cerne_diry.py,
+  správné polohy vypíše `py pipeline\overit_simbad.py` (běží jen na PC, cloud k CDS nemá přístup)
+- HD 130298 má v datech ještě possrc „memory“ – přepsat na ověřenou (SIMBAD); paralaxa SIMBAD 0,392 mas
+  (≈ 8 300 ly) vs. použitých 7 900 ly – o vzdálenosti rozhodnout
+- NGC 3201 #21859/#12560: poloha = střed kupy, v kartě to tak označit
 - XTE J1859+226 a H 1705-25 bez vzdálenosti (jen směr)
 - Spirální ramena schematická; rozměry disku (87 400 ly, tloušťky) převzaté z prototypu, neověřené
 - Slunce leží v rovině (skutečných ~20 pc nad rovinou zanedbáno)
 - Popisky se překrývají (V404 Cyg / Cyg X-1, Gaia BH1/BH3) – chybí kolize popisků
 - Fonty z Google Fonts – pro PWA/offline je bude třeba přibalit
 - JS bundle 585 kB (gzip 148 kB), většina je three.js
-- CLAUDE.md odkazuje na prototyp v `C:\Klouí\Claude outputs\`, ten je teď v `prototyp/`
 - data-pipeline/ je nahrazená složkou pipeline/, ponechaná kvůli historii
 
 ## Rozdělané
 - nic
 
 ## Další krok
-- Ráďa: nainstalovat Node.js + Python (README), `npm install`, `py pipeline\exoplanety.py`, `npm run dev`
-  a zkontrolovat plná data (výkon s ~4 800 body, popisky)
-- Ověřit souřadnice z prototypu přes SIMBAD (lokálně), hlavně HD 130298
-- Etapa 2: výkon (LOD, dlaždice), kolize popisků, filtry (vzdálenost, metoda, rok objevu), mobilní ovládání,
+- Na PC: přepsat polohy „z označení“ v pipeline/cerne_diry.py podle overit_simbad.py (possrc → „simbad“),
+  doplnit text do SRC v src/layers/blackHoles.ts, znovu `py pipeline\cerne_diry.py`
+- Etapa 2 (lze v cloudu, jen kód): návrh architektury nejdřív předložit Ráďovi; pak: výkon (LOD, dlaždice), kolize popisků, filtry (vzdálenost, metoda, rok objevu), mobilní ovládání,
   sdílení pohledu přes #kotvu
-- Git: repo zatím nezaložené – založit a první commit až s Ráďovým souhlasem
+- Git: 2026-09-29 Ráďa odsouhlasil commit + push a přesun sezení do cloudu (cloudové kredity);
+  další push/PR/Actions dál jen s jeho souhlasem
