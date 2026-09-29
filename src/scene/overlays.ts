@@ -85,7 +85,7 @@ export class Overlays {
       labels.add(`${fmtLy(r)} · ${fmtPcFromLy(r)}`, SUN.clone().add(new Vector3(0, 0, r)), "ring", () => {
         const vd = stage.viewDistance;
         return this.show.rings && r > vd * 0.08 && r < vd * 1.6;
-      });
+      }, 100);
     });
     [0, 90, 180, 270].forEach((l) => {
       const d = Frame.dir(l, 0);
@@ -138,7 +138,7 @@ export class Overlays {
     const sun = glowSprite(stage, css("--sun"), 1);
     sun.position.copy(SUN);
     scene.add(sun);
-    labels.add("Slunce", SUN, "sun");
+    labels.add("Slunce", SUN, "sun", () => true, 900);
     stage.onFrame(() => sun.scale.setScalar(stage.camera.position.distanceTo(SUN) * 0.02));
   }
 

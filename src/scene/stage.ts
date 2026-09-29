@@ -1,4 +1,4 @@
-import { CanvasTexture, Color, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
+import { CanvasTexture, Color, PerspectiveCamera, Plane, Raycaster, Scene, Vector2, Vector3, WebGLRenderer } from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 type FrameHook = (dt: number) => void;
@@ -19,7 +19,8 @@ const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 
 export class Stage {
   readonly renderer: WebGLRenderer;
   readonly scene = new Scene();
-  readonly camera = new PerspectiveCamera(50, 1, 0.1, 1e6);
+  static readonly FOV = 50;
+  readonly camera = new PerspectiveCamera(Stage.FOV, 1, 0.1, 1e6);
   readonly controls: OrbitControls;
   readonly glow: CanvasTexture;
   width = 1;
@@ -29,9 +30,12 @@ export class Stage {
   private flight: Flight | null = null;
   private keys: Record<string, boolean> = {};
   private last = performance.now();
+  private shift = 0;
+  private shiftGoal = 0;
 
   constructor(container: HTMLElement, background: string) {
-    this.renderer = new WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+    // Na hustých displejích je MSAA skoro neviditelné, ale na slabých telefonech stojí nejvíc výkonu.
+    this.renderer = new WebGLRenderer({ antialias: devicePixelRatio < 2, powerPreference: "high-performance" });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     container.appendChild(this.renderer.domElement);
     this.scene.background = new Color(background);
@@ -61,6 +65,11 @@ export class Stage {
     this.hooks.push(h);
   }
 
+  /** Posune střed pohledu o `px` nahoru, aby cíl nebyl schovaný pod panelem (mobilní karta). */
+  setCenterShift(px: number): void {
+    this.shiftGoal = px;
+  }
+
   get viewDistance(): number {
     return this.camera.position.distanceTo(this.controls.target);
   }
@@ -84,6 +93,16 @@ export class Stage {
       toT: target.clone(),
       toP: target.clone().addScaledVector(d, dist),
     };
+  }
+
+  /** Přiblíží pohled k bodu obrazovky (px): nový cíl leží v rovině kolmé k pohledu skrz dosavadní cíl. */
+  zoomAt(px: number, py: number, factor = 0.4): void {
+    const ndc = new Vector2((px / this.width) * 2 - 1, -(py / this.height) * 2 + 1);
+    const ray = new Raycaster();
+    ray.setFromCamera(ndc, this.camera);
+    const dir = this.camera.getWorldDirection(new Vector3());
+    const hit = ray.ray.intersectPlane(new Plane().setFromNormalAndCoplanarPoint(dir, this.controls.target), new Vector3());
+    this.flyTo(hit ?? this.controls.target, Math.max(this.controls.minDistance, this.viewDistance * factor));
   }
 
   jumpTo(target: Vector3, offset: Vector3): void {
@@ -110,12 +129,31 @@ export class Stage {
       const vd = this.viewDistance;
       this.camera.near = Math.max(0.01, vd * 0.002);
       this.camera.far = Math.max(4e5, vd * 50);
+      this.applyShift(dt);
       this.camera.updateProjectionMatrix();
       for (const h of this.hooks) h(dt);
       this.renderer.render(this.scene, this.camera);
       requestAnimationFrame(loop);
     };
     requestAnimationFrame(loop);
+  }
+
+  private applyShift(dt: number): void {
+    this.shift += (this.shiftGoal - this.shift) * Math.min(1, dt * 10);
+    if (Math.abs(this.shift - this.shiftGoal) < 0.5) this.shift = this.shiftGoal;
+    const d = Math.round(this.shift);
+    const { camera, width: w, height: h } = this;
+    if (!d) {
+      if (camera.view?.enabled) camera.clearViewOffset();
+      camera.fov = Stage.FOV;
+      camera.aspect = w / h;
+      return;
+    }
+    // Výřez z vyššího virtuálního snímku; fov a aspect jsou pro celý snímek, aby měřítko zůstalo stejné.
+    const full = h + 2 * Math.abs(d);
+    camera.fov = (2 * Math.atan(Math.tan((Stage.FOV * Math.PI) / 360) * (full / h)) * 180) / Math.PI;
+    camera.aspect = w / full;
+    camera.setViewOffset(w, full, 0, d > 0 ? 2 * d : 0, w, h);
   }
 
   private keyMove(dt: number): void {

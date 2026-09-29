@@ -14,18 +14,30 @@
     <div id="stage"></div>
     <div id="labels"></div>
     <div id="status" role="status">Načítám data…</div>
+    <div id="toast" role="status" hidden></div>
+    <div class="hud" id="touchHint" hidden>
+      <p><b>1 prst</b> otáčení · <b>2 prsty</b> zoom a posun<br><b>klep</b> na objekt = přelet · <b>dvojklep</b> = přiblížit<br>kartu zavřeš tahem dolů</p>
+      <button class="btn">Rozumím</button>
+    </div>
 
     <header class="hud">
       <h1>Mapa Mléčné dráhy</h1>
-      <div class="sub" id="sub">–</div>
+      <div class="subRow">
+        <div class="sub" id="sub">–</div>
+        <button class="btn small" id="legendToggle" aria-expanded="false" aria-controls="legend">Vrstvy</button>
+      </div>
       <div class="legend" id="legend"></div>
     </header>
 
     <aside class="hud" id="listPanel" aria-label="Seznam objektů">
       <div class="listHead">
         <input id="search" type="search" placeholder="Hledat hvězdu, planetu, černou díru…" autocomplete="off" aria-label="Hledat" />
-        <div class="count" id="listCount"></div>
+        <div class="listMeta">
+          <div class="count" id="listCount"></div>
+          <button class="btn small" id="filtersToggle" aria-expanded="false" aria-controls="filters">Filtry</button>
+        </div>
       </div>
+      <div id="filters" hidden></div>
       <div id="list"></div>
     </aside>
 
@@ -48,10 +60,11 @@
         <button class="btn" data-tog="rings" aria-pressed="true">Kruhy</button>
         <button class="btn" data-tog="grid" aria-pressed="true">Mřížka</button>
         <button class="btn" data-tog="dims" aria-pressed="true">Rozměry</button>
+        <button class="btn" id="share">Sdílet</button>
         <button class="btn" id="about">Zdroje</button>
       </div>
       </div>
-      <span class="help">Tah = otáčení · kolečko = zoom · pravé tl. = posun · WASD/QE = let · klik = přelet</span>
+      <span class="help">Tah = otáčení · kolečko = zoom · pravé tl. = posun · WASD/QE = let · klik = přelet · dvojklik = přiblížit</span>
       <div id="scale"><div id="scaleTxt">–</div><div id="scaleLine"></div><div id="readout"></div></div>
     </nav>
 

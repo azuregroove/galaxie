@@ -10,11 +10,12 @@ import {
   type Texture,
 } from "three";
 import type { Frame } from "../core/coords";
+import { PointOctree } from "../core/spatial";
 import type { MapObject } from "../core/types";
 import { LY_PER_PC, escapeHtml, fmtLy, fmtNum, fmtPcFromLy } from "../core/units";
 import type { Stage } from "../scene/stage";
 import { positionRows } from "./common";
-import type { Layer, LayerFilter } from "./layer";
+import { NO_FILTER, passDist, type Facet, type FilterState, type Layer, type LayerFilter } from "./layer";
 
 type N = number | null;
 export interface ExoData {
@@ -32,10 +33,12 @@ export interface ExoData {
 
 const MAJOR = new Set(["TRAPPIST-1", "51 Peg", "Proxima Cen", "TOI-700", "Kepler-186", "Kepler-452",
   "HD 209458", "eps Eri", "tau Cet", "Kepler-90", "55 Cnc", "GJ 1214", "WASP-12", "KELT-9"]);
-const LABEL_BUDGET = 24;
+const LABEL_BUDGET = 40;
 
 interface Sys extends MapObject {
   planets: number[];
+  /** index bodu v geometrii, −1 = bez vzdálenosti */
+  point: number;
 }
 
 export class ExoplanetLayer implements Layer {
@@ -44,7 +47,12 @@ export class ExoplanetLayer implements Layer {
   readonly group = new Group();
   readonly objects: Sys[] = [];
   readonly filters: LayerFilter[] = [{ key: "all", name: "Exoplanety", color: "--exo", on: true }];
-  private nearby = new Set<Sys>();
+  readonly facets: Facet[];
+  private filter = NO_FILTER;
+  private vis: BufferAttribute;
+  private nearby: Sys[] = [];
+  private majors: Sys[] = [];
+  private tree: PointOctree<Sys>;
   private frameNo = 0;
   private tmp = new Vector3();
 
@@ -60,6 +68,7 @@ export class ExoplanetLayer implements Layer {
     for (let i = 0; i < S.jmeno.length; i++) {
       const d = S.d[i];
       const pos = d != null ? frame.toScene(S.l[i], S.b[i], d) : null;
+      const point = pos ? pts.length / 3 : -1;
       if (pos) pts.push(pos.x, pos.y, pos.z);
       this.objects.push({
         layer: this.id, index: i, name: S.jmeno[i], pos,
@@ -69,11 +78,32 @@ export class ExoplanetLayer implements Layer {
         aliases: planetsOf[i].map((p) => data.planety.jmeno[p]),
         major: MAJOR.has(S.jmeno[i]),
         planets: planetsOf[i],
+        point,
       });
     }
 
+    this.tree = new PointOctree(this.objects.filter((o) => o.pos), (o) => o.pos!);
+    this.majors = this.objects.filter((o) => o.major);
+
     const g = new BufferGeometry();
     g.setAttribute("position", new BufferAttribute(new Float32Array(pts), 3));
+    this.vis = new BufferAttribute(new Float32Array(pts.length / 3).fill(1), 1);
+    g.setAttribute("vis", this.vis);
+
+    const P = data.planety;
+    const count = (arr: N[], n: number) => {
+      const c = new Array(n).fill(0);
+      arr.forEach((x) => x != null && c[x]++);
+      return c;
+    };
+    const mc = count(P.metoda, data.ciselniky.metoda_cz.length);
+    const years = P.rok.filter((x): x is number => x != null);
+    this.facets = [
+      { kind: "checks", id: "metoda", name: "Metoda objevu",
+        options: data.ciselniky.metoda_cz.map((label, value) => ({ value, label, count: mc[value] }))
+          .filter((o) => o.count > 0).sort((a, b) => b.count - a.count) },
+      { kind: "range", id: "rok", name: "Rok objevu", min: Math.min(...years), max: Math.max(...years) },
+    ];
     const m = new ShaderMaterial({
       uniforms: {
         map: { value: glow },
@@ -81,9 +111,10 @@ export class ExoplanetLayer implements Layer {
         pr: { value: Math.min(devicePixelRatio, 2) },
       },
       vertexShader: /* glsl */ `
-        uniform float pr;
+        uniform float pr; attribute float vis;
         void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.);
-          gl_PointSize = clamp(2000. / -mv.z, 4., 12.) * pr; gl_Position = projectionMatrix * mv; }`,
+          gl_PointSize = vis > .5 ? clamp(2000. / -mv.z, 4., 12.) * pr : 0.;
+          gl_Position = vis > .5 ? projectionMatrix * mv : vec4(2., 2., 2., 1.); }`,
       fragmentShader: /* glsl */ `
         uniform sampler2D map; uniform vec3 color;
         void main(){
@@ -103,32 +134,64 @@ export class ExoplanetLayer implements Layer {
   setFilter(key: string, on: boolean): void {
     const f = this.filters.find((x) => x.key === key);
     if (f) f.on = on;
+    this.refresh();
+  }
+
+  applyFilter(f: FilterState): void {
+    this.filter = f;
+    this.refresh();
+  }
+
+  /** Systém je vidět, když projde vzdáleností a aspoň jedna jeho planeta ostatními filtry. */
+  private planetPasses(p: number): boolean {
+    const f = this.filter;
+    const met = f.checks.metoda;
+    const yr = f.ranges.rok;
+    const P = this.data.planety;
+    if (met && (P.metoda[p] == null || !met.includes(P.metoda[p]!))) return false;
+    if (yr && (P.rok[p] == null || P.rok[p]! < yr[0] || P.rok[p]! > yr[1])) return false;
+    return true;
+  }
+
+  private get planetFilterOn(): boolean {
+    return !!(this.filter.checks.metoda || this.filter.ranges.rok);
+  }
+
+  private refresh(): void {
+    const on = this.filters[0].on;
+    const pf = this.planetFilterOn;
+    const arr = this.vis.array as Float32Array;
+    for (const o of this.objects) {
+      const v = on && passDist(o, this.filter) && (!pf || o.planets.some((p) => this.planetPasses(p)));
+      o.hidden = !v;
+      if (o.point >= 0) arr[o.point] = v ? 1 : 0;
+    }
+    this.vis.needsUpdate = true;
     this.group.visible = on;
-    this.objects.forEach((o) => (o.hidden = !on));
   }
 
   update(stage: Stage): void {
     // Výběr nejbližších systémů pro popisky stačí přepočítat jednou za pár snímků.
     if (this.frameNo++ % 8) return;
-    this.nearby.clear();
+    this.nearby = [];
     const vd = stage.viewDistance;
     if (vd > 4000 || !this.group.visible) return;
     const cam = stage.camera.position;
     const cand: [number, Sys][] = [];
-    for (const o of this.objects) {
-      if (!o.pos) continue;
-      const d = cam.distanceTo(o.pos);
-      if (d > vd * 1.3) continue;
-      this.tmp.copy(o.pos).project(stage.camera);
+    for (const o of this.tree.queryRadius(cam, vd * 1.3)) {
+      if (o.hidden) continue;
+      this.tmp.copy(o.pos!).project(stage.camera);
       if (this.tmp.z > 1 || Math.abs(this.tmp.x) > 1 || Math.abs(this.tmp.y) > 1) continue;
-      cand.push([d, o]);
+      cand.push([cam.distanceTo(o.pos!), o]);
     }
     cand.sort((a, b) => a[0] - b[0]);
-    for (const [, o] of cand.slice(0, LABEL_BUDGET)) this.nearby.add(o);
+    this.nearby = cand.slice(0, LABEL_BUDGET).map(([, o]) => o);
   }
 
-  labelVisible(o: MapObject, stage: Stage): boolean {
-    return (!!o.major && stage.viewDistance < 3000) || this.nearby.has(o as Sys);
+  labelCandidates(stage: Stage): MapObject[] {
+    if (!this.group.visible) return [];
+    const majors = stage.viewDistance < 3000 ? this.majors.filter((o) => !o.hidden) : [];
+    return [...majors, ...this.nearby];
   }
 
   flyDistance(o: MapObject): number {
@@ -155,7 +218,8 @@ export class ExoplanetLayer implements Layer {
     const rows = o.planets.map((p) => {
       const met = P.metoda[p] != null ? C.metoda_cz[P.metoda[p]!] : "–";
       const faci = P.zarizeni[p] != null ? C.zarizeni[P.zarizeni[p]!] : "";
-      return `<tr${P.sporna[p] ? ' class="disputed" title="Existence planety je sporná (pl_controv_flag)"' : ""}>
+      const cls = [P.sporna[p] ? "disputed" : "", this.planetFilterOn && !this.planetPasses(p) ? "filtered" : ""].filter(Boolean).join(" ");
+      return `<tr${cls ? ` class="${cls}"` : ""}${P.sporna[p] ? ' title="Existence planety je sporná (pl_controv_flag)"' : ""}>
         <th scope="row">${escapeHtml(P.jmeno[p])}${P.sporna[p] ? " ⚠" : ""}</th>
         <td>${v(P.r[p], 2)}</td><td>${v(P.m[p], 1)}</td><td>${v(P.p[p], 2)}</td><td>${v(P.a[p], 3)}</td>
         <td>${v(P.teq[p], 0)}</td><td title="${escapeHtml(faci)}">${P.rok[p] ?? "–"}<br><span class="dim">${met}</span></td></tr>`;

@@ -4,8 +4,9 @@ import type { Manifest, MapObject } from "../core/types";
 import { escapeHtml, fmt, fmtLy, fmtPcFromLy } from "../core/units";
 import type { Layer } from "../layers/layer";
 import type { OverlayKey, Overlays } from "../scene/overlays";
-import type { Stage } from "../scene/stage";
-import type { Labels } from "./labels";
+import { Stage } from "../scene/stage";
+import { FilterPanel } from "./filters";
+import type { DynLabel, Labels } from "./labels";
 
 const LIST_LIMIT = 150;
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -20,6 +21,8 @@ export class Hud {
   private all: MapObject[] = [];
   private index = new Map<MapObject, string>();
   private marker: Sprite;
+  readonly filters: FilterPanel;
+  private toastTimer = 0;
 
   private stage: Stage;
   private frame: Frame;
@@ -36,19 +39,23 @@ export class Hud {
     for (const L of layers) for (const o of L.objects) {
       this.all.push(o);
       this.index.set(o, norm([o.name, ...(o.aliases ?? [])].join(" ")));
-      labels.add(o.pos ? o.name : `${o.name} (jen směr)`, o.anchor, "obj",
-        () => this.showLabels && !o.hidden && (o === this.selected || L.labelVisible(o, stage)));
     }
     this.all.sort((a, b) => (a.distLy ?? 1e12) - (b.distLy ?? 1e12));
+    labels.setProvider(() => this.labelList());
 
     this.marker = new Sprite(new SpriteMaterial({ map: stage.glow, color: 0xffffff, transparent: true, depthWrite: false, blending: AdditiveBlending, opacity: 0.9 }));
     this.marker.visible = false;
     stage.scene.add(this.marker);
 
+    this.filters = new FilterPanel(layers, (f) => {
+      layers.forEach((L) => L.applyFilter(f));
+      this.afterVisibilityChange();
+    });
     this.buildLegend();
     this.buildBar();
     this.buildSearch();
     this.buildPicking();
+    this.buildMobile();
     this.renderList();
     stage.onFrame(() => {
       layers.forEach((L) => L.update?.(stage));
@@ -59,6 +66,22 @@ export class Hud {
       }
     });
     this.updateSubtitle();
+  }
+
+  // ---------- popisky ----------
+  private labelList(): DynLabel[] {
+    if (!this.showLabels) return [];
+    const out: DynLabel[] = [];
+    const text = (o: MapObject) => (o.pos ? o.name : `${o.name} (jen směr)`);
+    if (this.selected) out.push({ key: this.selected, text: text(this.selected), pos: this.selected.anchor, priority: 1000 });
+    for (const L of this.layers) {
+      L.labelCandidates(this.stage).forEach((o, i) => {
+        if (o === this.selected) return;
+        // významné objekty přednostně, jinak pořadí, které vrstva vrátila
+        out.push({ key: o, text: text(o), pos: o.anchor, priority: (o.major ? 600 : 300) - i * 0.01 });
+      });
+    }
+    return out;
   }
 
   // ---------- legenda ----------
@@ -72,18 +95,23 @@ export class Hud {
       b.onclick = () => {
         L.setFilter(f.key, !f.on);
         b.setAttribute("aria-pressed", String(f.on));
-        if (this.selected?.hidden) this.closeCard();
-        this.renderList();
-        this.updateSubtitle();
+        this.afterVisibilityChange();
       };
       legend.appendChild(b);
     }
   }
 
+  private afterVisibilityChange(): void {
+    if (this.selected?.hidden) this.closeCard();
+    else if (this.selected) this.select(this.selected, false);
+    this.renderList();
+    this.updateSubtitle();
+  }
+
   private updateSubtitle(): void {
     const parts = this.layers.map((L) => {
       const n = L.objects.filter((o) => !o.hidden).length;
-      return `${L.name}: ${fmt(n)}`;
+      return this.filters.active ? `${L.name}: ${fmt(n)} z ${fmt(L.objects.length)}` : `${L.name}: ${fmt(n)}`;
     });
     const vyrez = this.manifest.katalogy.some((k) => k.vyrez);
     $("sub").innerHTML = escapeHtml(parts.join(" · ")) + (vyrez ? ' <span class="warn" title="Data jsou jen testovací výřez katalogu. Spusť pipeline/exoplanety.py.">výřez dat</span>' : "");
@@ -149,12 +177,34 @@ export class Hud {
     card.querySelector<HTMLButtonElement>(".close")!.onclick = () => this.closeCard();
     this.marker.position.copy(o.anchor);
     this.marker.visible = true;
+    this.fitCenter();
     this.renderList();
     if (fly) this.stage.flyTo(o.anchor, L.flyDistance(o));
   }
 
+  get selection(): MapObject | null {
+    return this.selected;
+  }
+
+  deselect(): void {
+    if (this.selected) this.closeCard();
+  }
+
+  /** Na úzkém displeji zakrývá karta spodek obrazovky; střed pohledu posuň do volného místa nad ní. */
+  private fitCenter(): void {
+    const card = $("card");
+    if (card.hidden || !matchMedia("(max-width:760px)").matches) {
+      this.stage.setCenterShift(0);
+      return;
+    }
+    const top = document.querySelector("header.hud")!.getBoundingClientRect().bottom;
+    const free = (top + card.getBoundingClientRect().top) / 2;
+    this.stage.setCenterShift(Math.max(0, this.stage.height / 2 - free));
+  }
+
   private closeCard(): void {
     $("card").hidden = true;
+    this.stage.setCenterShift(0);
     this.selected = null;
     this.marker.visible = false;
     this.renderList();
@@ -176,6 +226,7 @@ export class Hud {
       (${escapeHtml(m.r0_zdroj)}). Spirální ramena na pozadí jsou zatím jen schematická.</p>${cats}`;
     card.hidden = false;
     card.querySelector<HTMLButtonElement>(".close")!.onclick = () => this.closeCard();
+    this.fitCenter();
   }
 
   // ---------- spodní lišta ----------
@@ -195,11 +246,40 @@ export class Hud {
       b.setAttribute("aria-pressed", String(on));
     }));
     $("about").onclick = () => this.showAbout();
+    $("share").onclick = () => this.share();
+  }
+
+  private async share(): Promise<void> {
+    const url = location.href;
+    const title = this.selected ? `${this.selected.name} · Mapa Mléčné dráhy` : "Mapa Mléčné dráhy";
+    // systémový dialog sdílení dává smysl hlavně na telefonu; na desktopu stačí schránka
+    if (navigator.share && matchMedia("(pointer: coarse)").matches) {
+      try {
+        await navigator.share({ title, url });
+        return;
+      } catch (e) {
+        if ((e as Error).name === "AbortError") return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      this.toast("Odkaz na tento pohled je ve schránce");
+    } catch {
+      prompt("Zkopíruj odkaz:", url);
+    }
+  }
+
+  private toast(text: string): void {
+    const t = $("toast");
+    t.textContent = text;
+    t.hidden = false;
+    clearTimeout(this.toastTimer);
+    this.toastTimer = setTimeout(() => (t.hidden = true), 2500);
   }
 
   private updateScale(): void {
-    const { camera, height } = this.stage;
-    const worldH = 2 * this.stage.viewDistance * Math.tan((camera.fov * Math.PI) / 360);
+    const { height } = this.stage;
+    const worldH = 2 * this.stage.viewDistance * Math.tan((Stage.FOV * Math.PI) / 360);
     const lyPx = worldH / height;
     const raw = lyPx * 130;
     const p = Math.pow(10, Math.floor(Math.log10(raw)));
@@ -209,10 +289,57 @@ export class Hud {
     $("readout").textContent = `střed pohledu: ${fmtLy(this.stage.controls.target.distanceTo(this.frame.sun))} od Slunce`;
   }
 
+  // ---------- mobil ----------
+  private buildMobile(): void {
+    const card = $("card");
+    let y0: number | null = null;
+    card.addEventListener("touchstart", (e) => {
+      // tah dolů jen když je karta odrolovaná nahoru, jinak by kolidoval se scrollem obsahu
+      y0 = card.scrollTop <= 0 ? e.touches[0].clientY : null;
+    }, { passive: true });
+    card.addEventListener("touchmove", (e) => {
+      if (y0 == null) return;
+      const dy = Math.max(0, e.touches[0].clientY - y0);
+      card.style.transition = "none";
+      card.style.transform = dy ? `translateY(${dy}px)` : "";
+    }, { passive: true });
+    card.addEventListener("touchend", (e) => {
+      if (y0 == null) return;
+      const dy = e.changedTouches[0].clientY - y0;
+      card.style.transition = "";
+      card.style.transform = "";
+      y0 = null;
+      if (dy > 80) this.closeCard();
+    });
+
+    addEventListener("resize", () => this.fitCenter());
+
+    const legend = $("legend");
+    const lt = $("legendToggle");
+    if (matchMedia("(max-width:760px)").matches) legend.classList.add("closed");
+    lt.onclick = () => lt.setAttribute("aria-expanded", String(!legend.classList.toggle("closed")));
+
+    const hint = $("touchHint");
+    let seen = false;
+    try {
+      seen = localStorage.getItem("galaxie.touchHint") === "1";
+    } catch { /* bez úložiště nápovědu prostě ukážeme */ }
+    if (matchMedia("(pointer: coarse)").matches && !seen) {
+      hint.hidden = false;
+      hint.querySelector("button")!.onclick = () => {
+        hint.hidden = true;
+        try {
+          localStorage.setItem("galaxie.touchHint", "1");
+        } catch { /* nevadí */ }
+      };
+    }
+  }
+
   // ---------- klik do scény ----------
   private buildPicking(): void {
     const el = this.stage.renderer.domElement;
     let downAt: [number, number] | null = null;
+    let lastTap: [number, number, number] | null = null;
     const tmp = new Vector3();
     el.addEventListener("pointerdown", (e) => (downAt = [e.clientX, e.clientY]));
     el.addEventListener("pointerup", (e) => {
@@ -229,7 +356,17 @@ export class Hud {
         const d = Math.hypot(((tmp.x + 1) / 2) * rect.width - px, ((1 - tmp.y) / 2) * rect.height - py);
         if (d < bd) { bd = d; best = o; }
       }
-      if (best) this.select(best, true);
+      if (best) {
+        this.select(best, true);
+        lastTap = null;
+        return;
+      }
+      // dvojklep do prázdna přiblíží; myš má na to kolečko, ale dvojklik nevadí ani jí
+      const now = performance.now();
+      if (lastTap && now - lastTap[0] < 350 && Math.hypot(px - lastTap[1], py - lastTap[2]) < 40) {
+        this.stage.zoomAt(px, py);
+        lastTap = null;
+      } else lastTap = [now, px, py];
     });
   }
 }

@@ -5,7 +5,7 @@ import { LY_PER_PC, escapeHtml, fmtPcFromLy } from "../core/units";
 import { circle, glowSprite, seg } from "../scene/overlays";
 import type { Stage } from "../scene/stage";
 import { positionRows } from "./common";
-import type { Layer, LayerFilter } from "./layer";
+import { NO_FILTER, passDist, type Facet, type FilterState, type Layer, type LayerFilter } from "./layer";
 
 export interface BlackHoleData {
   objekty: {
@@ -45,6 +45,8 @@ export class BlackHoleLayer implements Layer {
   readonly group = new Group();
   readonly objects: BH[] = [];
   readonly filters: LayerFilter[] = Object.entries(TYPES).map(([key, t]) => ({ key, name: t.name, color: t.c, on: true }));
+  readonly facets: Facet[] = [];
+  private filter = NO_FILTER;
 
   constructor(data: BlackHoleData, frame: Frame, stage: Stage, css: (n: string) => string) {
     const o = data.objekty;
@@ -82,16 +84,28 @@ export class BlackHoleLayer implements Layer {
   setFilter(key: string, on: boolean): void {
     const f = this.filters.find((x) => x.key === key);
     if (f) f.on = on;
+    this.refresh();
+  }
+
+  applyFilter(f: FilterState): void {
+    this.filter = f;
+    this.refresh();
+  }
+
+  private refresh(): void {
     for (const o of this.objects) {
-      const v = this.filters.find((x) => x.key === o.t)!.on;
+      const v = this.filters.find((x) => x.key === o.t)!.on && passDist(o, this.filter);
       o.hidden = !v;
       o.parts.forEach((p) => (p.visible = v));
     }
   }
 
-  labelVisible(o: MapObject, stage: Stage): boolean {
+  labelCandidates(stage: Stage): MapObject[] {
     const vd = stage.viewDistance;
-    return !!o.major || (vd < 30000 && stage.camera.position.distanceTo(o.anchor) < vd * 1.1);
+    const cam = stage.camera.position;
+    const near = (o: BH) => vd < 30000 && cam.distanceTo(o.anchor) < vd * 1.1;
+    return this.objects.filter((o) => !o.hidden && (o.major || near(o)))
+      .sort((a, b) => Number(!!b.major) - Number(!!a.major) || cam.distanceTo(a.anchor) - cam.distanceTo(b.anchor));
   }
 
   flyDistance(o: MapObject): number {

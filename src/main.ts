@@ -8,6 +8,7 @@ import type { Layer } from "./layers/layer";
 import { buildBackdrop } from "./scene/backdrop";
 import { Overlays } from "./scene/overlays";
 import { Stage } from "./scene/stage";
+import { Anchor } from "./ui/anchor";
 import { Hud } from "./ui/hud";
 import { Labels } from "./ui/labels";
 
@@ -43,9 +44,11 @@ async function main() {
 
     const hud = new Hud(stage, frame, layers, overlays, labels, manifest);
     stage.jumpTo(frame.sun.clone().add(new Vector3(9000, 0, 0)), new Vector3(-23000, 52000, 42000));
+    const anchor = new Anchor(stage, hud, layers);
+    anchor.apply(location.hash);
     stage.start();
     status.remove();
-    (window as unknown as { galaxie: unknown }).galaxie = { stage, hud, layers, frame };
+    (window as unknown as { galaxie: unknown }).galaxie = { stage, hud, layers, frame, anchor };
   } catch (err) {
     console.error(err);
     status.textContent = `Nepodařilo se načíst data: ${(err as Error).message}`;

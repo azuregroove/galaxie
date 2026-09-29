@@ -35,6 +35,23 @@ Aktualizovat na konci každého sezení.
   - SIMBAD nenajde OGLE-2011-BLG-0462 a hvězdy NGC 3201 (#21859, #12560 – obě mají souřadnice středu kupy)
   - Gaia BH1–3 SIMBAD zná jen pod čísly Gaia DR3 průvodců (v mapování skriptu)
 
+- 2026-09-29 (cloud): **Etapa 2 – výkon, popisky, filtry, #kotva, mobil** (build OK, testy Playwright desktop 1400×860 + mobil 390×844 s dotykem)
+  - `core/spatial.ts`: statický octree nad objekty; exoplanety z něj berou kandidáty na popisky místo průchodu všemi
+  - `ui/labels.ts` přepsán: pool max. 60 DOM popisků pro objekty (dřív ~4 800 divů) + statické popisky;
+    rozmisťování podle priority (vybraný > Slunce > významné > anotace > blízké > kruhy), 4 pozice u tečky,
+    vyhýbá se panelům HUD a okrajům; ověřeno 0 překryvů a 0 duplicit ve všech pohledech (vč. V404 Cyg / Cyg X-1)
+  - rozhraní vrstvy: `labelVisible` → `labelCandidates`, nové `facets` + `applyFilter`
+  - `ui/filters.ts`: panel Filtry v seznamu – vzdálenost (log posuvník 1–100 000 ly), metoda objevu, rok objevu;
+    systém se ukáže, když **tatáž planeta** splní metodu i rok; v kartě se nevyhovující planety ztlumí;
+    viditelnost bodů přes atribut `vis` v shaderu (Context7: `needsUpdate`)
+  - ověřené počty proti výpočtu v Pythonu: přímé zobrazení 87 systémů, rok 2020–22 1 000, tranzit+2020–22 714, 10–100 ly 320
+  - `ui/anchor.ts`: #kotva `#o=vrstva:jméno&c=kamera,cíl&d=…&rok=…&metoda=…` (replaceState 2×/s, hashchange);
+    nesmyslné hodnoty se ignorují; tlačítko Sdílet (mobil: systémové sdílení, desktop: schránka + toast)
+  - mobil: legenda sbalená pod „Vrstvy“ (hlavička 70 px), dotykové plochy ≥ 40 px, dvojklep do prázdna = přiblížit,
+    kartu zavře tah dolů, jednorázová nápověda gest (localStorage), střed pohledu se posune nad kartu
+    (`setViewOffset` s přepočtem fov/aspect, měřítko beze změny), MSAA jen při DPR < 2
+  - JS bundle 601 kB (gzip 154 kB)
+
 ## Rozhodnutí
 - Web veřejně na GitHub Pages (účet azuregroove), později PWA a mobilní aplikace přes Capacitor
 - Stavba v Claude Code, plánování a rešerše v projektu v aplikaci Claude
@@ -43,6 +60,8 @@ Aktualizovat na konci každého sezení.
 - 2026-09-29: **exoplanety jako bod = planetární systém** (planety v kartě, hledání najde i planetu)
 - 2026-09-29: struktura repa – Vite v kořeni, `src/`, `public/data/`, `pipeline/`, `prototyp/`
 - 2026-09-29: data v etapě 1 jako sloupcový JSON + manifest; binární dlaždice/octree až v etapě 2
+- 2026-09-29: **binární dlaždice/octree dat odloženy do Etapy 5** (Gaia vzorek); teď jen prostorový index v paměti
+- 2026-09-29: filtr metoda/rok: systém se zobrazí, když vyhoví aspoň jedna planeta
 - 2026-09-29: TypeScript ~6.0 podle šablony create-vite (TS 7 je venku, ale šablona ho zatím nepoužívá)
 
 ## Ověřená čísla (29. 9. 2026)
@@ -60,7 +79,9 @@ Aktualizovat na konci každého sezení.
 - XTE J1859+226 a H 1705-25 bez vzdálenosti (jen směr)
 - Spirální ramena schematická; rozměry disku (87 400 ly, tloušťky) převzaté z prototypu, neověřené
 - Slunce leží v rovině (skutečných ~20 pc nad rovinou zanedbáno)
-- Popisky se překrývají (V404 Cyg / Cyg X-1, Gaia BH1/BH3) – chybí kolize popisků
+- Výkon Etapy 2 v cloudu měřit nejde (WebGL běží softwarově na CPU) – ověřit na PC a na skutečném telefonu
+- Mobilní ovládání testované jen emulací dotyku v Playwrightu, ne na fyzickém telefonu
+- Posuvníky filtrů jsou dva samostatné (od/do), ne jeden se dvěma jezdci
 - Fonty z Google Fonts – pro PWA/offline je bude třeba přibalit
 - JS bundle 585 kB (gzip 148 kB), většina je three.js
 - data-pipeline/ je nahrazená složkou pipeline/, ponechaná kvůli historii
@@ -69,9 +90,9 @@ Aktualizovat na konci každého sezení.
 - nic
 
 ## Další krok
+- Ráďa: vyzkoušet Etapu 2 na PC a telefonu (`npm run dev -- --host`), změřit výkon; commit/push jen s jeho souhlasem
 - Na PC: přepsat polohy „z označení“ v pipeline/cerne_diry.py podle overit_simbad.py (possrc → „simbad“),
   doplnit text do SRC v src/layers/blackHoles.ts, znovu `py pipeline\cerne_diry.py`
-- Etapa 2 (lze v cloudu, jen kód): návrh architektury nejdřív předložit Ráďovi; pak: výkon (LOD, dlaždice), kolize popisků, filtry (vzdálenost, metoda, rok objevu), mobilní ovládání,
-  sdílení pohledu přes #kotvu
+- Pak Etapa 3 (hvězdokupy, mlhoviny, pulsary): nejdřív ověřit zdroje, licence a velikosti katalogů, stahování ohlásit
 - Git: 2026-09-29 Ráďa odsouhlasil commit + push a přesun sezení do cloudu (cloudové kredity);
   další push/PR/Actions dál jen s jeho souhlasem
