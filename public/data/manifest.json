@@ -28,6 +28,45 @@
       "systemu_se_vzdalenosti": 4751,
       "max_d_pc": 8500.0,
       "stazeno": "2026-09-29T21:08:38Z"
+    },
+    {
+      "nazev": "Hvězdokupy",
+      "zdroj": "Hunt & Reffert 2023, A&A 673, A114 (CDS J/A+A/673/A114); Baumgardt & Vasiliev 2021, MNRAS 505, 5957",
+      "url": "https://cdsarc.cds.unistra.fr/viz-bin/cat/J/A+A/673/A114",
+      "licence": "Katalog CDS/VizieR – volně s citací (podmínky CDS ověřit); Baumgardt: veřejně zveřejněná data bez výslovné licence, citovat publikace",
+      "citace": "Hunt E.L., Reffert S. 2023, A&A 673, A114; Baumgardt H., Vasiliev E. 2021, MNRAS 505, 5957",
+      "poznamka": "Kulové kupy z Hunt & Reffert vynechány (pokrývá je Baumgardt). Hunt & Reffert obsahuje i nespolehlivé kandidáty – viz filtr kvality.",
+      "id": "hvezdokupy",
+      "soubor": "hvezdokupy.json",
+      "objektu": 7211,
+      "se_vzdalenosti": 7211,
+      "stazeno": "2026-09-29T22:28:35Z"
+    },
+    {
+      "nazev": "Mlhoviny a mezihvězdná mračna",
+      "zdroj": "Anderson+ 2014 (WISE H II), Sharpless 1959, Lynds 1962 a 1965, Zucker+ 2020, González-Santamaría+ 2021, Green 2025 – vše přes CDS/VizieR",
+      "url": "https://vizier.cds.unistra.fr/",
+      "licence": "Katalogy CDS/VizieR – volně s citací (podmínky CDS ověřit)",
+      "citace": "Anderson L.D. et al. 2014, ApJS 212, 1; Sharpless S. 1959, ApJS 4, 257; Lynds B.T. 1962, ApJS 7, 1; Lynds B.T. 1965, ApJS 12, 163; Zucker C. et al. 2020, A&A 633, A51; González-Santamaría I. et al. 2021, A&A 656, A51; Green D.A. 2025 (CDS VII/297)",
+      "poznamka": "Vzdálenosti oblastí H II jsou většinou kinematické (nejisté). Světlé, temné mlhoviny, pozůstatky supernov a většina Sharplessových oblastí vzdálenost nemají – jen v seznamu.",
+      "id": "mlhoviny",
+      "soubor": "mlhoviny.json",
+      "objektu": 7358,
+      "se_vzdalenosti": 1869,
+      "stazeno": "2026-09-29T22:31:42Z"
+    },
+    {
+      "nazev": "Neutronové hvězdy (pulsary, magnetary)",
+      "zdroj": "ATNF Pulsar Catalogue, verze 2016-May (kopie v CDS B/psr); McGill Online Magnetar Catalog",
+      "url": "https://www.atnf.csiro.au/research/pulsar/psrcat/",
+      "licence": "ATNF: volně s citací Manchester et al. 2005; McGill: volně s citací Olausen & Kaspi 2014 a odkazem na web",
+      "citace": "Manchester R.N. et al. 2005, AJ 129, 1993; Olausen S.A., Kaspi V.M. 2014, ApJS 212, 6",
+      "poznamka": "Pulsary jsou ze staré verze katalogu (2016), aktuální ATNF nebyl dostupný – spustit na PC. Vzdálenosti pulsarů jsou většinou z disperzní míry a mohou mít velkou chybu. Magnetary v Magellanových mračnech leží mimo Galaxii.",
+      "id": "neutronove-hvezdy",
+      "soubor": "neutronove-hvezdy.json",
+      "objektu": 2567,
+      "se_vzdalenosti": 2506,
+      "stazeno": "2026-09-29T22:36:36Z"
     }
   ]
 }

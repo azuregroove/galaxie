@@ -37,4 +37,6 @@ export interface MapObject {
   aliases?: string[];
   major?: boolean;
   hidden?: boolean;
+  /** Bez vzdálenosti: jen v seznamu a hledání, na mapě se ukáže směr až po výběru. */
+  listOnly?: boolean;
 }

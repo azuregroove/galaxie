@@ -3,6 +3,7 @@ import { Vector3 } from "three";
 import { Frame } from "./core/coords";
 import type { Manifest } from "./core/types";
 import { BlackHoleLayer, type BlackHoleData } from "./layers/blackHoles";
+import { CatalogLayer, type CatalogData } from "./layers/catalog";
 import { ExoplanetLayer, type ExoData } from "./layers/exoplanets";
 import type { Layer } from "./layers/layer";
 import { buildBackdrop } from "./scene/backdrop";
@@ -26,9 +27,12 @@ async function main() {
   try {
     const manifest = await getJson<Manifest>("manifest.json");
     const file = (id: string) => manifest.katalogy.find((k) => k.id === id)?.soubor;
-    const [bh, exo] = await Promise.all([
+    // katalogy etapy 3 mají společný formát (pipeline/katalog.py); pořadí určuje pořadí v legendě
+    const generic = ["hvezdokupy", "mlhoviny", "neutronove-hvezdy"].filter(file);
+    const [bh, exo, ...cats] = await Promise.all([
       file("cerne-diry") ? getJson<BlackHoleData>(file("cerne-diry")!) : null,
       file("exoplanety") ? getJson<ExoData>(file("exoplanety")!) : null,
+      ...generic.map((id) => getJson<CatalogData>(file(id)!)),
     ]);
 
     const frame = new Frame(manifest.r0_pc);
@@ -40,6 +44,7 @@ async function main() {
     const layers: Layer[] = [];
     if (exo) layers.push(new ExoplanetLayer(exo, frame, stage.glow, css));
     if (bh) layers.push(new BlackHoleLayer(bh, frame, stage, css));
+    cats.forEach((c, i) => layers.push(new CatalogLayer(c as CatalogData, manifest.katalogy.find((k) => k.id === generic[i])!, frame, stage.glow, css)));
     layers.forEach((L) => stage.scene.add(L.group));
 
     const hud = new Hud(stage, frame, layers, overlays, labels, manifest);

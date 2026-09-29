@@ -1,6 +1,6 @@
 # Mapa Mléčné dráhy („Galaxie“)
 
-Interaktivní 3D mapa naší Galaxie: exoplanety, černé díry a později hvězdokupy, mlhoviny, pulsary a hvězdy.
+Interaktivní 3D mapa naší Galaxie: exoplanety, černé díry, hvězdokupy, mlhoviny, pulsary a magnetary; později hvězdy z Gaia.
 Vite + TypeScript + Three.js, statický web (GitHub Pages), později PWA a Capacitor.
 
 ## Struktura
@@ -10,7 +10,7 @@ index.html, package.json, vite.config.ts, tsconfig.json
 src/
   core/      souřadnice (Frame: l, b, d -> scéna v ly), jednotky a formátování, typy
   scene/     Stage (renderer, kamera, přelety, WASD), backdrop (schematická Galaxie), overlays (kruhy, ekliptika, mřížka, rozměry)
-  layers/    katalogové vrstvy se společným rozhraním Layer (exoplanety, černé díry)
+  layers/    katalogové vrstvy se společným rozhraním Layer (exoplanety, černé díry, obecná CatalogLayer pro katalogy etapy 3)
   ui/        HUD (legenda, seznam + hledání, karta, lišta, měřítko, výběr kliknutím), HTML popisky
 public/data/ manifest.json + JSON katalogů (generuje pipeline)
 pipeline/    Python skripty, které data stahují a převádějí
@@ -31,14 +31,18 @@ data-pipeline/  skript prototypu (nahrazený pipeline/cerne_diry.py, ponechán k
 
 ## Data
 
-V repu je zatím jen **testovací výřez** exoplanet (82 planet v 67 systémech, stažený 29. 9. 2026 přímo z archivu),
-aplikace ho označuje štítkem „výřez dat“. Plná data (~6 400 planet, ~4 800 systémů, pár MB, pod minutu):
+V repu jsou vygenerovaná data všech katalogů. Obnova (každý skript pod minutu, dohromady ~15 MB stahování):
 
 ```powershell
 cd C:\Klouí\galaxie\pipeline
-py exoplanety.py        # stáhne PSCompPars z NASA Exoplanet Archive -> public/data/exoplanety.json
-py cerne_diry.py        # přepočítá černé díry (offline, stačí po úpravě seznamu)
+py exoplanety.py          # NASA Exoplanet Archive (PSCompPars) -> public/data/exoplanety.json
+py cerne_diry.py          # černé díry z ručního seznamu (offline)
+py hvezdokupy.py          # Hunt & Reffert 2023 (CDS) + Baumgardt & Vasiliev 2021 -> hvezdokupy.json
+py mlhoviny.py            # WISE H II, Sharpless, Lynds, Zucker, planetární mlhoviny, Green (vše CDS) -> mlhoviny.json
+py neutronove_hvezdy.py   # ATNF přes psrqpy (jinak kopie 2016 v CDS) + magnetary McGill -> neutronove-hvezdy.json
 ```
+
+Katalogy etapy 3 sdílí formát (schema 2, popis v `pipeline/katalog.py`) a v aplikaci je čte jedna obecná vrstva.
 
 Syrové CSV se ukládá do `pipeline/raw/` (není v gitu). Test na výřezu: `py exoplanety.py --vstup testdata/pscomppars_vzorek.csv`.
 

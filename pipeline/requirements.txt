@@ -1,3 +1,5 @@
 astropy>=6.0
 pandas>=2.0
 numpy>=1.26
+# volitelné: aktuální ATNF Pulsar Catalogue (bez něj neutronove_hvezdy.py použije starší kopii v CDS)
+psrqpy

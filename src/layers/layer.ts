@@ -52,4 +52,6 @@ export interface Layer {
   /** Vzdálenost kamery po přeletu na objekt (ly). */
   flyDistance(o: MapObject): number;
   update?(stage: Stage): void;
+  /** Volá se při každé změně výběru (null = nic vybraného). */
+  onSelect?(o: MapObject | null): void;
 }

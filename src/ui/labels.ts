@@ -37,7 +37,7 @@ const PLACES: Record<LabelKind, Place[]> = {
   ecl: [(x, y, w, h) => [x - w / 2, y - h / 2, w, h]],
   ring: [(x, y, w, h) => [x + 4, y - h, w, h]],
 };
-const POOL = 60;
+const POOL = 80;
 const DOT = 5;
 
 interface Slot {

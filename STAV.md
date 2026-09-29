@@ -52,6 +52,19 @@ Aktualizovat na konci každého sezení.
     (`setViewOffset` s přepočtem fov/aspect, měřítko beze změny), MSAA jen při DPR < 2
   - JS bundle 601 kB (gzip 154 kB)
 
+- 2026-09-29 (cloud): Etapa 2 commitnuta a pushnuta (fc06b15, Claude GitHub App nainstalována)
+- 2026-09-29 (cloud): **Etapa 3 – hvězdokupy, mlhoviny, neutronové hvězdy** (build OK, Playwright desktop + mobil)
+  - pipeline: `katalog.py` (CDS stahování + obecný formát schema 2), `hvezdokupy.py`, `mlhoviny.py`, `neutronove_hvezdy.py`
+  - data: hvězdokupy 7 211 (všechny se vzdáleností, 761 kB), mlhoviny 7 358 (1 869 se vzdáleností, 819 kB),
+    neutronové hvězdy 2 567 (2 506, 338 kB); kontrolní hodnoty sedí: Plejády 135 pc, Helix 199 pc, Orion A 400 pc
+    (maser), Krabí pulsar 2 kpc, Vela 280 pc
+  - aplikace: `layers/catalog.ts` (obecná vrstva: barvy typů, filtry typů + faset z dat, popisky, karta,
+    objekty bez vzdálenosti jen v seznamu + směrový paprsek po výběru), legenda po skupinách s přepínačem celé skupiny,
+    výška hlavičky řídí panel seznamu, nové filtry „Kvalita“ (kupy) a „Původ vzdálenosti“ (mlhoviny), kotva je nese
+  - dotyk: výběr čeká 300 ms na případný dvojklep (v hustém přehledu byl dvojklep jinak nepoužitelný);
+    ověřeno syntetickými událostmi, Playwright neumí klepat dost rychle při softwarovém WebGL
+  - JS bundle 607 kB (gzip 156 kB); data celkem ~2,7 MB JSON
+
 ## Rozhodnutí
 - Web veřejně na GitHub Pages (účet azuregroove), později PWA a mobilní aplikace přes Capacitor
 - Stavba v Claude Code, plánování a rešerše v projektu v aplikaci Claude
@@ -62,6 +75,8 @@ Aktualizovat na konci každého sezení.
 - 2026-09-29: data v etapě 1 jako sloupcový JSON + manifest; binární dlaždice/octree až v etapě 2
 - 2026-09-29: **binární dlaždice/octree dat odloženy do Etapy 5** (Gaia vzorek); teď jen prostorový index v paměti
 - 2026-09-29: filtr metoda/rok: systém se zobrazí, když vyhoví aspoň jedna planeta
+- 2026-09-29: objekty bez vzdálenosti jen v seznamu (směr po výběru); pulsary přes ATNF se zálohou CDS 2016;
+  HII oblasti s kinematickou vzdáleností ve 3D s označením; kulové kupy z Baumgardt & Vasiliev 2021
 - 2026-09-29: TypeScript ~6.0 podle šablony create-vite (TS 7 je venku, ale šablona ho zatím nepoužívá)
 
 ## Ověřená čísla (29. 9. 2026)
@@ -70,7 +85,13 @@ Aktualizovat na konci každého sezení.
   10 buildů/h (neplatí pro vlastní Actions workflow)
 
 ## Známé nedostatky
-- Z cloudu jsou NASA archiv i CDS/SIMBAD blokované – stahování a kontroly dat jen na PC
+- Z cloudu: CDS/VizieR, Baumgardt, McGill a Cambridge povolené (Custom network access); NASA archiv, ATNF,
+  cds.unistra.fr (licenční stránka) a HASH nedostupné
+- **Pulsary jsou verze 2016** (CDS kopie) – na PC `py -m pip install psrqpy` a `py pipeline\neutronove_hvezdy.py`
+- Licenční podmínky CDS neověřené (viz ZDROJE.md); Hunt & Reffert „spolehlivý“ řez je jen přiblížení (4 105 vs. 4 114)
+- Planetární mlhoviny jen z Gaia katalogu (2 035), HASH nedostupný; vzdálenost jen u 405
+- Otevřená legenda na mobilu zabere ~600 px (sbalitelná tlačítkem Vrstvy)
+- Černé díry z BlackCAT (plán etapy 3) zatím nepřidány
 - 11 černých děr má polohu z katalogového označení (odchylka až 1°) – **zatím neopraveno** v cerne_diry.py,
   správné polohy vypíše `py pipeline\overit_simbad.py` (běží jen na PC, cloud k CDS nemá přístup)
 - HD 130298 má v datech ještě possrc „memory“ – přepsat na ověřenou (SIMBAD); paralaxa SIMBAD 0,392 mas
@@ -90,9 +111,11 @@ Aktualizovat na konci každého sezení.
 - nic
 
 ## Další krok
-- Ráďa: vyzkoušet Etapu 2 na PC a telefonu (`npm run dev -- --host`), změřit výkon; commit/push jen s jeho souhlasem
+- Ráďa: vyzkoušet Etapy 2 a 3 na PC a telefonu (`npm run dev -- --host`), změřit výkon s ~22 000 objekty
+- Na PC: `py -m pip install psrqpy` a `py pipeline\neutronove_hvezdy.py` (aktuální ATNF místo verze 2016)
+- Etapa 3 zbytek: BlackCAT pro černé díry (ověřit zdroj a licenci), případně HASH na PC
 - Na PC: přepsat polohy „z označení“ v pipeline/cerne_diry.py podle overit_simbad.py (possrc → „simbad“),
   doplnit text do SRC v src/layers/blackHoles.ts, znovu `py pipeline\cerne_diry.py`
-- Pak Etapa 3 (hvězdokupy, mlhoviny, pulsary): nejdřív ověřit zdroje, licence a velikosti katalogů, stahování ohlásit
+- Pak Etapa 4: karty s popisy a obrázky, česká jména (Plejády, Jesličky…), licence
 - Git: 2026-09-29 Ráďa odsouhlasil commit + push a přesun sezení do cloudu (cloudové kredity);
   další push/PR/Actions dál jen s jeho souhlasem

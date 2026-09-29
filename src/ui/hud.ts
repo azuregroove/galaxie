@@ -87,18 +87,46 @@ export class Hud {
   // ---------- legenda ----------
   private buildLegend(): void {
     const legend = $("legend");
-    for (const L of this.layers) for (const f of L.filters) {
-      const b = document.createElement("button");
-      b.className = "chip";
-      b.setAttribute("aria-pressed", "true");
-      b.innerHTML = `<i style="background:var(${f.color})"></i>${escapeHtml(f.name)}`;
-      b.onclick = () => {
-        L.setFilter(f.key, !f.on);
-        b.setAttribute("aria-pressed", String(f.on));
-        this.afterVisibilityChange();
-      };
-      legend.appendChild(b);
+    for (const L of this.layers) {
+      const row = document.createElement("div");
+      row.className = "legRow";
+      // skupina s víc typy dostane nadpis, ať je vidět, co k čemu patří
+      const chips: [HTMLButtonElement, typeof L.filters[number]][] = [];
+      if (L.filters.length > 1) {
+        const h = document.createElement("button");
+        h.className = "legName";
+        h.textContent = L.name;
+        h.title = "Zapnout / vypnout celou skupinu";
+        h.onclick = () => {
+          const on = !L.filters.some((f) => f.on);
+          for (const [b, f] of chips) {
+            L.setFilter(f.key, on);
+            b.setAttribute("aria-pressed", String(on));
+          }
+          this.afterVisibilityChange();
+        };
+        row.appendChild(h);
+      }
+      for (const f of L.filters) {
+        const b = document.createElement("button");
+        b.className = "chip";
+        b.setAttribute("aria-pressed", "true");
+        b.innerHTML = `<i style="background:var(${f.color})"></i>${escapeHtml(f.name)}`;
+        b.onclick = () => {
+          L.setFilter(f.key, !f.on);
+          b.setAttribute("aria-pressed", String(f.on));
+          this.afterVisibilityChange();
+        };
+        row.appendChild(b);
+        chips.push([b, f]);
+      }
+      legend.appendChild(row);
     }
+    // panel seznamu začíná pod hlavičkou, jejíž výška závisí na legendě
+    const header = document.querySelector<HTMLElement>("header.hud")!;
+    const setH = () => document.documentElement.style.setProperty("--header-h", `${header.getBoundingClientRect().bottom}px`);
+    new ResizeObserver(setH).observe(header);
+    setH();
   }
 
   private afterVisibilityChange(): void {
@@ -169,6 +197,7 @@ export class Hud {
   // ---------- karta ----------
   select(o: MapObject, fly: boolean): void {
     this.selected = o;
+    this.layers.forEach((L) => L.onSelect?.(o));
     const L = this.layers.find((x) => x.id === o.layer)!;
     const card = $("card");
     card.innerHTML = `<button class="close" aria-label="Zavřít">×</button>${L.cardHtml(o)}`;
@@ -204,6 +233,7 @@ export class Hud {
 
   private closeCard(): void {
     $("card").hidden = true;
+    this.layers.forEach((L) => L.onSelect?.(null));
     this.stage.setCenterShift(0);
     this.selected = null;
     this.marker.visible = false;
@@ -340,33 +370,49 @@ export class Hud {
     const el = this.stage.renderer.domElement;
     let downAt: [number, number] | null = null;
     let lastTap: [number, number, number] | null = null;
+    let pending = 0;
     const tmp = new Vector3();
-    el.addEventListener("pointerdown", (e) => (downAt = [e.clientX, e.clientY]));
-    el.addEventListener("pointerup", (e) => {
-      if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 6) return;
-      const rect = el.getBoundingClientRect();
-      const px = e.clientX - rect.left, py = e.clientY - rect.top;
-      // prst je méně přesný než myš
+    const pick = (px: number, py: number, radius: number, rect: DOMRect): MapObject | null => {
       let best: MapObject | null = null;
-      let bd = e.pointerType === "touch" ? 32 : 20;
+      let bd = radius;
       for (const o of this.all) {
-        if (o.hidden) continue;
+        if (o.hidden || o.listOnly) continue;
         tmp.copy(o.anchor).project(this.stage.camera);
         if (tmp.z > 1) continue;
         const d = Math.hypot(((tmp.x + 1) / 2) * rect.width - px, ((1 - tmp.y) / 2) * rect.height - py);
         if (d < bd) { bd = d; best = o; }
       }
-      if (best) {
-        this.select(best, true);
-        lastTap = null;
-        return;
-      }
-      // dvojklep do prázdna přiblíží; myš má na to kolečko, ale dvojklik nevadí ani jí
+      return best;
+    };
+    el.addEventListener("pointerdown", (e) => (downAt = [e.clientX, e.clientY]));
+    el.addEventListener("pointerup", (e) => {
+      if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 6) return;
+      const rect = el.getBoundingClientRect();
+      const px = e.clientX - rect.left, py = e.clientY - rect.top;
       const now = performance.now();
       if (lastTap && now - lastTap[0] < 350 && Math.hypot(px - lastTap[1], py - lastTap[2]) < 40) {
-        this.stage.zoomAt(px, py);
+        clearTimeout(pending);
         lastTap = null;
-      } else lastTap = [now, px, py];
+        this.stage.zoomAt(px, py);
+        return;
+      }
+      lastTap = [now, px, py];
+      if (e.pointerType === "touch") {
+        // V hustém přehledu je v dosahu prstu skoro vždy nějaký objekt, takže dvojklep by nikdy
+        // nepřiblížil. Výběr proto chvíli počká, jestli nepřijde druhý klep.
+        clearTimeout(pending);
+        pending = window.setTimeout(() => {
+          const best = pick(px, py, 32, rect);
+          if (best) this.select(best, true);
+        }, 300);
+      } else {
+        const best = pick(px, py, 20, rect);
+        if (best) {
+          this.select(best, true);
+          lastTap = null;
+        }
+      }
     });
   }
+
 }
