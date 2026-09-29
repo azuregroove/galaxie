@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="description" content="Interaktivní 3D mapa Mléčné dráhy: exoplanety, černé díry a další objekty s polohou vůči Slunci." />
+    <meta name="theme-color" content="#05070d" />
+    <title>Mapa Mléčné dráhy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+  </head>
+  <body>
+    <div id="stage"></div>
+    <div id="labels"></div>
+    <div id="status" role="status">Načítám data…</div>
+
+    <header class="hud">
+      <h1>Mapa Mléčné dráhy</h1>
+      <div class="sub" id="sub">–</div>
+      <div class="legend" id="legend"></div>
+    </header>
+
+    <aside class="hud" id="listPanel" aria-label="Seznam objektů">
+      <div class="listHead">
+        <input id="search" type="search" placeholder="Hledat hvězdu, planetu, černou díru…" autocomplete="off" aria-label="Hledat" />
+        <div class="count" id="listCount"></div>
+      </div>
+      <div id="list"></div>
+    </aside>
+
+    <section class="hud" id="card" hidden aria-live="polite"></section>
+
+    <nav class="hud" id="bar">
+      <div class="tools">
+      <div class="btns">
+        <button class="btn" id="listToggle" aria-pressed="false">Seznam</button>
+        <button class="btn" data-view="near">Okolí Slunce</button>
+        <button class="btn" data-view="sun">Slunce</button>
+        <button class="btn" data-view="top">Shora</button>
+        <button class="btn" data-view="edge">Z boku</button>
+        <button class="btn" data-view="gc">Centrum</button>
+      </div>
+      <div class="sep"></div>
+      <div class="btns">
+        <button class="btn" data-tog="labels" aria-pressed="true">Popisky</button>
+        <button class="btn" data-tog="ecl" aria-pressed="true">Ekliptika</button>
+        <button class="btn" data-tog="rings" aria-pressed="true">Kruhy</button>
+        <button class="btn" data-tog="grid" aria-pressed="true">Mřížka</button>
+        <button class="btn" data-tog="dims" aria-pressed="true">Rozměry</button>
+        <button class="btn" id="about">Zdroje</button>
+      </div>
+      </div>
+      <span class="help">Tah = otáčení · kolečko = zoom · pravé tl. = posun · WASD/QE = let · klik = přelet</span>
+      <div id="scale"><div id="scaleTxt">–</div><div id="scaleLine"></div><div id="readout"></div></div>
+    </nav>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
