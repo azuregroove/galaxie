@@ -47,6 +47,17 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 - **Licence: FAQ JPL SSD na otázku „chci zveřejnit informace z vašeho webu na svém, potřebuji svolení?“ odpovídá
   „The short answer is yes“** a odkazuje na copyright JPL (https://www.jpl.nasa.gov/copyrights.cfm – z cloudu nedostupné).
   **Před zveřejněním (etapa 6) napsat JPL SSD** a popsat použití; do té doby jen lokální vývoj.
+- Planetky a komety (vzorek 3 187 těles, `pipeline/mala_telesa.py`): SBDB Query API
+  (https://ssd-api.jpl.nasa.gov/doc/sbdb_query.html), oskulační heliocentrické elementy vůči ekliptice J2000, plná přesnost.
+  Výběr po skupinách (podle samotného H by vyšla skoro jen TNO): hlavní pás a okolí H ≤ 11 (1 185, bez Ceres),
+  NEO H ≤ 17,75 (883), trojáni H ≤ 11 (214), kentauři H ≤ 10 (154), TNO H ≤ 5,5 (232, bez trpasličích planet),
+  všechny číslované komety bez úlomků (516), 38 ručně vybraných (cíle sond, slavné komety), z toho 3 mezihvězdná tělesa.
+  Třídy drah podle https://ssd-api.jpl.nasa.gov/doc/sbdb_filter.html.
+  540 těles se starou epochou (hlavně komety, dráha k poslednímu průchodu přísluním) má elementy z Horizons k 2026-01-01.
+  Kontrola 14 těles proti Horizons (`--overit`): k 30. 9. 2026 do 0,3′; roky 2016/2036 obvykle do jednotek až desítek ′,
+  1990/2050 až stupně; Apophis po průletu u Země 2029 a 67P mimo o desítky stupňů (dvoučásticový model bez poruch).
+  ʻOumuamua: Horizons elementy nevrátil, použita dráha ze SBDB. MPC (minorplanetcenter.net) je z cloudu blokované.
+  Licence: stejná jako u ostatních dat JPL SSD (viz výše – svolení před zveřejněním).
 
 ### Spektrální třídy hvězd – Pecaut & Mamajek 2013
 - Pecaut M. J., Mamajek E. E. 2013, ApJS 208, 9 – CDS `J/ApJS/208/9`, tabulka 5 (Teff trpaslíků O9V–M9V).

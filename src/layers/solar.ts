@@ -2,6 +2,7 @@ import { Group } from "three";
 import type { Frame } from "../core/coords";
 import type { CatalogEntry, MapObject } from "../core/types";
 import { escapeHtml } from "../core/units";
+import type { SmallData } from "../system/small";
 import { solarSpec, type SolarData } from "../system/solar";
 import type { SystemView } from "../system/view";
 import { NO_FILTER, type Facet, type FilterState, type Layer, type LayerFilter } from "./layer";
@@ -9,7 +10,8 @@ import { NO_FILTER, type Facet, type FilterState, type Layer, type LayerFilter }
 // Hledání najde Sluneční soustavu i podle planet a velkých měsíců; data se stáhnou až při otevření.
 const ALIASES = ["Slunce", "Merkur", "Venuše", "Země", "Mars", "Jupiter", "Saturn", "Uran", "Neptun",
   "Pluto", "Ceres", "Eris", "Haumea", "Makemake", "Měsíc", "Io", "Europa", "Ganymed", "Kallisto", "Titan",
-  "Enceladus", "Triton", "Charon", "Phobos", "Deimos", "Titania", "Oberon", "Miranda"];
+  "Enceladus", "Triton", "Charon", "Phobos", "Deimos", "Titania", "Oberon", "Miranda",
+  "planetky", "komety", "Halleyova kometa", "Vesta", "Pallas", "Apophis", "Bennu", "Ryugu", "Eros", "Arrokoth", "Hale-Bopp", "3I/ATLAS"];
 
 /** Jediný objekt: Slunce s tlačítkem do pohledu Sluneční soustava. Bez legendy a filtrů. */
 export class SolarLayer implements Layer {
@@ -19,13 +21,17 @@ export class SolarLayer implements Layer {
   readonly objects: MapObject[];
   readonly filters: LayerFilter[] = [];
   readonly facets: Facet[] = [];
-  private data: Promise<SolarData> | null = null;
+  private data: Promise<[SolarData, SmallData | null]> | null = null;
+  private smallUrl: string | null;
+  private smallMeta: CatalogEntry | null;
   private meta: CatalogEntry;
   private url: string;
   private view: SystemView;
 
-  constructor(frame: Frame, meta: CatalogEntry, url: string, view: SystemView) {
+  constructor(frame: Frame, meta: CatalogEntry, url: string, view: SystemView, small: { meta: CatalogEntry; url: string } | null = null) {
     this.meta = meta;
+    this.smallMeta = small?.meta ?? null;
+    this.smallUrl = small?.url ?? null;
     this.url = url;
     this.view = view;
     this.objects = [{
@@ -48,11 +54,14 @@ export class SolarLayer implements Layer {
   }
 
   openDetail(): void {
-    this.data ??= fetch(this.url).then((r) => {
+    const get = <T>(url: string) => fetch(url).then((r) => {
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      return r.json() as Promise<SolarData>;
+      return r.json() as Promise<T>;
     });
-    this.data.then((d) => this.view.open(solarSpec(d))).catch((e) => {
+    // planetky jsou nepovinné: bez nich se soustava otevře taky
+    this.data ??= Promise.all([get<SolarData>(this.url),
+      this.smallUrl ? get<SmallData>(this.smallUrl).catch((e) => (console.warn("planetky a komety:", e), null)) : Promise.resolve(null)]);
+    this.data.then(([d, s]) => this.view.open(solarSpec(d, s))).catch((e) => {
       this.data = null;
       alert(`Data Sluneční soustavy se nepodařilo načíst: ${(e as Error).message}`);
     });
@@ -62,7 +71,8 @@ export class SolarLayer implements Layer {
     return `<div class="kind" style="color:var(--sun)">Naše planetární soustava</div>
       <h3>Sluneční soustava</h3>
       <p>Slunce (hvězda třídy G2 V), 8 planet, 5 trpasličích planet a jejich měsíce – celkem ${escapeHtml(String(this.meta.objektu ?? "?"))} těles
-      s drahami a polohou k libovolnému datu ${escapeHtml(((this.meta.platnost as number[] | undefined) ?? [1800, 2050]).join("–"))}.</p>
+      s drahami a polohou k libovolnému datu ${escapeHtml(((this.meta.platnost as number[] | undefined) ?? [1800, 2050]).join("–"))}${this.smallMeta ? `,
+      k tomu vzorek ${escapeHtml(String(this.smallMeta.objektu ?? "?"))} planetek a komet` : ""}.</p>
       <div class="src">Data: ${escapeHtml(this.meta.zdroj)} (stav ${escapeHtml(this.meta.stazeno.slice(0, 10))}).</div>`;
   }
 }

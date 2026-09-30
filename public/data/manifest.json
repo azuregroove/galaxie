@@ -45,6 +45,26 @@
       "stazeno": "2026-09-29T22:28:35Z"
     },
     {
+      "id": "mala-telesa",
+      "soubor": "mala-telesa.json",
+      "nazev": "Planetky a komety (vzorek)",
+      "zdroj": "NASA/JPL Small-Body Database (SBDB Query API), oskulační elementy",
+      "url": "https://ssd.jpl.nasa.gov/tools/sbdb_query.html",
+      "licence": "Obsah JPL SSD – podle FAQ webu je k převzetí potřeba svolení JPL (vyřídit před zveřejněním)",
+      "poznamka": "Vzorek po skupinách podle H; polohy z dvoučásticových drah k epoše oskulace (orientační, chyba roste s odstupem od epochy).",
+      "objektu": 3187,
+      "pocty": {
+        "pas": 1185,
+        "neo": 883,
+        "trojan": 214,
+        "kentaur": 154,
+        "tno": 232,
+        "kometa": 516,
+        "mezihvezdne": 3
+      },
+      "stazeno": "2026-09-30T19:44:05Z"
+    },
+    {
       "nazev": "Mlhoviny a mezihvězdná mračna",
       "zdroj": "Anderson+ 2014 (WISE H II), Sharpless 1959, Lynds 1962 a 1965, Zucker+ 2020, González-Santamaría+ 2021, Green 2025 – vše přes CDS/VizieR",
       "url": "https://vizier.cds.unistra.fr/",

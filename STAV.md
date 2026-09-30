@@ -129,7 +129,10 @@ Aktualizovat na konci každého sezení.
 - **Výstřednosti drah exoplanet chybí** – na PC `py pipeline\exoplanety.py` (názvy sloupců pl_orbeccen/pl_orblper/pl_orbincl
   z paměti, neověřené – kdyby TAP hlásil neznámý sloupec, opravit)
 - **JPL SSD: k převzetí dat na veřejný web chtějí svolení (FAQ) – napsat jim před etapou 6**
-- Sluneční soustava: poloměr Eris, Haumea, Makemake chybí (JPL neuvádí); Saturn bez prstenců; žádné planetky/komety (3c)
+- Sluneční soustava: poloměr Eris, Haumea, Makemake chybí (JPL neuvádí); Saturn bez prstenců
+- Planetky a komety: dvoučásticové dráhy – daleko od roku 2026 jen orientační (stupně), po blízkých průletech (Apophis 2029) úplně mimo;
+  hledání funguje jen uvnitř pohledu Soustava (hlavní hledání najde jen „Sluneční soustava“ podle aliasů);
+  popisek jen u vybraného tělesa; na mobilu může Slunce po přeletu skončit pod spodní lištou
 - Jupiter 115 a Saturn 291 měsíců = počet řádků tabulky JPL (vč. předběžných označení) – oficiální počty neověřeny
 - Nepravidelné měsíce: dráhy dlouhé přímky přes obraz (ztlumeno), polohy za roky orientační
 - Legenda exoplanet má teď 9 přepínačů – na mobilu delší
@@ -154,12 +157,24 @@ Aktualizovat na konci každého sezení.
     `src/layers/solar.ts` (objekt „Sluneční soustava“ v seznamu a hledání, data až po otevření)
   - předběžná označení měsíců zobrazena jako „S/2020 S 15“
 
+- 2026-09-30 (cloud, nové sezení): **3c – planetky a komety** (build OK, Playwright desktop 1400×860 + mobil 390×844, bez JS chyb)
+  - `pipeline/mala_telesa.py` → `mala-telesa.json` (442 kB, sloupcový): vzorek 3 187 těles z JPL SBDB Query API po skupinách
+    (pas H ≤ 11: 1 185, NEO H ≤ 17,75: 883, trojáni H ≤ 11: 214, kentauři H ≤ 10: 154, TNO H ≤ 5,5: 232, číslované komety: 516,
+    mezihvězdná 3 + ruční výběr cílů sond a slavných komet); podle samotného H by vyšla skoro jen TNO
+  - 540 těles se starou epochou (komety) → elementy z Horizons k 1. 1. 2026; kontrola 14 těles proti Horizons k dnešku do 0,3′
+  - hyperbolické dráhy (3I/ATLAS, 2I/Borisov, ʻOumuamua, C/2023 A3) – Kepler pro hyperbolu v `kepler.ts`, ověřeno proti Horizons
+  - aplikace: body počítané na CPU (jeden `Points`), panel „Planetky a komety“ (hledání bez diakritiky, přepínače skupin),
+    klepnutí na bod / výběr z hledání = dráha + údaje (třída dráhy česky, q, a, e, oběh, H/M1, průměr, zdroj a epocha dráhy)
+  - MPC z cloudu blokované (403) → jen JPL; licence stejná jako u JPL (svolení před etapou 6)
+  - v softwarovém WebGL ~30 ms/snímek desktop (dřív se neměřilo), na skutečném GPU ověřit na PC
+
 ## Rozdělané
 - nic
 
 ## Další krok
 **Pořadí dohodnuté s Ráďou 30. 9. 2026 (pokračuje se v novém chatu):**
-1. 3c – planetky a komety (MPC / JPL SBDB): vzorek nejjasnějších, plný katalog na vyžádání; licenci MPC ověřit
+1. ~~3c – planetky a komety~~ hotovo 30. 9. (vzorek); zbývá „plný katalog na vyžádání“ (návrh: dlaždice podle skupin/H,
+   načítání po skupinách) a MPC (z cloudu blokované)
 2. Bod 4 – obrázky „odkazy místo souborů“: Wikidata → Commons náhled + autor/licence, výřez oblohy CDS hips2fits,
    u exoplanet generované schéma; malá offline sada
 3. Než bude projekt „hotový“: projít internet, aktualizovat všechna data a čísla z ověřených zdrojů; najít podobné projekty
@@ -172,10 +187,10 @@ Aktualizovat na konci každého sezení.
 - Ráďa: vyzkoušet Etapy 2 a 3 na PC a telefonu (`npm run dev -- --host`), změřit výkon s ~22 000 objekty
 - Na PC: `py -m pip install psrqpy` a `py pipeline\neutronove_hvezdy.py` (aktuální ATNF místo verze 2016)
 - Na PC: `py pipeline\exoplanety.py` (výstřednosti drah), pak zkusit Soustava u HD 80606 (velmi výstředná dráha)
-- 3c: planetky a komety (MPC/JPL SBDB) – vzorek nejjasnějších, plný katalog na vyžádání; licence MPC ověřit
 - Bod 4: obrázky (Wikidata/Commons, hips2fits) – domény už povolené
 - Na PC nebo po povolení exoplanetarchive.ipac.caltech.edu: `exoplanety.py` (výstřednosti)
 - Případně HASH (planetární mlhoviny) na PC
 - Etapa 4 dál: karty s popisy a obrázky, česká jména (Plejády, Jesličky…), licence
+- 2026-09-30: Ráďa odsouhlasil commit + push 3c do claude/sharp-cerf-bzaom6
 - Git: 2026-09-29 Ráďa odsouhlasil commit + push a přesun sezení do cloudu (cloudové kredity);
   další push/PR/Actions dál jen s jeho souhlasem

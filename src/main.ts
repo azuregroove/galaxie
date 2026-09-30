@@ -46,7 +46,8 @@ async function main() {
     const layers: Layer[] = [];
     const systemView = new SystemView(stage, stage.glow);
     const solar = manifest.katalogy.find((k) => k.id === "slunecni-soustava");
-    if (solar) layers.push(new SolarLayer(frame, solar, DATA + solar.soubor, systemView));
+    const small = manifest.katalogy.find((k) => k.id === "mala-telesa");
+    if (solar) layers.push(new SolarLayer(frame, solar, DATA + solar.soubor, systemView, small ? { meta: small, url: DATA + small.soubor } : null));
     if (exo) {
       const L = new ExoplanetLayer(exo, frame, stage.glow, css);
       L.systemView = systemView;

@@ -1,6 +1,7 @@
 import {
   AdditiveBlending,
   BufferGeometry,
+  CanvasTexture,
   Color,
   Float32BufferAttribute,
   Group,
@@ -11,6 +12,8 @@ import {
   Mesh,
   MeshBasicMaterial,
   PerspectiveCamera,
+  Points,
+  PointsMaterial,
   Scene,
   SphereGeometry,
   Sprite,
@@ -22,7 +25,8 @@ import {
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { escapeHtml, fmtNum } from "../core/units";
 import type { Stage } from "../scene/stage";
-import { eccentricAnomaly } from "./kepler";
+import { planeXY } from "./kepler";
+import { SMALL_COLORS, smallBody, type SmallData } from "./small";
 import type { OrbitBody, SystemSpec } from "./types";
 
 const AU_KM = 149597870.7;
@@ -57,7 +61,8 @@ interface BodyView {
   b: OrbitBody;
   parent: BodyView | null;
   mesh: Mesh;
-  orbit: LineLoop;
+  /** LineLoop u elipsy, otevřená Line u hyperboly */
+  orbit: Line;
   /** skupina s měsíci, posouvá se s tělesem */
   sats: Group | null;
   children: BodyView[];
@@ -107,6 +112,14 @@ export class SystemView {
   private tmp = new Vector3();
   private tmp2 = new Vector3();
   private dateTick = 0;
+  // planetky a komety: body počítané na CPU, vybrané těleso dostane plnou BodyView
+  private small: SmallData | null = null;
+  private smallPts: Points | null = null;
+  private smallIdx: number[] = [];
+  private smallOn = new Set<string>();
+  private smallSel: BodyView | null = null;
+  private smallTex: Texture | null = null;
+  private down: { x: number; y: number } | null = null;
 
   private stage: Stage;
   private glow: Texture;
@@ -138,9 +151,15 @@ export class SystemView {
         <button class="btn" data-a="home">Celá soustava</button>
         <button class="btn" data-a="size" aria-pressed="false">Skutečné velikosti</button>
         <button class="btn" data-a="ref" aria-pressed="false">Sluneční soustava</button>
+        <button class="btn" data-a="small" aria-pressed="false">Planetky a komety</button>
         <button class="btn" data-a="notes" aria-pressed="false">Poznámky</button>
       </nav>
-      <div class="hud sysNotes" hidden></div>`;
+      <div class="hud sysNotes" hidden></div>
+      <div class="hud sysSmall" hidden>
+        <input type="search" class="sysFind" placeholder="Najít planetku nebo kometu…" aria-label="Najít planetku nebo kometu" autocomplete="off">
+        <div class="sysHits"></div>
+        <div class="sysGroups"></div>
+      </div>`;
     document.body.appendChild(this.root);
     this.q(".close").onclick = () => this.close();
     this.root.querySelectorAll<HTMLButtonElement>(".sysBar [data-a]").forEach((b) => (b.onclick = () => this.action(b)));
@@ -155,6 +174,18 @@ export class SystemView {
     addEventListener("resize", () => this.resize());
     const bar = this.q(".sysBar");
     new ResizeObserver(() => this.root.style.setProperty("--sysbar-h", `${bar.getBoundingClientRect().height}px`)).observe(bar);
+    const find = this.q<HTMLInputElement>(".sysFind");
+    find.oninput = () => this.findSmall(find.value);
+    this.q(".sysHits").addEventListener("click", (e) => {
+      const k = (e.target as HTMLElement).closest<HTMLElement>("[data-k]")?.dataset.k;
+      if (k != null) this.selectSmall(Number(k));
+    });
+    this.q(".sysGroups").addEventListener("change", (e) => {
+      const el = e.target as HTMLInputElement;
+      if (el.checked) this.smallOn.add(el.value);
+      else this.smallOn.delete(el.value);
+      this.rebuildSmall();
+    });
     this.q(".sysNotes").addEventListener("click", (e) => {
       const name = (e.target as HTMLElement).closest<HTMLElement>("[data-body]")?.dataset.body;
       const bv = name && this.all.find((x) => x.b.name === name);
@@ -202,6 +233,13 @@ export class SystemView {
     this.controls.dampingFactor = 0.08;
     this.controls.zoomToCursor = true;
     this.controls.screenSpacePanning = true;
+    const cv = this.renderer.domElement;
+    cv.addEventListener("pointerdown", (e) => (this.down = { x: e.clientX, y: e.clientY }));
+    cv.addEventListener("pointerup", (e) => {
+      // klepnutí, ne tah kamerou
+      if (this.down && Math.hypot(e.clientX - this.down.x, e.clientY - this.down.y) < 6) this.pickSmall(e.clientX, e.clientY, e.pointerType === "touch" ? 18 : 9);
+      this.down = null;
+    });
     // posun myší ruší sledování tělesa, jinak by kamera „utíkala“ zpátky
     this.controls.addEventListener("start", () => {
       this.flight = null;
@@ -228,6 +266,9 @@ export class SystemView {
     this.starLabel = null;
     this.focus = null;
     this.flight = null;
+    this.smallPts = null;
+    this.smallSel = null;
+    this.small = null;
   }
 
   // ---------- stavba scény ----------
@@ -252,7 +293,7 @@ export class SystemView {
 
     const make = (b: OrbitBody, i: number, parent: BodyView | null, into: Group | Scene): BodyView => {
       const col = b.color ?? planetColor(b.r);
-      const orbit = new LineLoop(new BufferGeometry(),
+      const orbit = new (b.e < 1 ? LineLoop : Line)(new BufferGeometry(),
         // malé (většinou nepravidelné) měsíce mají obří protáhlé dráhy, které by přehlušily ty velké
         new LineBasicMaterial({ color: col, transparent: true, opacity: b.eUnknown ? 0.35 : b.kind === "moon" ? (b.r != null ? 0.45 : 0.14) : 0.6 }));
       into.add(orbit);
@@ -266,7 +307,7 @@ export class SystemView {
       const bv: BodyView = {
         b, parent, mesh, orbit, sats: null, children: [], label, phase: i * GOLDEN * 2,
         realR: (b.r ?? 1) * R_EARTH_AU, drawn: { node: NaN, w: NaN, inc: NaN }, world: new Vector3(), visible: true,
-        prio: b.kind === "moon" ? (b.r ?? 0) : b.kind === "dwarf" ? 5000 : 10000 + (b.r ?? 0),
+        prio: b.kind === "moon" ? (b.r ?? 0) : b.kind === "dwarf" || b.kind === "small" ? 5000 : 10000 + (b.r ?? 0),
       };
       label.onclick = () => this.focusOn(bv);
       if (b.children?.length) {
@@ -278,6 +319,8 @@ export class SystemView {
       return bv;
     };
     spec.bodies.forEach((b, i) => this.bodies.push(make(b, i, null, this.scene)));
+    this.makeBody = (b) => make(b, 0, null, this.scene);
+    this.buildSmall(spec.small ?? null);
 
     for (const [name, a] of SOLAR_REF) {
       const pts: Vector3[] = [];
@@ -313,6 +356,8 @@ export class SystemView {
     }
     this.q(".sysDateBox").hidden = !spec.dated;
     this.q<HTMLButtonElement>('[data-a="ref"]').hidden = !spec.solarRef;
+    this.q<HTMLButtonElement>('[data-a="small"]').hidden = !spec.small;
+    if (!spec.small) this.q(".sysSmall").hidden = true;
     this.q<HTMLButtonElement>('[data-a="home"]').hidden = !spec.bodies.some((b) => b.children?.length);
     if (!spec.solarRef) this.showRef = false;
     this.syncButtons();
@@ -379,9 +424,17 @@ export class SystemView {
         this.refGroup.forEach((r) => (r.visible = this.showRef));
         this.fit();
         break;
+      case "small": {
+        const p = this.q(".sysSmall");
+        p.hidden = !p.hidden;
+        // oba panely jsou vpravo nahoře, na sebe by se překryly
+        if (!p.hidden) this.q(".sysNotes").hidden = true;
+        break;
+      }
       case "notes": {
         const n = this.q(".sysNotes");
         n.hidden = !n.hidden;
+        if (!n.hidden) this.q(".sysSmall").hidden = true;
         break;
       }
     }
@@ -399,6 +452,7 @@ export class SystemView {
     set("size", this.realSize);
     set("ref", this.showRef);
     set("notes", !this.q(".sysNotes").hidden);
+    set("small", !this.q(".sysSmall").hidden);
     this.q(".sysSpeed").textContent = `1 s = ${fmtDays(this.daysPerSec)}`;
   }
 
@@ -422,7 +476,15 @@ export class SystemView {
     const major = bv.children.filter((c) => (c.b.r ?? 0) * 6371 >= 200).map((c) => c.b.a * (1 + c.b.e));
     const extent = major.length ? Math.max(...major) : kids.length ? Math.min(...kids) * 3 : bv.realR * 40;
     this.startFlight(Math.max(extent, bv.realR * 6) / Math.tan((FOV * DEG) / 2) * 1.3);
+    this.showInfo(bv);
+  }
+
+  private showInfo(bv: BodyView): void {
     const b = bv.b;
+    if (b.info) {
+      this.q(".sysFocus").innerHTML = `<b>${escapeHtml(b.name)}</b> · ${escapeHtml(b.info)}`;
+      return;
+    }
     const parts = [b.name !== (b.label ?? b.name) ? b.name : null,
       b.r != null ? `poloměr ${fmtNum(b.r * 6371, 0)} km` : "poloměr neznámý",
       b.kind === "moon" ? `oběh ${fmtDays(b.p)}` : null,
@@ -474,14 +536,12 @@ export class SystemView {
     const dt = dated ? this.t - b.epoch! : this.t;
     const r = b.rates;
     const a = b.a + (dated && r?.a ? r.a * dt : 0);
-    const e = Math.min(0.99, Math.max(0, b.e + (dated && r?.e ? r.e * dt : 0)));
+    const e = b.e >= 1 ? b.e : Math.min(0.99, Math.max(0, b.e + (dated && r?.e ? r.e * dt : 0)));
     const inc = (b.inc ?? 0) + (dated && r?.inc ? r.inc * dt : 0);
     const node = (b.node ?? 0) + (dated && r?.node ? r.node * dt : 0);
     const w = b.w + (dated && r?.w ? r.w * dt : 0);
     const M = dated ? (b.m0! + b.n! * dt) * DEG : bv.phase + (2 * Math.PI * this.t) / b.p;
-    const E = eccentricAnomaly(M, e);
-    const x = a * (Math.cos(E) - e);
-    const y = a * Math.sqrt(1 - e * e) * Math.sin(E);
+    const [x, y] = planeXY(a, e, M);
     this.toScene(x, y, w, inc, node, out);
     const d = bv.drawn;
     if (Number.isNaN(d.node) || Math.abs(node - d.node) > 0.5 || Math.abs(w - d.w) > 0.5 || Math.abs(inc - d.inc) > 0.2) {
@@ -502,9 +562,20 @@ export class SystemView {
     const seg = bv.b.kind === "moon" ? 128 : 360;
     const pts = new Float32Array(seg * 3);
     const v = this.tmp2;
+    // hyperbola: jen úsek do vzdálenosti rMax od Slunce (r = a(1 − e·cosh H), a < 0)
+    const hMax = e >= 1 ? Math.acosh((1 - Math.max(60, 4 * a * (1 - e)) / a) / e) : 0;
     for (let k = 0; k < seg; k++) {
-      const E = (k / seg) * Math.PI * 2;
-      this.toScene(a * (Math.cos(E) - e), a * Math.sqrt(1 - e * e) * Math.sin(E), w, inc, node, v);
+      let x: number, y: number;
+      if (e < 1) {
+        const E = (k / seg) * Math.PI * 2;
+        x = a * (Math.cos(E) - e);
+        y = a * Math.sqrt(1 - e * e) * Math.sin(E);
+      } else {
+        const H = -hMax + (2 * hMax * k) / (seg - 1);
+        x = a * (Math.cosh(H) - e);
+        y = -a * Math.sqrt(e * e - 1) * Math.sinh(H);
+      }
+      this.toScene(x, y, w, inc, node, v);
       pts.set([v.x, v.y, v.z], k * 3);
     }
     bv.orbit.geometry.dispose();
@@ -572,11 +643,12 @@ export class SystemView {
     // hvězda: ve zvětšeném režimu nesmí přerůst dráhu nejbližšího tělesa
     const star = this.star!;
     const sPx = pxWorld(star.position);
-    const innermost = Math.min(...this.bodies.map((b) => b.b.a * (1 - b.b.e)));
+    const innermost = Math.min(...this.bodies.filter((b) => b.b.kind !== "small").map((b) => b.b.a * (1 - b.b.e)));
     const sr = this.realSize ? Math.max(this.starReal, sPx) : Math.max(this.starReal, Math.min(9 * sPx, innermost * 0.4));
     star.scale.setScalar(sr);
     this.starGlow!.scale.setScalar(Math.max(sr * 6, 6 * sPx));
 
+    this.updateSmall();
     const labelled: BodyView[] = [];
     for (const bv of this.bodies) {
       const px = pxWorld(bv.world);
@@ -612,6 +684,140 @@ export class SystemView {
     }
     this.renderer!.render(this.scene, cam);
     this.raf = requestAnimationFrame((n) => this.loop(n));
+  }
+
+  // ---------- planetky a komety ----------
+  private makeBody: ((b: OrbitBody) => BodyView) | null = null;
+
+  private buildSmall(d: SmallData | null): void {
+    this.small = d;
+    const groups = this.q(".sysGroups");
+    this.q<HTMLInputElement>(".sysFind").value = "";
+    this.q(".sysHits").innerHTML = "";
+    if (!d) {
+      groups.innerHTML = "";
+      return;
+    }
+    if (!this.smallOn.size) Object.keys(d.skupiny).forEach((k) => this.smallOn.add(k));
+    groups.innerHTML = Object.entries(d.skupiny).map(([k, name]) => `<label class="fcheck"><input type="checkbox" value="${k}"${this.smallOn.has(k) ? " checked" : ""}>
+      <span><i class="dot" style="background:${SMALL_COLORS[k]}"></i>${escapeHtml(name)}</span><span class="dim">${fmtNum(d.pocty[k] ?? 0, 0)}</span></label>`).join("")
+      + `<p class="src">JPL SBDB, vzorek (stav ${escapeHtml(d.stazeno.slice(0, 10))}). Podrobnosti v Poznámkách.</p>`;
+    if (!this.smallTex) {
+      const c = document.createElement("canvas");
+      c.width = c.height = 32;
+      const g = c.getContext("2d")!;
+      g.fillStyle = "#fff";
+      g.beginPath();
+      g.arc(16, 16, 14, 0, Math.PI * 2);
+      g.fill();
+      this.smallTex = new CanvasTexture(c);
+    }
+    const n = d.sloupce.jmeno.length;
+    const geo = new BufferGeometry();
+    geo.setAttribute("position", new Float32BufferAttribute(new Float32Array(n * 3), 3));
+    geo.setAttribute("color", new Float32BufferAttribute(new Float32Array(n * 3), 3));
+    this.smallPts = new Points(geo, new PointsMaterial({
+      size: 4, sizeAttenuation: false, vertexColors: true, map: this.smallTex, transparent: true, alphaTest: 0.3, depthWrite: false,
+    }));
+    // polohy se mění každý snímek, ohraničující koule by byla stará
+    this.smallPts.frustumCulled = false;
+    this.scene.add(this.smallPts);
+    this.rebuildSmall();
+  }
+
+  private rebuildSmall(): void {
+    const d = this.small;
+    if (!d || !this.smallPts) return;
+    this.smallIdx = [];
+    const col = this.smallPts.geometry.getAttribute("color") as Float32BufferAttribute;
+    const c = new Color();
+    d.sloupce.skupina.forEach((g, k) => {
+      if (!this.smallOn.has(g)) return;
+      c.set(SMALL_COLORS[g]);
+      col.setXYZ(this.smallIdx.length, c.r, c.g, c.b);
+      this.smallIdx.push(k);
+    });
+    col.needsUpdate = true;
+    this.smallPts.geometry.setDrawRange(0, this.smallIdx.length);
+  }
+
+  private updateSmall(): void {
+    const d = this.small, pts = this.smallPts;
+    if (!d || !pts) return;
+    const c = d.sloupce;
+    const pos = pts.geometry.getAttribute("position") as Float32BufferAttribute;
+    const v = this.tmp2;
+    for (let j = 0; j < this.smallIdx.length; j++) {
+      const k = this.smallIdx[j];
+      const M = (c.m0[k] + c.n[k] * (this.t - c.epocha[k])) * DEG;
+      const [x, y] = planeXY(c.a[k], c.e[k], M);
+      this.toScene(x, y, c.w[k], c.i[k], c.om[k], v);
+      pos.setXYZ(j, v.x, v.y, v.z);
+    }
+    pos.needsUpdate = true;
+  }
+
+  private pickSmall(cx: number, cy: number, radius: number): void {
+    if (!this.smallPts || !this.smallIdx.length) return;
+    const pos = this.smallPts.geometry.getAttribute("position") as Float32BufferAttribute;
+    let best = -1, bestD = radius;
+    for (let j = 0; j < this.smallIdx.length; j++) {
+      this.tmp.fromBufferAttribute(pos, j).project(this.camera);
+      if (this.tmp.z > 1) continue;
+      const d = Math.hypot(((this.tmp.x + 1) / 2) * innerWidth - cx, ((1 - this.tmp.y) / 2) * innerHeight - cy);
+      if (d < bestD) {
+        bestD = d;
+        best = this.smallIdx[j];
+      }
+    }
+    if (best >= 0) this.selectSmall(best, false);
+  }
+
+  /** Vybere planetku/kometu: dráha, popisek, údaje; při fly=true na ni přeletí. */
+  selectSmall(k: number, fly = true): void {
+    if (!this.small || !this.makeBody) return;
+    if (this.smallSel) {
+      const old = this.smallSel;
+      this.scene.remove(old.mesh, old.orbit);
+      old.mesh.geometry.dispose();
+      old.orbit.geometry.dispose();
+      old.label.remove();
+      this.bodies = this.bodies.filter((b) => b !== old);
+      this.all = this.all.filter((b) => b !== old);
+    }
+    const bv = this.makeBody(smallBody(this.small, k));
+    this.bodies.push(bv);
+    this.smallSel = bv;
+    this.place3(bv, bv.mesh.position);
+    bv.world.copy(bv.mesh.position);
+    if (fly) {
+      this.focusOn(bv);
+      // odstup tak, aby bylo vidět i Slunce – samotná tečka v prázdnu nic neřekne
+      this.startFlight(Math.max(bv.world.length(), 0.3) / Math.tan((FOV * DEG) / 2) * 1.3);
+      if (innerWidth < 700) {
+        this.q(".sysSmall").hidden = true;
+        this.syncButtons();
+      }
+    } else {
+      // klepnutí na bod: jen dráha a údaje, kamera zůstane
+      this.showInfo(bv);
+    }
+  }
+
+  private findSmall(text: string): void {
+    const box = this.q(".sysHits");
+    const d = this.small;
+    const q = norm(text.trim());
+    if (!d || q.length < 2) {
+      box.innerHTML = "";
+      return;
+    }
+    const hits: number[] = [];
+    const names = d.sloupce.jmeno;
+    for (let k = 0; k < names.length && hits.length < 8; k++) if (norm(names[k]).includes(q)) hits.push(k);
+    box.innerHTML = hits.length
+      ? hits.map((k) => `<button class="linkish" data-k="${k}"><i class="dot" style="background:${SMALL_COLORS[d.sloupce.skupina[k]]}"></i>${escapeHtml(names[k])}</button>`).join("")
+      : `<span class="dim">Ve vzorku není.</span>`;
   }
 
   /** Popisky od nejdůležitějších, bez překryvu (hrubý obdélník kolem textu). */
@@ -650,6 +856,8 @@ export class SystemView {
     el.style.transform = `translate(${((this.tmp.x + 1) / 2) * innerWidth + dx}px, ${((1 - this.tmp.y) / 2) * innerHeight - 7}px)`;
   }
 }
+
+const norm = (s: string) => s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
 
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 

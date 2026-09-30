@@ -1,4 +1,5 @@
 import { STAR_CLASS } from "../core/starClass";
+import { smallNotes, type SmallData } from "./small";
 import type { OrbitBody, SystemSpec } from "./types";
 
 const AU_KM = 149597870.7;
@@ -65,7 +66,7 @@ function body(el: Elements, kind: OrbitBody["kind"], aKm = false): OrbitBody {
   };
 }
 
-export function solarSpec(d: SolarData): SystemSpec {
+export function solarSpec(d: SolarData, small: SmallData | null = null): SystemSpec {
   const planets = d.planety.map((p) => body(p, "planet"));
   const dwarfs = d.trpaslici.map((p) => body(p, "dwarf"));
   const all = [...planets, ...dwarfs];
@@ -94,7 +95,9 @@ export function solarSpec(d: SolarData): SystemSpec {
       `Měsíce se ukážou po přiblížení k planetě; klepnutím na jméno se na těleso přeletí a kamera ho sleduje.`,
       `„Skutečné velikosti“ kreslí tělesa v měřítku drah (většinou jen jako tečky). Jinak jsou zvětšená.`,
       `Planeta „Země“ je ve skutečnosti těžiště soustavy Země–Měsíc (liší se o ~4 700 km).`,
+      ...(small ? smallNotes(small) : []),
     ],
+    small: small ?? undefined,
     source: `Data: NASA/JPL Solar System Dynamics – přibližné polohy planet, SBDB, Horizons, parametry měsíců (stav ${d.stazeno.slice(0, 10)}).`,
   };
 }

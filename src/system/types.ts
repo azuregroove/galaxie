@@ -1,4 +1,5 @@
 import type { StarClassResult } from "../core/starClass";
+import type { SmallData } from "./small";
 
 /** Oběžné těleso pro pohled Soustava. Délky v au, periody a čas ve dnech, úhly ve stupních. */
 export interface OrbitBody {
@@ -21,7 +22,9 @@ export interface OrbitBody {
   /** lineární změny elementů za den (planety podle Standishe, stáčení uzlu u měsíců) */
   rates?: { a?: number; e?: number; inc?: number; node?: number; w?: number };
   color?: string;
-  kind?: "planet" | "dwarf" | "moon";
+  kind?: "planet" | "dwarf" | "moon" | "small";
+  /** text do řádku vybraného tělesa místo výchozího (planetky a komety) */
+  info?: string;
   children?: OrbitBody[];
   /** poznámka k přesnosti do tabulky */
   note?: string;
@@ -59,5 +62,7 @@ export interface SystemSpec {
   notes?: string[];
   /** ukázat srovnání s drahami Sluneční soustavy */
   solarRef?: boolean;
+  /** planetky a komety jako body (jen Sluneční soustava) */
+  small?: SmallData;
   source: string;
 }

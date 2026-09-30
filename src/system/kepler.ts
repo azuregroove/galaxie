@@ -30,3 +30,27 @@ export function orbitPoint(a: number, e: number, wDeg: number, E: number): [numb
 /** Třetí Keplerův zákon: a [au] z periody [dny] a hmotnosti hvězdy [M☉] (hmotnost planety zanedbána). */
 export const aFromPeriod = (pDays: number, mStar: number): number => Math.cbrt(mStar * (pDays / 365.25) ** 2);
 export const periodFromA = (aAu: number, mStar: number): number => Math.sqrt(aAu ** 3 / mStar) * 365.25;
+
+/**
+ * Poloha v rovině dráhy před otočením o ω (osa x k periheliu) pro elipsu i hyperbolu.
+ * M v radiánech; u hyperboly je a záporné a M = n (t − T).
+ */
+export function planeXY(a: number, e: number, M: number): [number, number] {
+  if (e < 1) {
+    const E = eccentricAnomaly(M, e);
+    return [a * (Math.cos(E) - e), a * Math.sqrt(1 - e * e) * Math.sin(E)];
+  }
+  const H = hyperbolicAnomaly(M, e);
+  return [a * (Math.cosh(H) - e), -a * Math.sqrt(e * e - 1) * Math.sinh(H)];
+}
+
+/** Hyperbolická anomálie z e·sinh H − H = M (Newton, start z asinh). */
+export function hyperbolicAnomaly(M: number, e: number): number {
+  let H = Math.asinh(M / e);
+  for (let k = 0; k < 60; k++) {
+    const d = (e * Math.sinh(H) - H - M) / (e * Math.cosh(H) - 1);
+    H -= d;
+    if (Math.abs(d) < 1e-12) break;
+  }
+  return H;
+}
