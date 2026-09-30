@@ -24,7 +24,10 @@
       <h1>Mapa Mléčné dráhy</h1>
       <div class="subRow">
         <div class="sub" id="sub">–</div>
-        <button class="btn small" id="legendToggle" aria-expanded="false" aria-controls="legend">Vrstvy</button>
+        <span class="toggles">
+          <button class="btn small" id="legendToggle" aria-expanded="false" aria-controls="legend">Vrstvy</button>
+          <button class="btn small" id="listToggle" aria-expanded="false" aria-controls="listPanel">Seznam</button>
+        </span>
       </div>
       <div class="legend" id="legend"></div>
     </header>
@@ -44,9 +47,9 @@
     <section class="hud" id="card" hidden aria-live="polite"></section>
 
     <nav class="hud" id="bar">
+      <button class="btn" id="barToggle" aria-controls="bar" title="Schovat nebo ukázat lištu nástrojů"><span class="open">Skrýt lištu ▾</span><span class="shut">Nástroje ▴</span></button>
       <div class="tools">
       <div class="btns">
-        <button class="btn" id="listToggle" aria-pressed="false">Seznam</button>
         <button class="btn" data-view="near">Okolí Slunce</button>
         <button class="btn" data-view="sun">Slunce</button>
         <button class="btn" data-view="top">Shora</button>

@@ -7,6 +7,7 @@ import type { OverlayKey, Overlays } from "../scene/overlays";
 import { Stage } from "../scene/stage";
 import { FilterPanel } from "./filters";
 import { fillImage } from "./images";
+import { togglable, trackHeight } from "./panels";
 import type { DynLabel, Labels } from "./labels";
 
 const LIST_LIMIT = 150;
@@ -166,13 +167,7 @@ export class Hud {
         input.blur();
       }
     });
-    const panel = $("listPanel");
-    const toggle = $("listToggle");
-    if (matchMedia("(max-width:760px)").matches) panel.classList.add("closed");
-    toggle.onclick = () => {
-      const c = panel.classList.toggle("closed");
-      toggle.setAttribute("aria-pressed", String(!c));
-    };
+    togglable($("listToggle"), $("listPanel"), "seznam");
   }
 
   private renderList(): void {
@@ -358,10 +353,9 @@ export class Hud {
 
     addEventListener("resize", () => this.fitCenter());
 
-    const legend = $("legend");
-    const lt = $("legendToggle");
-    if (matchMedia("(max-width:760px)").matches) legend.classList.add("closed");
-    lt.onclick = () => lt.setAttribute("aria-expanded", String(!legend.classList.toggle("closed")));
+    togglable($("legendToggle"), $("legend"), "vrstvy");
+    togglable($("barToggle"), $("bar"), "lista", "min", false);
+    trackHeight($("bar"), "--bar-h");
 
     const hint = $("touchHint");
     let seen = false;
