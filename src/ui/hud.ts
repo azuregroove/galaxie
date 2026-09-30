@@ -204,6 +204,14 @@ export class Hud {
     card.hidden = false;
     card.scrollTop = 0;
     card.querySelector<HTMLButtonElement>(".close")!.onclick = () => this.closeCard();
+    const detail = L.detailLabel?.(o);
+    if (detail && L.openDetail) {
+      const b = document.createElement("button");
+      b.className = "btn detail";
+      b.textContent = detail;
+      b.onclick = () => L.openDetail!(o);
+      card.querySelector("h3")?.after(b);
+    }
     this.marker.position.copy(o.anchor);
     this.marker.visible = true;
     this.fitCenter();

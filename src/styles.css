@@ -13,6 +13,15 @@
   --imbh: #ff9a5c;
   --smbh: #ffe9b0;
   --bhkand: #4f86b0;
+  --st-ob: #8fb0ff;
+  --st-a: #dfe8ff;
+  --st-f: #fff3cf;
+  --st-g: #ffe066;
+  --st-k: #ffab4a;
+  --st-m: #ff6448;
+  --st-lty: #c0567e;
+  --st-d: #a9f0ff;
+  --st-x: #7d8699;
   --exo: #ff7fae;
   --ocl: #7aa7ff;
   --mgr: #9fb0d9;
@@ -103,15 +112,15 @@ table.planets tr.filtered { opacity: 0.35; }
 #card { top: calc(12px + env(safe-area-inset-top, 0px)); right: 12px; width: 360px; padding: 14px 16px; max-height: calc(100% - 110px); overflow-y: auto; box-sizing: border-box; }
 #card h3 { font: 600 17px/1.2 var(--f-display); margin: 0 0 2px; letter-spacing: 0.02em; padding-right: 24px; }
 #card h4 { font: 600 13px var(--f-display); margin: 14px 0 4px; letter-spacing: 0.03em; }
-#card .kind { font: 500 11px var(--f-mono); text-transform: uppercase; letter-spacing: 0.1em; }
+#card .kind, #system .kind { font: 500 11px var(--f-mono); text-transform: uppercase; letter-spacing: 0.1em; }
 #card dl { display: grid; grid-template-columns: auto 1fr; gap: 5px 12px; margin: 12px 0 10px; font-size: 12.5px; }
 #card dt { color: var(--dim); }
 #card dd { margin: 0; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
 #card p { margin: 0 0 6px; font-size: 12.5px; line-height: 1.5; color: #c3cce0; }
 #card a { color: var(--accent); }
 #card .cite { font-size: 11px; color: var(--dim); font-style: italic; }
-#card .src { margin-top: 8px; font-size: 11px; color: var(--dim); line-height: 1.45; }
-#card .close { position: absolute; top: 8px; right: 8px; background: none; border: 0; color: var(--dim); font-size: 18px; cursor: pointer; width: 28px; height: 28px; border-radius: 6px; }
+#card .src, #system .src { margin-top: 8px; font-size: 11px; color: var(--dim); line-height: 1.45; }
+#card .close, #system .close { position: absolute; top: 8px; right: 8px; background: none; border: 0; color: var(--dim); font-size: 18px; cursor: pointer; width: 28px; height: 28px; border-radius: 6px; }
 .tablewrap { overflow-x: auto; margin: 4px -4px 0; }
 table.planets { border-collapse: collapse; width: 100%; font: 400 11.5px var(--f-mono); font-variant-numeric: tabular-nums; }
 table.planets th, table.planets td { padding: 4px 4px; text-align: right; border-bottom: 1px solid var(--line); vertical-align: top; }
@@ -161,4 +170,29 @@ table.planets .dim { font-size: 10px; }
   .frange input { min-height: 34px; }
   #card { transition: transform 0.15s ease-out; }
   #card::before { content: ""; display: block; width: 36px; height: 4px; border-radius: 2px; background: var(--line); margin: -6px auto 8px; }
+}
+
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+
+/* ---------- pohled Soustava ---------- */
+#card .btn.detail { display: block; margin: 8px 0 4px; width: 100%; padding: 8px 10px; font-weight: 600; color: var(--fg); border-color: var(--accent); }
+#system { position: fixed; inset: 0; z-index: 30; background: var(--void); }
+#system[hidden] { display: none; }
+#system .sysCanvas, #system .sysCanvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+#system .sysLabels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.sysLabel { position: absolute; left: 0; top: 0; font: 500 11px var(--f-mono); color: var(--fg); white-space: nowrap; text-shadow: 0 0 3px #000, 0 0 6px #000; }
+.sysLabel.ref { color: var(--dim); }
+#system .sysHead { top: calc(12px + env(safe-area-inset-top, 0px)); left: 12px; right: auto; max-width: min(420px, calc(100% - 24px)); padding: 12px 44px 12px 16px; box-sizing: border-box; }
+#system .sysHead h3 { font: 600 17px/1.2 var(--f-display); margin: 0 0 2px; }
+#system .sysBar { left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 10px; }
+#system .sysBar .btn[aria-pressed="true"] { border-color: var(--accent); }
+#system .sysSpeed { font: 500 12px var(--f-mono); min-width: 110px; text-align: center; }
+#system .sysNotes { right: 12px; top: calc(12px + env(safe-area-inset-top, 0px)); width: 380px; max-height: calc(100% - 130px); overflow-y: auto; padding: 12px 14px; box-sizing: border-box; font-size: 12px; }
+#system .sysNotes[hidden] { display: none; }
+#system .sysNotes ul { padding-left: 16px; margin: 8px 0; }
+#system .sysNotes li { margin: 4px 0; color: var(--dim); }
+@media (max-width: 760px) {
+  #system .sysNotes { left: 12px; width: auto; top: auto; bottom: calc(var(--sysbar-h, 110px) + 20px + env(safe-area-inset-bottom, 0px)); max-height: 45%; }
+  #system .sysBar .btn { min-height: 40px; }
+  #system .sysSpeed { min-width: 90px; }
 }

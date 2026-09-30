@@ -52,6 +52,9 @@ export interface Layer {
   /** Vzdálenost kamery po přeletu na objekt (ly). */
   flyDistance(o: MapObject): number;
   update?(stage: Stage): void;
+  /** Podrobný pohled na objekt (např. planetární soustava); tlačítko v kartě se ukáže, když vrátí popisek. */
+  detailLabel?(o: MapObject): string | null;
+  openDetail?(o: MapObject): void;
   /** Volá se při každé změně výběru (null = nic vybraného). */
   onSelect?(o: MapObject | null): void;
 }

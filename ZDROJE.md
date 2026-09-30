@@ -35,6 +35,12 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 - Licence VizieR: metadata odkazují na https://cds.unistra.fr/vizier-org/licences_vizier.html – **text neověřen** (stránka z cloudu nedostupná).
 - Sgr A* a 1E 1740.7-2942 umístěny do vzdálenosti R₀.
 
+### Spektrální třídy hvězd – Pecaut & Mamajek 2013
+- Pecaut M. J., Mamajek E. E. 2013, ApJS 208, 9 – CDS `J/ApJS/208/9`, tabulka 5 (Teff trpaslíků O9V–M9V).
+- Použití: odhad třídy hostitelské hvězdy exoplanet z Teff, když archiv nemá spektrální typ (`src/core/starClass.ts`).
+  Hranice = střed mezi posledním podtypem třídy a prvním podtypem další. Platí pro hlavní posloupnost, u obrů jen přibližně.
+- Barvy tříd v mapě jsou orientační konvence, ne výpočet.
+
 ### Hvězdokupy – Hunt & Reffert 2023; Baumgardt & Vasiliev 2021
 - Otevřené kupy a pohybové skupiny: Hunt E.L., Reffert S. 2023, A&A 673, A114 – CDS `J/A+A/673/A114`, tabulka `clusters.dat`
   (7 167 řádků, stav 29. 9. 2026). Vzdálenost = medián (dist50), meze 16. a 84. percentil. Kulové kupy (typ g, 121)

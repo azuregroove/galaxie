@@ -29,6 +29,8 @@ COLUMNS = [
     "pl_rade", "pl_bmasse", "pl_orbper", "pl_orbsmax", "pl_eqt",
     "disc_year", "discoverymethod", "disc_facility", "pl_controv_flag",
 ]
+# Tvar a natočení drah pro pohled „Soustava“. Nepovinné: starší stažená CSV je nemají.
+ORBIT_COLS = ["pl_orbeccen", "pl_orblper", "pl_orbincl"]
 STAR_COLS = ["st_spectype", "st_teff", "st_rad", "st_mass", "sy_vmag"]
 
 METODY_CZ = {
@@ -47,7 +49,7 @@ METODY_CZ = {
 
 
 def download() -> str:
-    query = f"select {','.join(COLUMNS)} from pscomppars"
+    query = f"select {','.join(COLUMNS + ORBIT_COLS)} from pscomppars"
     url = f"{TAP_URL}?{urllib.parse.urlencode({'query': query, 'format': 'csv'})}"
     print("Stahuji PSCompPars z NASA Exoplanet Archive …", flush=True)
     with urllib.request.urlopen(url, timeout=180) as r:
@@ -68,6 +70,11 @@ def build(df: pd.DataFrame, source_note: str) -> tuple[dict, dict]:
     missing = [c for c in COLUMNS if c not in df.columns]
     if missing:
         raise SystemExit(f"Ve vstupu chybí sloupce: {missing}")
+    no_orbit = [c for c in ORBIT_COLS if c not in df.columns]
+    if no_orbit:
+        print(f"  pozor: vstup nemá {no_orbit}, dráhy v pohledu Soustava budou kruhové")
+        for c in no_orbit:
+            df[c] = np.nan
 
     df = df.sort_values(["hostname", "pl_name"]).reset_index(drop=True)
 
@@ -105,7 +112,8 @@ def build(df: pd.DataFrame, source_note: str) -> tuple[dict, dict]:
     mi = {m: i for i, m in enumerate(metody)}
     zi = {z: i for i, z in enumerate(zarizeni)}
 
-    pl = {k: [] for k in ["sys", "jmeno", "r", "m", "p", "a", "teq", "rok", "metoda", "zarizeni", "sporna"]}
+    pl = {k: [] for k in ["sys", "jmeno", "r", "m", "p", "a", "teq", "rok", "metoda", "zarizeni", "sporna",
+                          "e", "w", "inc"]}
     for _, r in df.iterrows():
         pl["sys"].append(host_index[r["hostname"]])
         pl["jmeno"].append(r["pl_name"])
@@ -118,6 +126,9 @@ def build(df: pd.DataFrame, source_note: str) -> tuple[dict, dict]:
         pl["metoda"].append(mi.get(r["discoverymethod"]))
         pl["zarizeni"].append(zi.get(r["disc_facility"]))
         pl["sporna"].append(1 if r["pl_controv_flag"] == 1 else 0)
+        pl["e"].append(rnd(r["pl_orbeccen"], 4))
+        pl["w"].append(rnd(r["pl_orblper"], 2))
+        pl["inc"].append(rnd(r["pl_orbincl"], 2))
 
     systemy = {k: [row[k] for row in sys_rows] for k in sys_rows[0]}
     stazeno = now_iso()
@@ -125,6 +136,7 @@ def build(df: pd.DataFrame, source_note: str) -> tuple[dict, dict]:
         "schema": 1,
         "katalog": "exoplanety",
         "jednotky": {"d": "pc", "l": "deg", "b": "deg", "r": "R_Zeme", "m": "M_Zeme", "p": "dny", "a": "au",
+                     "e": "-", "w": "deg", "inc": "deg",
                      "teq": "K", "teff": "K", "rs": "R_Slunce", "ms": "M_Slunce"},
         "stazeno": stazeno,
         "zdroj_dat": source_note,
@@ -138,7 +150,8 @@ def build(df: pd.DataFrame, source_note: str) -> tuple[dict, dict]:
     }
     n_dist = sum(1 for d in systemy["d"] if d is not None)
     stats = {"planet": len(df), "systemu": len(sys_rows), "systemu_se_vzdalenosti": n_dist,
-             "max_d_pc": max(d for d in systemy["d"] if d is not None), "stazeno": stazeno}
+             "max_d_pc": max(d for d in systemy["d"] if d is not None), "stazeno": stazeno,
+             "planet_s_vystrednosti": sum(1 for e in pl["e"] if e is not None)}
     return out, stats
 
 
@@ -162,6 +175,7 @@ def main(argv=None):
     print(f"Hotovo: {st['planet']} planet v {st['systemu']} systémech "
           f"({st['systemu_se_vzdalenosti']} se vzdáleností, nejdál {st['max_d_pc']:.0f} pc "
           f"= {st['max_d_pc'] * LY_PER_PC:,.0f} ly) -> {a.vystup} ({size / 1024:.0f} kB)")
+    print(f"  výstřednost dráhy má {st['planet_s_vystrednosti']} planet")
 
     if not a.bez_manifestu:
         update_manifest({

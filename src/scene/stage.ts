@@ -25,6 +25,8 @@ export class Stage {
   readonly glow: CanvasTexture;
   width = 1;
   height = 1;
+  /** Když je otevřený jiný celoobrazovkový pohled (Soustava), hlavní scéna se nevykresluje. */
+  paused = false;
 
   private hooks: FrameHook[] = [];
   private flight: Flight | null = null;
@@ -115,6 +117,10 @@ export class Stage {
     const loop = (now: number) => {
       const dt = Math.min(0.05, (now - this.last) / 1000);
       this.last = now;
+      if (this.paused) {
+        requestAnimationFrame(loop);
+        return;
+      }
       if (this.flight) {
         const f = this.flight;
         const t = Math.min(1, (now - f.t0) / f.dur);

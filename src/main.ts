@@ -9,6 +9,7 @@ import type { Layer } from "./layers/layer";
 import { buildBackdrop } from "./scene/backdrop";
 import { Overlays } from "./scene/overlays";
 import { Stage } from "./scene/stage";
+import { SystemView } from "./system/view";
 import { Anchor } from "./ui/anchor";
 import { Hud } from "./ui/hud";
 import { Labels } from "./ui/labels";
@@ -42,7 +43,11 @@ async function main() {
     const overlays = new Overlays(stage, frame, labels, css);
 
     const layers: Layer[] = [];
-    if (exo) layers.push(new ExoplanetLayer(exo, frame, stage.glow, css));
+    if (exo) {
+      const L = new ExoplanetLayer(exo, frame, stage.glow, css);
+      L.systemView = new SystemView(stage, stage.glow);
+      layers.push(L);
+    }
     if (bh) layers.push(new BlackHoleLayer(bh, frame, stage, css));
     cats.forEach((c, i) => layers.push(new CatalogLayer(c as CatalogData, manifest.katalogy.find((k) => k.id === generic[i])!, frame, stage.glow, css)));
     layers.forEach((L) => stage.scene.add(L.group));

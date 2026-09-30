@@ -74,8 +74,28 @@ Aktualizovat na konci každého sezení.
   - XTE J1859+226 a H 1705-25 mají vzdálenost z BlackCAT → už nejsou „jen směr“
   - aplikace: typ „Kandidát (rentgenový tranzient)“ (barva `--bhkand`), objekty bez vzdálenosti jen v seznamu
     + paprsek po výběru (jako CatalogLayer), hmotnost „neurčena“, texty zdroje polohy `simbad`/`kupa`/`blackcat`
+- 2026-09-30 (cloud): commit 44c3a20 pushnut (Ráďa odsouhlasil); Ráďa vyzkoušel na PC – „good“
+- 2026-09-30 (cloud): **Etapa 4 začátek – třída hvězdy + pohled Soustava** (build OK, Playwright desktop + mobil, bez JS chyb)
+  - `src/core/starClass.ts`: třída ze spektrálního typu (vč. WD/DA…, sd…, „m3 V“), jinak **odhad z Teff** podle
+    Pecaut & Mamajek 2013 tab. 5 (ověřeno z VizieR J/ApJS/208/9); spektrální typ má 1 687 ze 4 779 systémů, Teff 4 483
+  - exoplanety: barva bodu podle třídy hvězdy, legenda = přepínače tříd (O/B … M, hnědý a bílý trpaslík, neznámá),
+    karta ukazuje třídu, „odhad z teploty“ a český popis
+  - `src/system/`: pohled **Soustava** (tlačítko v kartě systému) – vlastní renderer, hlavní scéna se mezitím
+    nevykresluje (`Stage.paused`); elipsy podle e a ω (Keplerova rovnice), periody skutečné a zrychlené (« »),
+    přepínač skutečných velikostí, srovnávací dráhy Merkur–Jupiter (kamera se oddálí aspoň na 1 au), tabulka a poznámky
+  - chybějící a nebo P dopočteno 3. Keplerovým zákonem (označeno *); rovina drah schematická, fáze ilustrativní
+  - pipeline/exoplanety.py stahuje navíc `pl_orbeccen`, `pl_orblper`, `pl_orbincl` → e, w, inc (nepovinné pro starší CSV)
+  - elipsy ověřeny jen testovací hodnotou vloženou do stránky (e = 0,9); **skutečná data e zatím nejsou**
 
 ## Rozhodnutí
+- 2026-09-30: Ráďa chce třídu hvězdy s barvou i pohled Soustava s elipsami (ne jen kruhy)
+- 2026-09-30: **Sluneční soustava schválena v krocích 3a → 3b → 3c**: (a) planety, trpasličí planety, velké měsíce se
+  skutečnými sklony a polohou k datu + časový posuvník; (b) všechny známé měsíce; (c) planetky a komety – vzorek
+  nejjasnějších, plný katalog až na vyžádání. Zdroje JPL + MPC (licence ověřit), z cloudu blokované
+- 2026-09-30: **obrázky schváleny jako „odkazy místo souborů“**: (1) Wikidata → Wikimedia Commons náhled + autor/licence
+  načtené až v kartě, (2) výřez oblohy CDS hips2fits pro objekty bez fotky (licence přehlídek ověřit),
+  (3) exoplanety generované schéma, umělecké představy jen označené; offline jen malá kurátorovaná sada
+- 2026-09-30: pohled Soustava jako samostatná scéna v au (v mapě Galaxie jsou dráhy pod přesností float32 a pod pixel)
 - 2026-09-30: HD 130298 zůstává 7 900 ly (hodnota z článku), ne 8 300 ly z paralaxy Gaia (Ráďa)
 - 2026-09-30: kandidáti z BlackCAT jako samostatný typ ve vrstvě černých děr; shoda s ručním seznamem = poloha do 15″
 - Web veřejně na GitHub Pages (účet azuregroove), později PWA a mobilní aplikace přes Capacitor
@@ -106,6 +126,10 @@ Aktualizovat na konci každého sezení.
 - BlackCAT jen ve verzi 2016 (VizieR); aktuální web BlackCAT (novější tranzienty) z cloudu nedostupný
 - Gaia BH (plán etapy 3): BH1–3 v ručním seznamu jsou; jiný katalog kandidátů z Gaia zatím ne
 - Galaktické souřadnice v kartě mají desetinnou tečku (l 13.95°), jinde čárku – sjednotit
+- **Výstřednosti drah exoplanet chybí** – na PC `py pipeline\exoplanety.py` (názvy sloupců pl_orbeccen/pl_orblper/pl_orbincl
+  z paměti, neověřené – kdyby TAP hlásil neznámý sloupec, opravit)
+- Srovnávací poloosy Merkur–Jupiter (0,39/0,72/1,00/1,52/5,20 au) zapsané zpaměti – nahradit daty JPL se Sluneční soustavou
+- Legenda exoplanet má teď 9 přepínačů – na mobilu delší
 - Spirální ramena schematická; rozměry disku (87 400 ly, tloušťky) převzaté z prototypu, neověřené
 - Slunce leží v rovině (skutečných ~20 pc nad rovinou zanedbáno)
 - Výkon Etapy 2 v cloudu měřit nejde (WebGL běží softwarově na CPU) – ověřit na PC a na skutečném telefonu
@@ -121,7 +145,10 @@ Aktualizovat na konci každého sezení.
 ## Další krok
 - Ráďa: vyzkoušet Etapy 2 a 3 na PC a telefonu (`npm run dev -- --host`), změřit výkon s ~22 000 objekty
 - Na PC: `py -m pip install psrqpy` a `py pipeline\neutronove_hvezdy.py` (aktuální ATNF místo verze 2016)
+- Na PC: `py pipeline\exoplanety.py` (výstřednosti drah), pak zkusit Soustava u HD 80606 (velmi výstředná dráha)
+- Ráďa: pipeline Sluneční soustavy na PC, nebo povolit v cloudu domény ssd.jpl.nasa.gov, ssd-api.jpl.nasa.gov, minorplanetcenter.net
+- Pak 3a Sluneční soustava (planety, trpasličí planety, velké měsíce)
 - Případně HASH (planetární mlhoviny) na PC
-- Etapa 4: karty s popisy a obrázky, česká jména (Plejády, Jesličky…), licence
+- Etapa 4 dál: karty s popisy a obrázky, česká jména (Plejády, Jesličky…), licence
 - Git: 2026-09-29 Ráďa odsouhlasil commit + push a přesun sezení do cloudu (cloudové kredity);
   další push/PR/Actions dál jen s jeho souhlasem
