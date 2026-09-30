@@ -5,6 +5,7 @@ Použití:  python overit_simbad.py
 """
 from __future__ import annotations
 
+import os
 import sys
 import time
 import urllib.parse
@@ -51,7 +52,7 @@ SIMBAD_ID = {
 }
 
 # Zrcadlo CfA: server CDS neposílá celý řetězec certifikátů a Python na Windows ho pak neověří.
-SESAME = "https://vizier.cfa.harvard.edu/viz-bin/nph-sesame/-ox/S?"
+SESAME = os.environ.get("SESAME_URL", "https://vizier.cfa.harvard.edu/viz-bin/nph-sesame/-ox/S?")
 
 
 def resolve(name: str):

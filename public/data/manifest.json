@@ -6,12 +6,14 @@
     {
       "id": "cerne-diry",
       "soubor": "cerne-diry.json",
-      "nazev": "Černé díry (ruční výběr z prototypu)",
-      "zdroj": "Wikipedie (souřadnice RA/Dec, vzdálenosti, hmotnosti), katalogová označení",
-      "licence": "Fakta z Wikipedie (CC BY-SA 4.0); texty poznámek vlastní",
-      "poznamka": "HD 130298 má souřadnice neověřené; 11 objektů má polohu odvozenou z označení.",
-      "objektu": 39,
-      "stazeno": "2026-09-29T20:48:48Z"
+      "nazev": "Černé díry (ruční výběr + BlackCAT)",
+      "zdroj": "Wikipedie (vzdálenosti, hmotnosti), SIMBAD (polohy), BlackCAT – Corral-Santana et al. 2016 (kandidáti)",
+      "url": "https://cdsarc.cds.unistra.fr/viz-bin/cat/J/A+A/587/A61",
+      "licence": "Fakta z Wikipedie (CC BY-SA 4.0); BlackCAT přes CDS/VizieR (podmínky CDS, citovat článek); texty poznámek vlastní",
+      "citace": "Corral-Santana J. M. et al. 2016, A&A 587, A61 (bibcode 2016A&A...587A..61C, VizieR doi:10.26093/cds/vizier.35870061)",
+      "poznamka": "Polohy ověřené proti SIMBADu (30. 9. 2026); 13 převzato přímo ze SIMBADu, 2 hvězdy v NGC 3201 mají polohu středu kupy.",
+      "objektu": 78,
+      "stazeno": "2026-09-30T17:38:37Z"
     },
     {
       "id": "exoplanety",

@@ -64,8 +64,20 @@ Aktualizovat na konci každého sezení.
   - dotyk: výběr čeká 300 ms na případný dvojklep (v hustém přehledu byl dvojklep jinak nepoužitelný);
     ověřeno syntetickými událostmi, Playwright neumí klepat dost rychle při softwarovém WebGL
   - JS bundle 607 kB (gzip 156 kB); data celkem ~2,7 MB JSON
+- 2026-09-30 (cloud): **Etapa 3 dokončena – černé díry** (build OK, Playwright desktop 1400×860 + mobil 390×844, bez JS chyb)
+  - z cloudu je dostupný Sesame přes `vizier.cds.unistra.fr` → `overit_simbad.py` bere adresu z `SESAME_URL`
+  - 13 poloh přepsáno na SIMBAD (11 „z označení“ + GS 2000+25 6,5″ + Swift J1727.8-1613 41″) a HD 130298 („memory“ → simbad);
+    nová kontrola: odchylka 0,0–0,1″ u všech; NGC 3201 #21859/#12560 mají possrc „kupa“ (karta to říká)
+  - 1E 1740.7-2942: po opravě polohy ~390 ly od Sgr A* v průmětu (dřív ~340)
+  - BlackCAT 2016 (CDS J/A+A/587/A61): 57 tranzientů, 18 shod s ručním seznamem (do 15″; 1′ by spletl
+    SWIFT J174540.2-290005 se Sgr A*), **39 nových „kandidátů“**, 14 se vzdáleností; vrstva má 78 objektů
+  - XTE J1859+226 a H 1705-25 mají vzdálenost z BlackCAT → už nejsou „jen směr“
+  - aplikace: typ „Kandidát (rentgenový tranzient)“ (barva `--bhkand`), objekty bez vzdálenosti jen v seznamu
+    + paprsek po výběru (jako CatalogLayer), hmotnost „neurčena“, texty zdroje polohy `simbad`/`kupa`/`blackcat`
 
 ## Rozhodnutí
+- 2026-09-30: HD 130298 zůstává 7 900 ly (hodnota z článku), ne 8 300 ly z paralaxy Gaia (Ráďa)
+- 2026-09-30: kandidáti z BlackCAT jako samostatný typ ve vrstvě černých děr; shoda s ručním seznamem = poloha do 15″
 - Web veřejně na GitHub Pages (účet azuregroove), později PWA a mobilní aplikace přes Capacitor
 - Stavba v Claude Code, plánování a rešerše v projektu v aplikaci Claude
 - Model: Opus na architekturu a pipeline, Sonnet na rutinní práci
@@ -91,13 +103,9 @@ Aktualizovat na konci každého sezení.
 - Licenční podmínky CDS neověřené (viz ZDROJE.md); Hunt & Reffert „spolehlivý“ řez je jen přiblížení (4 105 vs. 4 114)
 - Planetární mlhoviny jen z Gaia katalogu (2 035), HASH nedostupný; vzdálenost jen u 405
 - Otevřená legenda na mobilu zabere ~600 px (sbalitelná tlačítkem Vrstvy)
-- Černé díry z BlackCAT (plán etapy 3) zatím nepřidány
-- 11 černých děr má polohu z katalogového označení (odchylka až 1°) – **zatím neopraveno** v cerne_diry.py,
-  správné polohy vypíše `py pipeline\overit_simbad.py` (běží jen na PC, cloud k CDS nemá přístup)
-- HD 130298 má v datech ještě possrc „memory“ – přepsat na ověřenou (SIMBAD); paralaxa SIMBAD 0,392 mas
-  (≈ 8 300 ly) vs. použitých 7 900 ly – o vzdálenosti rozhodnout
-- NGC 3201 #21859/#12560: poloha = střed kupy, v kartě to tak označit
-- XTE J1859+226 a H 1705-25 bez vzdálenosti (jen směr)
+- BlackCAT jen ve verzi 2016 (VizieR); aktuální web BlackCAT (novější tranzienty) z cloudu nedostupný
+- Gaia BH (plán etapy 3): BH1–3 v ručním seznamu jsou; jiný katalog kandidátů z Gaia zatím ne
+- Galaktické souřadnice v kartě mají desetinnou tečku (l 13.95°), jinde čárku – sjednotit
 - Spirální ramena schematická; rozměry disku (87 400 ly, tloušťky) převzaté z prototypu, neověřené
 - Slunce leží v rovině (skutečných ~20 pc nad rovinou zanedbáno)
 - Výkon Etapy 2 v cloudu měřit nejde (WebGL běží softwarově na CPU) – ověřit na PC a na skutečném telefonu
@@ -113,9 +121,7 @@ Aktualizovat na konci každého sezení.
 ## Další krok
 - Ráďa: vyzkoušet Etapy 2 a 3 na PC a telefonu (`npm run dev -- --host`), změřit výkon s ~22 000 objekty
 - Na PC: `py -m pip install psrqpy` a `py pipeline\neutronove_hvezdy.py` (aktuální ATNF místo verze 2016)
-- Etapa 3 zbytek: BlackCAT pro černé díry (ověřit zdroj a licenci), případně HASH na PC
-- Na PC: přepsat polohy „z označení“ v pipeline/cerne_diry.py podle overit_simbad.py (possrc → „simbad“),
-  doplnit text do SRC v src/layers/blackHoles.ts, znovu `py pipeline\cerne_diry.py`
-- Pak Etapa 4: karty s popisy a obrázky, česká jména (Plejády, Jesličky…), licence
+- Případně HASH (planetární mlhoviny) na PC
+- Etapa 4: karty s popisy a obrázky, česká jména (Plejády, Jesličky…), licence
 - Git: 2026-09-29 Ráďa odsouhlasil commit + push a přesun sezení do cloudu (cloudové kredity);
   další push/PR/Actions dál jen s jeho souhlasem

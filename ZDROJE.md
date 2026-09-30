@@ -21,11 +21,19 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
   bereme z první vyplněné planety systému (abecedně).
 - Poloha: RA/Dec → l, b přes astropy (kontrola proti `glon/glat` archivu, tolerance 0,01°), vzdálenost `sy_dist`.
 
-### Černé díry – ruční výběr z prototypu
-- Souřadnice, vzdálenosti a hmotnosti z Wikipedie (CC BY-SA 4.0), část poloh odvozena z katalogových označení.
-- Známé nejistoty: HD 130298 (souřadnice neověřené), 11 objektů s polohou z označení, 2 bez vzdálenosti.
+### Černé díry – ruční výběr z prototypu + BlackCAT
+- Ruční seznam (39 objektů): vzdálenosti a hmotnosti z Wikipedie (CC BY-SA 4.0).
+- Polohy ověřené proti SIMBADu přes CDS Sesame (zrcadlo `vizier.cds.unistra.fr`, 30. 9. 2026, `pipeline/overit_simbad.py`):
+  položky z Wikipedie sedí do ~2″; 13 poloh (dřív odvozených z označení nebo nepřesných) převzato přímo ze SIMBADu
+  (possrc `simbad`); dvě hvězdy v NGC 3201 mají polohu středu kupy (possrc `kupa`).
+- Kandidáti: BlackCAT – Corral-Santana J. M. et al. 2016, A&A 587, A61 (bibcode 2016A&A...587A..61C),
+  CDS `J/A+A/587/A61`, tabulka `tablea1.dat` (57 rentgenových tranzientů, VizieR doi:10.26093/cds/vizier.35870061).
+  18 se shoduje s ručním seznamem (poloha do 15″), 39 nových je v mapě jako „Kandidát“, 14 z nich se vzdáleností.
+  Vzdálenost bereme jen bez meze nebo s „~“; meze („<“, „>“) jsou jen v textu karty.
+  Z BlackCATu jsou i vzdálenosti XTE J1859+226 (12,5 ± 1,5 kpc) a H 1705-25 (8,6 ± 2,1 kpc).
+- Pozor: verze ve VizieR je stav 2016; web BlackCAT s novějšími objekty je z cloudu nedostupný.
+- Licence VizieR: metadata odkazují na https://cds.unistra.fr/vizier-org/licences_vizier.html – **text neověřen** (stránka z cloudu nedostupná).
 - Sgr A* a 1E 1740.7-2942 umístěny do vzdálenosti R₀.
-- V etapě 3 nahradit/doplnit katalogem BlackCAT a Gaia BH.
 
 ### Hvězdokupy – Hunt & Reffert 2023; Baumgardt & Vasiliev 2021
 - Otevřené kupy a pohybové skupiny: Hunt E.L., Reffert S. 2023, A&A 673, A114 – CDS `J/A+A/673/A114`, tabulka `clusters.dat`

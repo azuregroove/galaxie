@@ -36,7 +36,7 @@ V repu jsou vygenerovaná data všech katalogů. Obnova (každý skript pod minu
 ```powershell
 cd C:\Klouí\galaxie\pipeline
 py exoplanety.py          # NASA Exoplanet Archive (PSCompPars) -> public/data/exoplanety.json
-py cerne_diry.py          # černé díry z ručního seznamu (offline)
+py cerne_diry.py          # černé díry: ruční seznam + kandidáti z BlackCAT (CDS) -> cerne-diry.json
 py hvezdokupy.py          # Hunt & Reffert 2023 (CDS) + Baumgardt & Vasiliev 2021 -> hvezdokupy.json
 py mlhoviny.py            # WISE H II, Sharpless, Lynds, Zucker, planetární mlhoviny, Green (vše CDS) -> mlhoviny.json
 py neutronove_hvezdy.py   # ATNF přes psrqpy (jinak kopie 2016 v CDS) + magnetary McGill -> neutronove-hvezdy.json
