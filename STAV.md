@@ -158,6 +158,17 @@ Aktualizovat na konci každého sezení.
 - nic
 
 ## Další krok
+**Pořadí dohodnuté s Ráďou 30. 9. 2026 (pokračuje se v novém chatu):**
+1. 3c – planetky a komety (MPC / JPL SBDB): vzorek nejjasnějších, plný katalog na vyžádání; licenci MPC ověřit
+2. Bod 4 – obrázky „odkazy místo souborů“: Wikidata → Commons náhled + autor/licence, výřez oblohy CDS hips2fits,
+   u exoplanet generované schéma; malá offline sada
+3. Než bude projekt „hotový“: projít internet, aktualizovat všechna data a čísla z ověřených zdrojů; najít podobné projekty
+   a sepsat, čím mapu vylepšit (návrh Ráďovi)
+4. Přepínač „Star Trek“: 3D bubliny teritorií (Federace, Klingoni, Romulané, Cardassiané…) z dostupných zdrojů.
+   Pozor: fikce – jasně označit jako fanouškovskou vrstvu, u každé polohy zdroj a míru nejistoty; nepřebírat
+   chráněné mapy (např. oficiální Star Charts) doslova, jen fakta a vlastní odvození; ochranné známky Paramount – ověřit
+5. Úplně nakonec: e-mail JPL SSD kvůli svolení k datům (před etapou 6 – nasazení)
+
 - Ráďa: vyzkoušet Etapy 2 a 3 na PC a telefonu (`npm run dev -- --host`), změřit výkon s ~22 000 objekty
 - Na PC: `py -m pip install psrqpy` a `py pipeline\neutronove_hvezdy.py` (aktuální ATNF místo verze 2016)
 - Na PC: `py pipeline\exoplanety.py` (výstřednosti drah), pak zkusit Soustava u HD 80606 (velmi výstředná dráha)
