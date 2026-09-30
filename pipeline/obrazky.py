@@ -13,7 +13,7 @@ Párování:
     položky bez souřadnic se berou jen při shodě s hlavním jménem objektu (počet se vypíše)
   - tělesa Sluneční soustavy: podle rodičovského tělesa (P397 = Slunce nebo planeta) a jména
 
-Použití:  python obrazky.py        (~20 dotazů SPARQL po minutě kvůli limitu WDQS, ~20 min; cache v raw/wikidata)
+Použití:  python obrazky.py        (3 dotazy SPARQL, při limitu WDQS i desítky minut; cache v raw/wikidata)
 """
 from __future__ import annotations
 
@@ -51,7 +51,7 @@ def sparql(q: str, cache: str) -> list[dict]:
     if p.exists() and p.stat().st_size > 0:
         return json.loads(p.read_text(encoding="utf-8"))
     print(f"  SPARQL {cache}")
-    for attempt in range(4):
+    for attempt in range(10):
         try:
             req = urllib.request.Request(f"{SPARQL}?{urllib.parse.urlencode({'query': q, 'format': 'json'})}",
                                          headers={"User-Agent": UA, "Accept": "application/sparql-results+json"})
@@ -60,8 +60,8 @@ def sparql(q: str, cache: str) -> list[dict]:
             break
         except Exception as ex:  # 429/504 – služba je sdílená, počkat a zkusit znovu
             print(f"    chyba {ex}, zkouším znovu")
-            # při výpadku WDQS platí limit 1 dotaz/min
-            time.sleep(65)
+            # při výpadku WDQS platí limit 1 dotaz/min – na IP adresu, kterou v cloudu sdílíme s jinými
+            time.sleep(90)
     else:
         raise SystemExit(f"SPARQL {cache} opakovaně selhal")
     out = [{k: v["value"] for k, v in r.items()} for r in rows]
@@ -81,8 +81,11 @@ OPTS = """OPTIONAL { ?i wdt:P6257 ?ra } OPTIONAL { ?i wdt:P6258 ?dec }
   OPTIONAL { ?a2 schema:about ?i ; schema:isPartOf <https://en.wikipedia.org/> ; schema:name ?enw }"""
 
 
-def items_of_class(q: str) -> list[dict]:
-    return sparql(f"SELECT ?i {FIELDS} WHERE {{ ?i wdt:P31 wd:{q} ; wdt:P18 ?img . {OPTS} }} GROUP BY ?i", f"trida_{q}.json")
+def items_of_classes() -> list[dict]:
+    """Všechny třídy jedním dotazem (kvůli limitu WDQS); položka s víc třídami se vrátí jednou."""
+    vals = " ".join(f"wd:{q}" for q in TRIDY)
+    return sparql(f"SELECT ?i {FIELDS} WHERE {{ VALUES ?c {{ {vals} }} ?i wdt:P31 ?c ; wdt:P18 ?img . {OPTS} }} GROUP BY ?i",
+                  "tridy.json")
 
 
 def exo_hosts() -> list[dict]:
@@ -233,14 +236,8 @@ def solar(items: list[dict]) -> dict:
 
 def main():
     print("Wikidata: položky s obrázkem …")
-    deep: list[dict] = []
-    seen = set()
-    for q, nm in TRIDY.items():
-        rows = items_of_class(q)
-        new = [r for r in rows if r["i"] not in seen]
-        seen.update(r["i"] for r in rows)
-        deep += new
-        print(f"  {nm}: {len(rows)}")
+    deep = items_of_classes()
+    print(f"  hvězdokupy, mlhoviny, pulsary, rentgenové zdroje, černé díry: {len(deep)}")
     hosts = exo_hosts()
     print(f"  hostitelské hvězdy exoplanet: {len(hosts)}")
     sol = solar_items()
