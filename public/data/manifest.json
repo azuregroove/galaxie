@@ -69,6 +69,21 @@
       "objektu": 2567,
       "se_vzdalenosti": 2506,
       "stazeno": "2026-09-29T22:36:36Z"
+    },
+    {
+      "id": "slunecni-soustava",
+      "soubor": "slunecni-soustava.json",
+      "nazev": "Sluneční soustava (planety, trpasličí planety, měsíce)",
+      "zdroj": "NASA/JPL Solar System Dynamics: přibližné polohy planet (Standish), SBDB, střední elementy a fyzikální parametry měsíců, Horizons",
+      "url": "https://ssd.jpl.nasa.gov/",
+      "licence": "Obsah JPL SSD – podle FAQ webu je k převzetí potřeba svolení JPL (vyřídit před zveřejněním)",
+      "poznamka": "Polohy přibližné: planety podle Standishe (1800–2050), měsíce ze středních elementů.",
+      "objektu": 472,
+      "platnost": [
+        1800,
+        2050
+      ],
+      "stazeno": "2026-09-30T19:00:16Z"
     }
   ]
 }

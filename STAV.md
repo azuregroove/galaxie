@@ -128,7 +128,10 @@ Aktualizovat na konci každého sezení.
 - Galaktické souřadnice v kartě mají desetinnou tečku (l 13.95°), jinde čárku – sjednotit
 - **Výstřednosti drah exoplanet chybí** – na PC `py pipeline\exoplanety.py` (názvy sloupců pl_orbeccen/pl_orblper/pl_orbincl
   z paměti, neověřené – kdyby TAP hlásil neznámý sloupec, opravit)
-- Srovnávací poloosy Merkur–Jupiter (0,39/0,72/1,00/1,52/5,20 au) zapsané zpaměti – nahradit daty JPL se Sluneční soustavou
+- **JPL SSD: k převzetí dat na veřejný web chtějí svolení (FAQ) – napsat jim před etapou 6**
+- Sluneční soustava: poloměr Eris, Haumea, Makemake chybí (JPL neuvádí); Saturn bez prstenců; žádné planetky/komety (3c)
+- Jupiter 115 a Saturn 291 měsíců = počet řádků tabulky JPL (vč. předběžných označení) – oficiální počty neověřeny
+- Nepravidelné měsíce: dráhy dlouhé přímky přes obraz (ztlumeno), polohy za roky orientační
 - Legenda exoplanet má teď 9 přepínačů – na mobilu delší
 - Spirální ramena schematická; rozměry disku (87 400 ly, tloušťky) převzaté z prototypu, neověřené
 - Slunce leží v rovině (skutečných ~20 pc nad rovinou zanedbáno)
@@ -139,6 +142,18 @@ Aktualizovat na konci každého sezení.
 - JS bundle 585 kB (gzip 148 kB), většina je three.js
 - data-pipeline/ je nahrazená složkou pipeline/, ponechaná kvůli historii
 
+- 2026-09-30 (cloud): commit c251221 pushnut (třída hvězdy + Soustava); Ráďa povolil v cloudu domény JPL, MPC, CDS alasky, Wikidata, Commons
+- 2026-09-30 (cloud): **3a+3b Sluneční soustava** (build OK, Playwright desktop + mobil, bez JS chyb, exoplanety beze změny)
+  - `pipeline/slunecni_soustava.py` → `slunecni-soustava.json` (213 kB): 8 planet (Standish tab. 1), 5 trpasličích planet (SBDB),
+    459 měsíců (Horizons, 3 epochy; ~6 min stahování, cache v pipeline/raw/jpl)
+  - ověření proti Horizons: planety do 4,4′, trpasličí do 2′, měsíce dnes do ~6° (vzorek 25 + 12 velkých)
+  - slepé uličky: tabulkové střední elementy JPL (Saturn nesedí ani k epoše; perioda jednou siderická, jindy anomalistická);
+    oskulační elementy jedné epochy (rychlé měsíce ujíždějí) → řešení: 3 epochy z Horizons
+  - aplikace: `src/system/view.ts` zobecněn (3D sklony a uzly, polohy k datu, posuvník 1800–2050, „Dnes“, měsíce ve skupině planety,
+    ukážou se po přiblížení, klepnutí na jméno = přelet + sledování, popisky bez překryvu, max 45), `src/system/solar.ts`,
+    `src/layers/solar.ts` (objekt „Sluneční soustava“ v seznamu a hledání, data až po otevření)
+  - předběžná označení měsíců zobrazena jako „S/2020 S 15“
+
 ## Rozdělané
 - nic
 
@@ -146,8 +161,9 @@ Aktualizovat na konci každého sezení.
 - Ráďa: vyzkoušet Etapy 2 a 3 na PC a telefonu (`npm run dev -- --host`), změřit výkon s ~22 000 objekty
 - Na PC: `py -m pip install psrqpy` a `py pipeline\neutronove_hvezdy.py` (aktuální ATNF místo verze 2016)
 - Na PC: `py pipeline\exoplanety.py` (výstřednosti drah), pak zkusit Soustava u HD 80606 (velmi výstředná dráha)
-- Ráďa: pipeline Sluneční soustavy na PC, nebo povolit v cloudu domény ssd.jpl.nasa.gov, ssd-api.jpl.nasa.gov, minorplanetcenter.net
-- Pak 3a Sluneční soustava (planety, trpasličí planety, velké měsíce)
+- 3c: planetky a komety (MPC/JPL SBDB) – vzorek nejjasnějších, plný katalog na vyžádání; licence MPC ověřit
+- Bod 4: obrázky (Wikidata/Commons, hips2fits) – domény už povolené
+- Na PC nebo po povolení exoplanetarchive.ipac.caltech.edu: `exoplanety.py` (výstřednosti)
 - Případně HASH (planetární mlhoviny) na PC
 - Etapa 4 dál: karty s popisy a obrázky, česká jména (Plejády, Jesličky…), licence
 - Git: 2026-09-29 Ráďa odsouhlasil commit + push a přesun sezení do cloudu (cloudové kredity);

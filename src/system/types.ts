@@ -1,14 +1,30 @@
 import type { StarClassResult } from "../core/starClass";
 
-/** Oběžné těleso pro pohled Soustava. Délky v au, periody ve dnech, úhly ve stupních. */
+/** Oběžné těleso pro pohled Soustava. Délky v au, periody a čas ve dnech, úhly ve stupních. */
 export interface OrbitBody {
   name: string;
+  /** krátký popisek na mapě (např. „e“ místo „TRAPPIST-1 e“) */
+  label?: string;
   a: number;
   e: number;
   w: number;
   p: number;
   /** poloměr v poloměrech Země; null = neznámý */
   r: number | null;
+  /** sklon a délka výstupného uzlu vůči ekliptice; bez nich leží dráha v základní rovině */
+  inc?: number;
+  node?: number;
+  /** poloha k datu: střední anomálie m0 v epoše (JD), střední pohyb n [°/den] */
+  epoch?: number;
+  m0?: number;
+  n?: number;
+  /** lineární změny elementů za den (planety podle Standishe, stáčení uzlu u měsíců) */
+  rates?: { a?: number; e?: number; inc?: number; node?: number; w?: number };
+  color?: string;
+  kind?: "planet" | "dwarf" | "moon";
+  children?: OrbitBody[];
+  /** poznámka k přesnosti do tabulky */
+  note?: string;
   /** a dopočtené z periody (3. Keplerův zákon) */
   aEst?: boolean;
   /** perioda dopočtená z a */
@@ -26,6 +42,9 @@ export interface SystemSpec {
     /** poloměr v poloměrech Slunce; null = neznámý */
     rs: number | null;
     teff: number | null;
+    label?: string;
+    /** přesný spektrální typ, když ho chceme ukázat místo třídy */
+    spType?: string;
   };
   bodies: OrbitBody[];
   /** planety, které nešlo vykreslit (chybí a i perioda) */
@@ -34,5 +53,11 @@ export interface SystemSpec {
   massAssumed?: boolean;
   /** data vůbec neobsahují výstřednosti (pipeline před 30. 9. 2026) */
   noOrbitData?: boolean;
+  /** skutečné polohy k datu (JD TDB); jinak jen ilustrativní fáze */
+  dated?: { min: number; max: number };
+  /** vlastní poznámky místo výchozích pro exoplanety */
+  notes?: string[];
+  /** ukázat srovnání s drahami Sluneční soustavy */
+  solarRef?: boolean;
   source: string;
 }

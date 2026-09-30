@@ -5,6 +5,7 @@ import type { Manifest } from "./core/types";
 import { BlackHoleLayer, type BlackHoleData } from "./layers/blackHoles";
 import { CatalogLayer, type CatalogData } from "./layers/catalog";
 import { ExoplanetLayer, type ExoData } from "./layers/exoplanets";
+import { SolarLayer } from "./layers/solar";
 import type { Layer } from "./layers/layer";
 import { buildBackdrop } from "./scene/backdrop";
 import { Overlays } from "./scene/overlays";
@@ -43,9 +44,12 @@ async function main() {
     const overlays = new Overlays(stage, frame, labels, css);
 
     const layers: Layer[] = [];
+    const systemView = new SystemView(stage, stage.glow);
+    const solar = manifest.katalogy.find((k) => k.id === "slunecni-soustava");
+    if (solar) layers.push(new SolarLayer(frame, solar, DATA + solar.soubor, systemView));
     if (exo) {
       const L = new ExoplanetLayer(exo, frame, stage.glow, css);
-      L.systemView = new SystemView(stage, stage.glow);
+      L.systemView = systemView;
       layers.push(L);
     }
     if (bh) layers.push(new BlackHoleLayer(bh, frame, stage, css));

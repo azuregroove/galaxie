@@ -88,6 +88,7 @@ export class Hud {
   private buildLegend(): void {
     const legend = $("legend");
     for (const L of this.layers) {
+      if (!L.filters.length) continue;
       const row = document.createElement("div");
       row.className = "legRow";
       // skupina s víc typy dostane nadpis, ať je vidět, co k čemu patří
@@ -137,7 +138,7 @@ export class Hud {
   }
 
   private updateSubtitle(): void {
-    const parts = this.layers.map((L) => {
+    const parts = this.layers.filter((L) => L.filters.length).map((L) => {
       const n = L.objects.filter((o) => !o.hidden).length;
       return this.filters.active ? `${L.name}: ${fmt(n)} z ${fmt(L.objects.length)}` : `${L.name}: ${fmt(n)}`;
     });

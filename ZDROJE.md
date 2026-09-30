@@ -35,6 +35,19 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 - Licence VizieR: metadata odkazují na https://cds.unistra.fr/vizier-org/licences_vizier.html – **text neověřen** (stránka z cloudu nedostupná).
 - Sgr A* a 1E 1740.7-2942 umístěny do vzdálenosti R₀.
 
+### Sluneční soustava – NASA/JPL Solar System Dynamics
+- Planety: Keplerovské elementy pro přibližné polohy planet, tabulka 1 (1800–2050, E. M. Standish),
+  https://ssd.jpl.nasa.gov/planets/approx_pos.html. Proti JPL Horizons k 30. 9. 2026: odchylka směru 0,06′ (Merkur) až 4,4′ (Saturn).
+- Poloměry planet: https://ssd.jpl.nasa.gov/planets/phys_par.html (střední poloměr); Slunce a Pluto z Horizons.
+- Trpasličí planety (Ceres, Pluto, Eris, Haumea, Makemake): SBDB API, oskulační elementy v plné přesnosti; průměr jen Ceres.
+- Měsíce (459): seznam, periody a poloměry (46) ze https://ssd.jpl.nasa.gov/sats/elem/ a /sats/phys_par/;
+  dráhy z Horizons (oskulační elementy k 2026-01-01, 2026-01-11, 2027-01-01 vůči ekliptice J2000 → střední pohyb
+  a stáčení uzlu). Tabulkové střední elementy samotné nesedí u Saturnových měsíců ani k epoše (Titan ~157°),
+  proto jen záloha (1 měsíc: Daphnis). Kontrola 25 náhodných měsíců: dnes do 6,4°, za 5 let malé nepravidelné až desítky stupňů.
+- **Licence: FAQ JPL SSD na otázku „chci zveřejnit informace z vašeho webu na svém, potřebuji svolení?“ odpovídá
+  „The short answer is yes“** a odkazuje na copyright JPL (https://www.jpl.nasa.gov/copyrights.cfm – z cloudu nedostupné).
+  **Před zveřejněním (etapa 6) napsat JPL SSD** a popsat použití; do té doby jen lokální vývoj.
+
 ### Spektrální třídy hvězd – Pecaut & Mamajek 2013
 - Pecaut M. J., Mamajek E. E. 2013, ApJS 208, 9 – CDS `J/ApJS/208/9`, tabulka 5 (Teff trpaslíků O9V–M9V).
 - Použití: odhad třídy hostitelské hvězdy exoplanet z Teff, když archiv nemá spektrální typ (`src/core/starClass.ts`).

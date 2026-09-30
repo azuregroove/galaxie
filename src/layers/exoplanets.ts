@@ -250,7 +250,8 @@ export class ExoplanetLayer implements Layer {
       if (a == null || per == null || a <= 0 || per <= 0) { skipped.push(P.jmeno[p]); continue; }
       const e = P.e?.[p];
       bodies.push({
-        name: P.jmeno[p], a, p: per, r: P.r[p],
+        name: P.jmeno[p], label: P.jmeno[p].startsWith(o.name + " ") ? P.jmeno[p].slice(o.name.length + 1) : P.jmeno[p],
+        a, p: per, r: P.r[p],
         // e ≥ 1 by nebyla uzavřená dráha; v archivu se nevyskytuje, ale pojistka nic nestojí
         e: e != null && e >= 0 && e < 0.99 ? e : 0, eUnknown: e == null,
         w: P.w?.[p] ?? 0,
@@ -261,7 +262,7 @@ export class ExoplanetLayer implements Layer {
     return {
       name: o.name,
       star: { cls: o.cls, rs: S.rs[i], teff: S.teff[i] },
-      bodies, skipped, massAssumed: massAssumed && bodies.some((b) => b.aEst || b.pEst), noOrbitData,
+      bodies, skipped, solarRef: true, massAssumed: massAssumed && bodies.some((b) => b.aEst || b.pEst), noOrbitData,
       source: `Data: NASA Exoplanet Archive, PSCompPars (stav ${this.data.stazeno.slice(0, 10)}).`,
     };
   }

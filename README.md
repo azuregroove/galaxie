@@ -39,6 +39,7 @@ py exoplanety.py          # NASA Exoplanet Archive (PSCompPars, vč. výstředno
 py cerne_diry.py          # černé díry: ruční seznam + kandidáti z BlackCAT (CDS) -> cerne-diry.json
 py hvezdokupy.py          # Hunt & Reffert 2023 (CDS) + Baumgardt & Vasiliev 2021 -> hvezdokupy.json
 py mlhoviny.py            # WISE H II, Sharpless, Lynds, Zucker, planetární mlhoviny, Green (vše CDS) -> mlhoviny.json
+py slunecni_soustava.py   # JPL: planety, trpasličí planety, 459 měsíců (Horizons, ~6 min) -> slunecni-soustava.json
 py neutronove_hvezdy.py   # ATNF přes psrqpy (jinak kopie 2016 v CDS) + magnetary McGill -> neutronove-hvezdy.json
 ```
 
