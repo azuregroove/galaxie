@@ -126,8 +126,6 @@ Aktualizovat na konci každého sezení.
 - BlackCAT jen ve verzi 2016 (VizieR); aktuální web BlackCAT (novější tranzienty) z cloudu nedostupný
 - Gaia BH (plán etapy 3): BH1–3 v ručním seznamu jsou; jiný katalog kandidátů z Gaia zatím ne
 - Galaktické souřadnice v kartě mají desetinnou tečku (l 13.95°), jinde čárku – sjednotit
-- **Výstřednosti drah exoplanet chybí** – na PC `py pipeline\exoplanety.py` (názvy sloupců pl_orbeccen/pl_orblper/pl_orbincl
-  z paměti, neověřené – kdyby TAP hlásil neznámý sloupec, opravit)
 - **JPL SSD: k převzetí dat na veřejný web chtějí svolení (FAQ) – napsat jim před etapou 6**
 - Sluneční soustava: poloměr Eris, Haumea, Makemake chybí (JPL neuvádí); Saturn bez prstenců
 - Planetky a komety: dvoučásticové dráhy – daleko od roku 2026 jen orientační (stupně), po blízkých průletech (Apophis 2029) úplně mimo;
@@ -178,6 +176,10 @@ Aktualizovat na konci každého sezení.
   - WDQS při výpadku omezuje na 1 dotaz/min → 3 sloučené dotazy
 - 2026-09-30 (cloud): panely vypínací (Vrstvy, Seznam, lišta), legenda s posuvníkem, --bar-h (seznam byl u Ráďi vmáčknutý)
 
+- 2026-09-30 (PC, Ráďa): `exoplanety.py` znovu staženo (b150aa5): výstřednost má 5 305 z 6 372 planet, ω 2 107, sklon 4 842;
+  názvy sloupců pl_orbeccen/pl_orblper/pl_orbincl ověřené; HD 80606 b e = 0,932 → elipsa v Soustavě ověřena (Playwright)
+- 2026-09-30: Ráďa vyzkoušel mapu na PC – „boží“; náhledy z Commons a výkon na GPU zatím nenahlášeny
+
 ## Rozdělané
 - nic
 
@@ -196,9 +198,7 @@ Aktualizovat na konci každého sezení.
 
 - Ráďa: vyzkoušet Etapy 2 a 3 na PC a telefonu (`npm run dev -- --host`), změřit výkon s ~22 000 objekty
 - Na PC: `py -m pip install psrqpy` a `py pipeline\neutronove_hvezdy.py` (aktuální ATNF místo verze 2016)
-- Na PC: `py pipeline\exoplanety.py` (výstřednosti drah), pak zkusit Soustava u HD 80606 (velmi výstředná dráha)
 - Bod 4: obrázky (Wikidata/Commons, hips2fits) – domény už povolené
-- Na PC nebo po povolení exoplanetarchive.ipac.caltech.edu: `exoplanety.py` (výstřednosti)
 - Případně HASH (planetární mlhoviny) na PC
 - Etapa 4 dál: karty s popisy a obrázky, česká jména (Plejády, Jesličky…), licence
 - 2026-09-30: Ráďa odsouhlasil commit + push 3c do claude/sharp-cerf-bzaom6
