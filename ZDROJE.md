@@ -92,3 +92,9 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 - Magnetary: McGill Online Magnetar Catalog, Olausen S.A., Kaspi V.M. 2014, ApJS 212, 6 – `TabO1.csv`
   (31 objektů, poslední úprava 17. 11. 2020). Autoři: volné použití s citací článku a odkazem na
   http://www.physics.mcgill.ca/~pulsar/magnetar/main.html.
+
+### Obrázky – Wikidata + Wikimedia Commons
+- `pipeline/obrazky.py`: Wikidata Query Service, vlastnost P18 (obrázek), P528 (katalogové kódy), P6257/P6258 (RA/Dec), P397 (rodičovské těleso).
+  Data Wikidata jsou CC0. Ukládá se jen QID a název souboru, obrázky se nestahují.
+- Každý soubor na Commons má vlastní licenci a autora; aplikace je čte z Commons API (extmetadata) a bez nich obrázek nezobrazí.
+- Typy (P31) ověřené 30. 9. 2026 na známých objektech; párování s kontrolou polohy. Vyřazeno: Q16839981 (obrázek jiného objektu).

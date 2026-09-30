@@ -91,6 +91,16 @@
       "stazeno": "2026-09-29T22:36:36Z"
     },
     {
+      "id": "obrazky",
+      "soubor": "obrazky.json",
+      "nazev": "Obrázky (odkazy na Wikimedia Commons)",
+      "zdroj": "Wikidata (vlastnost P18), soubory Wikimedia Commons",
+      "url": "https://www.wikidata.org/",
+      "licence": "Wikidata CC0; každý obrázek má vlastní licenci a autora na Commons (zobrazeno v kartě)",
+      "objektu": 1739,
+      "stazeno": "2026-09-30T20:53:30Z"
+    },
+    {
       "id": "slunecni-soustava",
       "soubor": "slunecni-soustava.json",
       "nazev": "Sluneční soustava (planety, trpasličí planety, měsíce)",

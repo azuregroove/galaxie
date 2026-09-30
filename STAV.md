@@ -168,6 +168,16 @@ Aktualizovat na konci každého sezení.
   - MPC z cloudu blokované (403) → jen JPL; licence stejná jako u JPL (svolení před etapou 6)
   - v softwarovém WebGL ~30 ms/snímek desktop (dřív se neměřilo), na skutečném GPU ověřit na PC
 
+- 2026-09-30 (cloud): **bod 4.1 – obrázky z Wikidata/Commons** (build OK, Playwright bez JS chyb)
+  - `pipeline/obrazky.py` → `obrazky.json` (152 kB, jen odkazy): 1 739 objektů – hvězdokupy 458, mlhoviny 302, pulsary 19,
+    černé díry 12, hostitelé exoplanet 186, Sluneční soustava 762; párování jmény/aliasy/P528 + kontrola polohy (1°/0,2°/0,1°)
+  - ruční kontrola vzorku: identita sedí; vyřazen obrázek Velkého anihilátoru (na Wikidata je tam umělecká představa SS 433)
+  - karta: náhled + autor + licence z Commons API až při otevření; bez autora/licence jen odkaz; štítek „umělecká představa /
+    mapa / světelná křivka / schéma“; české jméno z Wikidata; odkaz na cs (jinak en) Wikipedii a Wikidata
+  - **z cloudu Commons API nedostupné** → skutečné náhledy neověřené, jen náhradní cesta a vykreslení s podvrženou odpovědí
+  - WDQS při výpadku omezuje na 1 dotaz/min → 3 sloučené dotazy
+- 2026-09-30 (cloud): panely vypínací (Vrstvy, Seznam, lišta), legenda s posuvníkem, --bar-h (seznam byl u Ráďi vmáčknutý)
+
 ## Rozdělané
 - nic
 
@@ -175,8 +185,8 @@ Aktualizovat na konci každého sezení.
 **Pořadí dohodnuté s Ráďou 30. 9. 2026 (pokračuje se v novém chatu):**
 1. ~~3c – planetky a komety~~ hotovo 30. 9. (vzorek); zbývá „plný katalog na vyžádání“ (návrh: dlaždice podle skupin/H,
    načítání po skupinách) a MPC (z cloudu blokované)
-2. Bod 4 – obrázky „odkazy místo souborů“: Wikidata → Commons náhled + autor/licence, výřez oblohy CDS hips2fits,
-   u exoplanet generované schéma; malá offline sada
+2. Bod 4 – obrázky: ~~Wikidata → Commons~~ hotovo (ověřit náhledy na PC); zbývá výřez oblohy CDS hips2fits (z cloudu
+   funguje, licence přehlídek ověřit), u exoplanet generované schéma, malá offline sada
 3. Než bude projekt „hotový“: projít internet, aktualizovat všechna data a čísla z ověřených zdrojů; najít podobné projekty
    a sepsat, čím mapu vylepšit (návrh Ráďovi)
 4. Přepínač „Star Trek“: 3D bubliny teritorií (Federace, Klingoni, Romulané, Cardassiané…) z dostupných zdrojů.

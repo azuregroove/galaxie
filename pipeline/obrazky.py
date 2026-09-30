@@ -29,6 +29,8 @@ import numpy as np
 from common import DATA_DIR, RAW_DIR, icrs_to_galactic, now_iso, update_manifest, write_json
 
 SPARQL = "https://query.wikidata.org/sparql"
+# Obrázky, které na Wikidata patří jinému objektu (ruční kontrola 30. 9. 2026)
+VYRADIT = {"Q16839981": "Velký anihilátor má jako obrázek uměleckou představu SS 433"}
 UA = "GalaxieMapa/0.1 (https://github.com/azuregroove/galaxie)"
 
 # Typy (P31) ověřené na známých objektech 30. 9. 2026 (Orion, Plejády, Krab, Cyg X-1, Sgr A* …)
@@ -180,7 +182,7 @@ def match_layer(layer: str, names: list[str], aliases: list[str | None], l: list
                 continue
             if best_sep is None or sep < best_sep:
                 best, best_sep = k, sep
-        if best is None:
+        if best is None or items[best]["i"].rsplit("/", 1)[-1] in VYRADIT:
             continue
         if best_sep is None:
             n_nocoord += 1

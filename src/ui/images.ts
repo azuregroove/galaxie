@@ -75,6 +75,16 @@ function commons(file: string): Promise<CommonsInfo | null> {
   return p;
 }
 
+/** Co na obrázku je, podle názvu souboru a popisu z Commons (Wikidata dává i kresby, mapy a grafy). */
+function imageKind(file: string, desc: string): string | null {
+  const t = `${file} ${desc}`;
+  if (/artist|concept|impression|illustration|rendering|umělecká|představa/i.test(t)) return "umělecká představa, ne fotografie";
+  if (/light ?curve/i.test(t)) return "světelná křivka (graf jasnosti)";
+  if (/constellation|IAU\.svg|star ?chart|\bmap\b|location of/i.test(t)) return "mapa – poloha na obloze";
+  if (/diagram|comparison|compare|sizes/i.test(t)) return "schéma nebo srovnání";
+  return null;
+}
+
 const short = (s: string, n: number) => (s.length > n ? `${s.slice(0, n - 1).trimEnd()}…` : s);
 
 const wikiLink = (lang: string, title: string) =>
@@ -108,10 +118,11 @@ export async function fillImage(el: HTMLElement, layer: string, name: string, is
   const lic = info.licenseUrl
     ? `<a href="${escapeHtml(info.licenseUrl)}" target="_blank" rel="noopener">${escapeHtml(info.license)}</a>`
     : escapeHtml(info.license);
+  const kind = imageKind(file, info.desc);
   box.className = "imgBox";
   box.innerHTML = `<figure>
       <a href="${escapeHtml(info.page)}" target="_blank" rel="noopener"><img src="${escapeHtml(info.thumb)}" alt="${escapeHtml(short(info.desc || name, 120))}" loading="lazy"></a>
-      <figcaption>${info.desc ? `<span class="imgDesc">${escapeHtml(short(info.desc, 160))}<br></span>` : ""}Autor: ${escapeHtml(short(info.author, 120))} · Licence: ${lic} ·
+      <figcaption>${kind ? `<span class="imgKind">${escapeHtml(kind)}</span><br>` : ""}${info.desc ? `<span class="imgDesc">${escapeHtml(short(info.desc, 160))}<br></span>` : ""}Autor: ${escapeHtml(short(info.author, 120))} · Licence: ${lic} ·
         <a href="${escapeHtml(info.page)}" target="_blank" rel="noopener">Wikimedia Commons</a></figcaption>
     </figure>`;
 }
