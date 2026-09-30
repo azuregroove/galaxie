@@ -58,7 +58,7 @@ function body(el: Elements, kind: OrbitBody["kind"], aKm = false): OrbitBody {
   return {
     name: el.en === el.jmeno || kind !== "moon" ? cz : `${cz} (${el.en})`,
     label: cz,
-    kind, a, e: el.e, inc: el.i, node: el.om, w: el.w, epoch: el.epocha, m0: el.m0, n: el.n,
+    kind, imgKey: el.en, a, e: el.e, inc: el.i, node: el.om, w: el.w, epoch: el.epocha, m0: el.m0, n: el.n,
     p: 360 / Math.abs(el.n),
     r: el.r_km != null ? el.r_km / R_EARTH_KM : null,
     color: COLORS[el.jmeno] ?? (kind === "moon" ? "#b9b3a8" : kind === "dwarf" ? "#c8b6a0" : undefined),

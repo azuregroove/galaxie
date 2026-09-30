@@ -6,6 +6,7 @@ import type { Layer } from "../layers/layer";
 import type { OverlayKey, Overlays } from "../scene/overlays";
 import { Stage } from "../scene/stage";
 import { FilterPanel } from "./filters";
+import { fillImage } from "./images";
 import type { DynLabel, Labels } from "./labels";
 
 const LIST_LIMIT = 150;
@@ -213,6 +214,10 @@ export class Hud {
       b.onclick = () => L.openDetail!(o);
       card.querySelector("h3")?.after(b);
     }
+    const img = document.createElement("div");
+    img.className = "imgs";
+    card.appendChild(img);
+    void fillImage(img, L.id, o.name, () => this.selected === o && !card.hidden);
     this.marker.position.copy(o.anchor);
     this.marker.visible = true;
     this.fitCenter();

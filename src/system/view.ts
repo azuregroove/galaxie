@@ -25,6 +25,7 @@ import {
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { escapeHtml, fmtNum } from "../core/units";
 import type { Stage } from "../scene/stage";
+import { fillImage } from "../ui/images";
 import { planeXY } from "./kepler";
 import { SMALL_COLORS, smallBody, type SmallData } from "./small";
 import type { OrbitBody, SystemSpec } from "./types";
@@ -480,6 +481,19 @@ export class SystemView {
   }
 
   private showInfo(bv: BodyView): void {
+    this.infoFor = bv;
+    this.renderInfo(bv);
+    if (bv.b.imgKey) {
+      const img = document.createElement("div");
+      img.className = "imgs";
+      this.q(".sysFocus").appendChild(img);
+      void fillImage(img, "slunecni-soustava", bv.b.imgKey, () => this.infoFor === bv && !this.root.hidden);
+    }
+  }
+
+  private infoFor: BodyView | null = null;
+
+  private renderInfo(bv: BodyView): void {
     const b = bv.b;
     if (b.info) {
       this.q(".sysFocus").innerHTML = `<b>${escapeHtml(b.name)}</b> · ${escapeHtml(b.info)}`;

@@ -11,6 +11,7 @@ import { buildBackdrop } from "./scene/backdrop";
 import { Overlays } from "./scene/overlays";
 import { Stage } from "./scene/stage";
 import { SystemView } from "./system/view";
+import { initImages } from "./ui/images";
 import { Anchor } from "./ui/anchor";
 import { Hud } from "./ui/hud";
 import { Labels } from "./ui/labels";
@@ -37,6 +38,7 @@ async function main() {
       ...generic.map((id) => getJson<CatalogData>(file(id)!)),
     ]);
 
+    if (file("obrazky")) initImages(DATA + file("obrazky"));
     const frame = new Frame(manifest.r0_pc);
     const stage = new Stage(document.getElementById("stage")!, css("--void"));
     stage.scene.add(buildBackdrop(stage.glow, frame.sun));

@@ -69,7 +69,7 @@ export function smallBody(d: SmallData, k: number): OrbitBody {
   const ep = new Date((c.epocha[k] - 2440587.5) * 86400000).toLocaleDateString("cs-CZ");
   parts.push(c.zdroj[k] === "h" ? `dráha: JPL Horizons k ${ep}` : `dráha: JPL SBDB k ${ep}`);
   return {
-    name, label: shortName(name), kind: "small", a, e, inc: c.i[k], node: c.om[k], w: c.w[k],
+    name, label: shortName(name), kind: "small", imgKey: name, a, e, inc: c.i[k], node: c.om[k], w: c.w[k],
     epoch: c.epocha[k], m0: c.m0[k], n: c.n[k], p: e < 1 ? 360 / c.n[k] : Infinity,
     r: c.d_km[k] != null ? c.d_km[k]! / 2 / 6371 : null,
     color: SMALL_COLORS[c.skupina[k]], info: parts.join(" · "),

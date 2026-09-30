@@ -23,6 +23,8 @@ export interface OrbitBody {
   rates?: { a?: number; e?: number; inc?: number; node?: number; w?: number };
   color?: string;
   kind?: "planet" | "dwarf" | "moon" | "small";
+  /** klíč do obrazky.json (vrstva slunecni-soustava): anglické jméno nebo označení z JPL */
+  imgKey?: string;
   /** text do řádku vybraného tělesa místo výchozího (planetky a komety) */
   info?: string;
   children?: OrbitBody[];
