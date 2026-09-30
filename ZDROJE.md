@@ -98,3 +98,11 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
   Data Wikidata jsou CC0. Ukládá se jen QID a název souboru, obrázky se nestahují.
 - Každý soubor na Commons má vlastní licenci a autora; aplikace je čte z Commons API (extmetadata) a bez nich obrázek nezobrazí.
 - Typy (P31) ověřené 30. 9. 2026 na známých objektech; párování s kontrolou polohy. Vyřazeno: Q16839981 (obrázek jiného objektu).
+
+### Výřezy oblohy – CDS hips2fits + DSS2
+- Služba: https://alasky.cds.unistra.fr/hips-image-services/hips2fits (záloha alaskybis). CDS žádá citaci:
+  „This research made use of hips2fits, a service provided by CDS.“
+- Přehlídka: `CDS/P/DSS2/color`. Z popisu HiPS (https://alasky.cds.unistra.fr/DSS/DSSColor/properties, 30. 9. 2026):
+  obs_copyright „Digitized Sky Survey - STScI/NASA, Colored & Healpixed by CDS“, obs_copyright_url http://archive.stsci.edu/dss/copyright.html.
+  Poděkování (obs_ack): „The Digitized Sky Surveys were produced at the Space Telescope Science Institute under U.S. Government grant NAG W-2166. …“
+- **Podmínky užití DSS neověřené** – stránka STScI je z cloudu blokovaná. Ověřit před zveřejněním (etapa 6).

@@ -238,3 +238,7 @@ table.planets .dim { font-size: 10px; }
   #system .sysFocus .imgs img { max-height: 90px; }
   #system .sysFocus .imgs .imgDesc { display: none; }
 }
+/* výřez oblohy: kroužek ve středu = poloha objektu */
+.imgs figure.sky > a { position: relative; display: block; aspect-ratio: 1; max-width: 330px; background: #000; border-radius: 6px; }
+.imgs figure.sky img { width: 100%; height: 100%; max-height: none; }
+.imgs figure.sky > a::after { content: ""; position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px; border: 1.5px solid rgba(255, 179, 92, 0.85); border-radius: 50%; pointer-events: none; }

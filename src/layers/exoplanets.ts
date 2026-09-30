@@ -19,7 +19,7 @@ import { aFromPeriod, periodFromA } from "../system/kepler";
 import type { OrbitBody, SystemSpec } from "../system/types";
 import type { SystemView } from "../system/view";
 import { positionRows } from "./common";
-import { NO_FILTER, passDist, type Facet, type FilterState, type Layer, type LayerFilter } from "./layer";
+import { NO_FILTER, passDist, type Facet, type FilterState, type Layer, type LayerFilter, type SkyPos } from "./layer";
 
 type N = number | null;
 export interface ExoData {
@@ -265,6 +265,11 @@ export class ExoplanetLayer implements Layer {
       bodies, skipped, solarRef: true, massAssumed: massAssumed && bodies.some((b) => b.aEst || b.pEst), noOrbitData,
       source: `Data: NASA Exoplanet Archive, PSCompPars (stav ${this.data.stazeno.slice(0, 10)}).`,
     };
+  }
+
+  skyPos(mo: MapObject): SkyPos {
+    const S = this.data.systemy;
+    return { l: S.l[mo.index], b: S.b[mo.index], fovDeg: 0.15 };
   }
 
   cardHtml(mo: MapObject): string {

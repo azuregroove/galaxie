@@ -5,7 +5,7 @@ import { LY_PER_PC, escapeHtml, fmtPcFromLy } from "../core/units";
 import { circle, glowSprite, seg } from "../scene/overlays";
 import type { Stage } from "../scene/stage";
 import { positionRows } from "./common";
-import { NO_FILTER, passDist, type Facet, type FilterState, type Layer, type LayerFilter } from "./layer";
+import { NO_FILTER, passDist, type Facet, type FilterState, type Layer, type LayerFilter, type SkyPos } from "./layer";
 
 export interface BlackHoleData {
   objekty: {
@@ -140,6 +140,11 @@ export class BlackHoleLayer implements Layer {
       const s = Math.max(o.base, d * 0.012 * (o.t === "smbh" ? 2 : 1));
       o.spr.scale.set(s, s, 1);
     }
+  }
+
+  skyPos(mo: MapObject): SkyPos {
+    const o = mo as BH;
+    return { l: o.l, b: o.b, fovDeg: 0.15 };
   }
 
   cardHtml(mo: MapObject): string {

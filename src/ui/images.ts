@@ -1,4 +1,6 @@
-import { escapeHtml } from "../core/units";
+import { galToIcrs } from "../core/coords";
+import { escapeHtml, fmtNum } from "../core/units";
+import type { SkyPos } from "../layers/layer";
 
 /**
  * Obrázky k objektům jako odkazy: pipeline/obrazky.py spáruje objekty s Wikidata (P18), tady se až při otevření
@@ -85,6 +87,37 @@ function imageKind(file: string, desc: string): string | null {
   return null;
 }
 
+// Přehlídka pro výřezy: DSS2 pokrývá celou oblohu. Údaje o autorství z popisu HiPS
+// (https://alasky.cds.unistra.fr/DSS/DSSColor/properties, 30. 9. 2026); podmínky užití DSS (STScI) z cloudu neověřené.
+const SKY_HIPS = "CDS/P/DSS2/color";
+const SKY_CREDIT = "Digitized Sky Survey – STScI/NASA, obarveno CDS";
+const HIPS2FITS = "https://alasky.cds.unistra.fr/hips-image-services/hips2fits";
+// hips2fits má dva nezávislé servery (dokumentace služby); při chybě zkusit záložní, pak se vzdát
+const SKY_ONERROR = "if(!this.dataset.bis){this.dataset.bis='1';this.src=this.src.replace('//alasky.','//alaskybis.')}"
+  + "else{this.closest('figure').outerHTML='<span class=dim>Výřez oblohy se nepodařilo načíst.</span>'}";
+
+/** Výřez oblohy z hips2fits (CDS) pro objekty bez fotky. Sever nahoře, východ vlevo. */
+function skyCutout(sky: SkyPos): string {
+  const [ra, dec] = galToIcrs(sky.l, sky.b);
+  const fov = sky.fovDeg;
+  const q = new URLSearchParams({
+    hips: SKY_HIPS, ra: ra.toFixed(5), dec: dec.toFixed(5), fov: fov.toFixed(4),
+    width: String(THUMB_W), height: String(THUMB_W), projection: "TAN", format: "jpg",
+  });
+  const aladin = `https://aladin.cds.unistra.fr/AladinLite/?${new URLSearchParams({
+    target: `${ra.toFixed(5)} ${dec >= 0 ? "+" : ""}${dec.toFixed(5)}`, fov: fov.toFixed(3), survey: SKY_HIPS,
+  })}`;
+  const fovTxt = fov >= 1 ? `${fmtNum(fov, 1)}°` : `${fmtNum(fov * 60, 0)}′`;
+  return `<div class="imgBox"><figure class="sky">
+      <a href="${escapeHtml(aladin)}" target="_blank" rel="noopener"><img src="${escapeHtml(`${HIPS2FITS}?${q}`)}" alt="Výřez oblohy kolem objektu" loading="lazy"
+        onerror="${SKY_ONERROR}"></a>
+      <figcaption><span class="imgKind">výřez z přehlídky oblohy (fotka tohoto objektu není)</span><br>
+        Pole ${fovTxt}, střed = poloha objektu, sever nahoře. Snímek: ${escapeHtml(SKY_CREDIT)} ·
+        služba <a href="https://alasky.cds.unistra.fr/hips-image-services/hips2fits" target="_blank" rel="noopener">hips2fits (CDS)</a> ·
+        <a href="${escapeHtml(aladin)}" target="_blank" rel="noopener">otevřít v Aladin Lite</a></figcaption>
+    </figure></div>`;
+}
+
 const short = (s: string, n: number) => (s.length > n ? `${s.slice(0, n - 1).trimEnd()}…` : s);
 
 const wikiLink = (lang: string, title: string) =>
@@ -94,10 +127,15 @@ const wikiLink = (lang: string, title: string) =>
  * Doplní do prvku obrázek a odkazy k objektu (vrstva + jméno). Když obrázek k objektu není, prvek zůstane prázdný.
  * `isCurrent` hlídá, jestli je karta pořád otevřená pro stejný objekt (odpověď může přijít pozdě).
  */
-export async function fillImage(el: HTMLElement, layer: string, name: string, isCurrent: () => boolean = () => true): Promise<void> {
+export async function fillImage(el: HTMLElement, layer: string, name: string, isCurrent: () => boolean = () => true,
+  sky: SkyPos | null = null): Promise<void> {
   const d = await load();
   const e = d?.vrstvy[layer]?.[name];
-  if (!e || !isCurrent()) return;
+  if (!isCurrent()) return;
+  if (!e) {
+    if (sky) el.innerHTML = skyCutout(sky);
+    return;
+  }
   const [qid, file, cs, csWiki, enWiki] = e;
   const links = [
     csWiki ? `<a href="${wikiLink("cs", csWiki)}" target="_blank" rel="noopener">Wikipedie (česky)</a>` : null,

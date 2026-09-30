@@ -49,6 +49,8 @@ export interface Layer {
   /** Objekty, které chtějí popisek při daném přiblížení, od nejdůležitějšího. O umístění rozhodnou Labels. */
   labelCandidates(stage: Stage): MapObject[];
   cardHtml(o: MapObject): string;
+  /** Poloha na obloze a velikost výřezu pro obrázek z přehlídky (když objekt nemá fotku). */
+  skyPos?(o: MapObject): SkyPos | null;
   /** Vzdálenost kamery po přeletu na objekt (ly). */
   flyDistance(o: MapObject): number;
   update?(stage: Stage): void;
@@ -57,4 +59,11 @@ export interface Layer {
   openDetail?(o: MapObject): void;
   /** Volá se při každé změně výběru (null = nic vybraného). */
   onSelect?(o: MapObject | null): void;
+}
+
+export interface SkyPos {
+  l: number;
+  b: number;
+  /** zorné pole výřezu ve stupních */
+  fovDeg: number;
 }

@@ -26,3 +26,19 @@ export class Frame {
     return out.copy(this.sun).addScaledVector(Frame.dir(lDeg, bDeg), dPc * LY_PER_PC);
   }
 }
+
+// Matice z galaktických do ICRS (transpozice A_G, Hipparcos 1997); proti astropy ověřeno na 0,02″.
+const G2E = [
+  [-0.0548755604162154, 0.4941094278755837, -0.8676661490190047],
+  [-0.8734370902348850, -0.4448296299600112, -0.1980763734312015],
+  [-0.4838350155487132, 0.7469822444972189, 0.4559837761750669],
+];
+
+/** Galaktické (l, b) → rovníkové ICRS (RA, Dec), vše ve stupních. */
+export function galToIcrs(lDeg: number, bDeg: number): [number, number] {
+  const L = (lDeg * Math.PI) / 180, B = (bDeg * Math.PI) / 180;
+  const g = [Math.cos(B) * Math.cos(L), Math.cos(B) * Math.sin(L), Math.sin(B)];
+  const e = G2E.map((r) => r[0] * g[0] + r[1] * g[1] + r[2] * g[2]);
+  const ra = ((Math.atan2(e[1], e[0]) * 180) / Math.PI + 360) % 360;
+  return [ra, (Math.asin(Math.max(-1, Math.min(1, e[2]))) * 180) / Math.PI];
+}

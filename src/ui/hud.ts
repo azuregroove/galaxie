@@ -212,7 +212,7 @@ export class Hud {
     const img = document.createElement("div");
     img.className = "imgs";
     card.appendChild(img);
-    void fillImage(img, L.id, o.name, () => this.selected === o && !card.hidden);
+    void fillImage(img, L.id, o.name, () => this.selected === o && !card.hidden, L.skyPos?.(o) ?? null);
     this.marker.position.copy(o.anchor);
     this.marker.visible = true;
     this.fitCenter();

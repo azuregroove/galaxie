@@ -17,7 +17,7 @@ import { LY_PER_PC, escapeHtml, fmtLy, fmtNum, fmtPcFromLy } from "../core/units
 import { seg } from "../scene/overlays";
 import type { Stage } from "../scene/stage";
 import { positionRows } from "./common";
-import { NO_FILTER, passDist, type Facet, type FilterState, type Layer, type LayerFilter } from "./layer";
+import { NO_FILTER, passDist, type Facet, type FilterState, type Layer, type SkyPos, type LayerFilter } from "./layer";
 
 type N = number | null;
 
@@ -214,6 +214,19 @@ export class CatalogLayer implements Layer {
   flyDistance(o: MapObject): number {
     if (!o.pos) return 9000;
     return Math.max(30, Math.min(4000, (o.distLy ?? 100) * 0.35));
+  }
+
+  skyPos(mo: MapObject): SkyPos {
+    const O = this.data.objekty;
+    const i = mo.index;
+    const x = O.x;
+    const clamp = (v: number) => Math.max(0.08, Math.min(3, v));
+    // úhlová velikost (′) u mlhovin, poloměr r50 (pc) u hvězdokup; výřez ~1,6× větší než objekt
+    const prumer = x.prumer?.[i];
+    if (typeof prumer === "number" && prumer > 0) return { l: O.l[i], b: O.b[i], fovDeg: clamp((prumer / 60) * 1.6) };
+    const r = x.r?.[i], d = O.d[i];
+    if (typeof r === "number" && d) return { l: O.l[i], b: O.b[i], fovDeg: clamp(((2 * Math.atan(r / d) * 180) / Math.PI) * 4) };
+    return { l: O.l[i], b: O.b[i], fovDeg: this.id === "neutronove-hvezdy" ? 0.2 : 0.5 };
   }
 
   cardHtml(mo: MapObject): string {
