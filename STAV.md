@@ -190,11 +190,16 @@ Aktualizovat na konci každého sezení.
 - nic
 
 ## Další krok
-**Pořadí dohodnuté s Ráďou 30. 9. 2026 (pokračuje se v novém chatu):**
+**Aktuální větev: `claude/sharp-cerf-bzaom6`** (vše pushnuté; obsahuje i starší `claude/galaxie-project-status-re4n0y`).
+Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve a navázat bodem 2 (schéma exoplanet).
+Ráďa má na PC tuto větev (`git pull origin claude/sharp-cerf-bzaom6`, `npm run dev -- --host`).
+Commit + push průběžné práce Ráďa v tomto sezení povolil („klidně to mezitím komitni a pushni“) – v novém chatu se raději zeptat.
+
+**Pořadí dohodnuté s Ráďou 30. 9. 2026:**
 1. ~~3c – planetky a komety~~ hotovo 30. 9. (vzorek); zbývá „plný katalog na vyžádání“ (návrh: dlaždice podle skupin/H,
    načítání po skupinách) a MPC (z cloudu blokované)
-2. Bod 4 – obrázky: ~~Wikidata → Commons~~ ~~výřezy hips2fits~~ hotovo; zbývá u exoplanet generované schéma, malá offline
-   sada; ověřit podmínky DSS (https://archive.stsci.edu/dss/copyright.html – z cloudu blokované, na PC nebo povolit doménu)
+2. **Bod 4 – obrázky (DALŠÍ):** ~~Wikidata → Commons~~ ~~výřezy hips2fits~~ hotovo; zbývá u exoplanet generované schéma
+   (rozhodnutí 30. 9.: „exoplanety generované schéma, umělecké představy jen označené“), malá offline sada; ověřit podmínky DSS (https://archive.stsci.edu/dss/copyright.html – z cloudu blokované, na PC nebo povolit doménu)
 3. Než bude projekt „hotový“: projít internet, aktualizovat všechna data a čísla z ověřených zdrojů; najít podobné projekty
    a sepsat, čím mapu vylepšit (návrh Ráďovi)
 4. Přepínač „Star Trek“: 3D bubliny teritorií (Federace, Klingoni, Romulané, Cardassiané…) z dostupných zdrojů.
@@ -202,7 +207,7 @@ Aktualizovat na konci každého sezení.
    chráněné mapy (např. oficiální Star Charts) doslova, jen fakta a vlastní odvození; ochranné známky Paramount – ověřit
 5. Úplně nakonec: e-mail JPL SSD kvůli svolení k datům (před etapou 6 – nasazení)
 
-- Ráďa: vyzkoušet Etapy 2 a 3 na PC a telefonu (`npm run dev -- --host`), změřit výkon s ~22 000 objekty
+- Ráďa: změřit výkon na PC/GPU a na telefonu (hlavně Soustava s 3 187 planetkami); na PC už vyzkoušeno 30. 9. („boží“)
 - Na PC: `py -m pip install psrqpy` a `py pipeline\neutronove_hvezdy.py` (aktuální ATNF místo verze 2016)
 - Bod 4: obrázky (Wikidata/Commons, hips2fits) – domény už povolené
 - Případně HASH (planetární mlhoviny) na PC
