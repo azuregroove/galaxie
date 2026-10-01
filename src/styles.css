@@ -300,3 +300,25 @@ table.planets .dim { font-size: 10px; }
 .tourMenu .btn .dim { font-size: 11.5px; }
 #card .twin { font-size: 12px; color: var(--dim); }
 #card .twin .linkish { color: var(--accent); text-decoration: underline; }
+
+/* časová osa objevů */
+.tlHead { font-size: 13px !important; color: var(--fg) !important; margin: 6px 0 8px !important; }
+.tlCtl { display: flex; gap: 8px; align-items: center; }
+.tlCtl .btn { flex: none; min-width: 92px; }
+.tlRange { flex: 1; accent-color: var(--accent); min-height: 28px; }
+.tlChart { position: relative; margin: 10px 0 4px; }
+.tlChart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.tlChart text { font: 400 9px var(--f-mono); fill: var(--dim); }
+.tlChart .base { stroke: var(--line); stroke-width: 1; }
+.tlChart .grid { stroke: var(--line); stroke-dasharray: 2 3; }
+.tlChart .hit { fill: transparent; }
+.tlCol { cursor: pointer; }
+.tlCol.future rect:not(.hit) { opacity: 0.22; }
+.tlCol:hover .hit { fill: rgba(143, 180, 255, 0.08); }
+.tlTip { position: absolute; top: 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font: 400 11px var(--f-mono); color: var(--fg); pointer-events: none; white-space: nowrap; z-index: 2; }
+.tlTip[hidden] { display: none; }
+.tlTip i, .tlLegend i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; vertical-align: 0; }
+.tlLegend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11.5px; color: var(--fg); margin: 6px 0 8px; }
+.timeline details { margin: 8px 0; font-size: 12px; }
+.timeline summary { cursor: pointer; color: var(--accent); }
+.timeline .tablewrap { max-height: 220px; overflow-y: auto; }

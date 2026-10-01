@@ -21,6 +21,7 @@ import { Anchor } from "./ui/anchor";
 import { Hud } from "./ui/hud";
 import { Labels } from "./ui/labels";
 import { Tours } from "./ui/tours";
+import { Timeline } from "./ui/timeline";
 
 const css = (n: string) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const DATA = `${import.meta.env.BASE_URL}data/`;
@@ -89,6 +90,11 @@ async function main() {
     stage.jumpTo(frame.sun.clone().add(new Vector3(9000, 0, 0)), new Vector3(-23000, 52000, 42000));
     const tours = new Tours(DATA + "vylety.json", hud, stage, layers);
     document.getElementById("tours")!.onclick = () => void tours.menu();
+    const tlBtn = document.getElementById("timeline")!;
+    if (exo) {
+      const timeline = new Timeline(exo, hud, hud.filters);
+      tlBtn.onclick = () => timeline.show();
+    } else tlBtn.remove();
     const anchor = new Anchor(stage, hud, layers, tours);
     anchor.apply(location.hash);
     stage.start();

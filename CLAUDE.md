@@ -61,7 +61,7 @@ Stav 1. 10. 2026: etapy 1–3 hotové; z 5 hotová ramena (Reid 2019 + Gaia) a j
    - ~~propojit jasné hvězdy s hvězdami s exoplanetami~~ (1. 10., 36 dvojic)
    - ~~přístupnost: textové popisy pro čtečky, ovládání seznamu a karty klávesnicí (NAVRHY.md bod 11)~~ (1. 10.)
    - ~~„výlety“ s komentářem (NAVRHY.md bod 13)~~ – 5 výletů hotových 1. 10. (další podle chuti)
-   - časová osa objevů, porovnání objektů
+   - ~~časová osa objevů~~ (1. 10.); porovnání objektů – zatím ne (Ráďa)
 5. Stavba Galaxie podle modelů, vzorek hvězd z Gaia, doladění vzhledu – hotovo: ramena Reid 2019, ramena z Gaia,
    jasné hvězdy V ≤ 4,5. Zbývá (data na arXiv, Harvard Dataverse, Zenodo – nejdřív povolit domény):
    - Radcliffeova vlna, Místní bublina, Gouldův pás (NAVRHY.md bod 7)

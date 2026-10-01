@@ -297,8 +297,18 @@ Aktualizovat na konci každého sezení.
     v kartě odkaz „Táž hvězda ve vrstvě …“ oběma směry
   - z cloudu teď nedostupné i Wikidata a WDQS (dřív šly), dál iau.org, exopla.net, Wikipedie → WGSN a popisy jen na PC
 
+- 2026-10-01 (cloud): propojení pushnuté (2d20dc7); Ráďa: časová osa ano, porovnání objektů zatím ne
+- 2026-10-01 (cloud): **etapa 4 – časová osa objevů** (build OK, Playwright desktop + mobil bez JS chyb)
+  - `src/ui/timeline.ts`, tlačítko „Objevy“ v liště → panel v kartě: posuvník „do roku X“ (1992–2026) řídí filtr Rok objevu,
+    ▶ Přehrát (0,7 s/rok), sloupcový graf objevů po letech podle metody (tranzit, RV, mikročočka, přímé zobrazení, ostatní),
+    tooltip a klik na sloupec, tabulka pod „Tabulka“, budoucí roky ztlumené; pohled se přesune na „Slunce“
+  - barvy z palety skillu dataviz (tmavý režim), ověřené validate_palette.js proti #0b0f19 (všechny kontroly PASS)
+  - počty ověřené proti Pythonu: do 1995 4 planety/2 systémy, 2000 46/39, 2010 498/418, 2016 3 442/2 555, 2026 6 372/4 779
+  - po zavření panelu se vrátí dřívější filtr roku; když kartu převezme výběr objektu, přehrávání se zastaví a filtr zůstane do zavření karty
+  - Hud: `cardCloseHandlers` (místo jednoho onCardClose), `showPanel(fill)`
+
 ## Rozdělané
-- nic (propojení pushnuté 1. 10. s Ráďovým souhlasem; další: časová osa objevů, porovnání objektů zatím ne – Ráďa)
+- nic (časová osa pushnutá 1. 10. s Ráďovým souhlasem; Ráďa povolil domény Wikipedie, Wikidata, IAU)
 
 ## Další krok
 **Aktuální větev: `claude/jolly-thompson-pyvslt`** (navazuje na `claude/confident-lovelace-1lqe2y`, 1b473f0).

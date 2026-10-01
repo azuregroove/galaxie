@@ -29,8 +29,8 @@ export class Hud {
   private rows = new Map<HTMLElement, MapObject>();
   /** Doplní do každé karty vlastní blok (výlet); volá se po sestavení karty. */
   cardExtra: ((card: HTMLElement) => void) | null = null;
-  /** Karta se zavřela (křížkem, Esc, filtrem). */
-  onCardClose: (() => void) | null = null;
+  /** Karta se zavřela (křížkem, Esc, filtrem) nebo ji převzal jiný panel. */
+  readonly cardCloseHandlers: (() => void)[] = [];
   readonly views: Record<string, () => void>;
 
   private stage: Stage;
@@ -378,11 +378,15 @@ export class Hud {
       if (row) this.focusRow(row);
       else $("search").focus();
     }
-    if (wasOpen) this.onCardClose?.();
+    if (wasOpen) this.cardCloseHandlers.forEach((h) => h());
   }
 
-  /** Karta bez objektu (zastávka výletu jen s pohledem). */
-  showPanel(): HTMLElement {
+  /**
+   * Karta bez objektu: zastávka výletu (fill chybí, obsah doplní cardExtra), nebo vlastní panel (fill),
+   * který kartu převezme a dosavadnímu obsahu oznámí zavření.
+   */
+  showPanel(fill?: (card: HTMLElement) => void): HTMLElement {
+    if (fill && !$("card").hidden) this.cardCloseHandlers.forEach((h) => h());
     this.selected = null;
     this.layers.forEach((L) => L.onSelect?.(null));
     this.marker.visible = false;
@@ -391,14 +395,15 @@ export class Hud {
     card.querySelector<HTMLButtonElement>(".close")!.onclick = () => this.closeCard();
     card.hidden = false;
     card.scrollTop = 0;
-    this.cardExtra?.(card);
+    if (fill) fill(card);
+    else this.cardExtra?.(card);
     this.fitCenter();
     this.renderList();
     return card;
   }
 
   private showAbout(): void {
-    if (!$("card").hidden) this.onCardClose?.();
+    if (!$("card").hidden) this.cardCloseHandlers.forEach((h) => h());
     this.selected = null;
     this.marker.visible = false;
     const card = $("card");

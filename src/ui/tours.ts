@@ -56,7 +56,7 @@ export class Tours {
     this.stage = stage;
     this.layers = layers;
     hud.cardExtra = (card) => this.render(card);
-    hud.onCardClose = () => (this.state = null);
+    hud.cardCloseHandlers.push(() => (this.state = null));
     addEventListener("keydown", (e) => {
       if (this.state?.mode !== "tour" || e.defaultPrevented || this.stage.paused || e.ctrlKey || e.metaKey || e.altKey) return;
       const t = e.target as HTMLElement;
