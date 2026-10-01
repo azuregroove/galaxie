@@ -153,12 +153,19 @@ export class BlackHoleLayer implements Layer {
     return `<div class="kind" style="color:var(${T.c})">Černá díra · ${T.name}</div>
       <h3>${escapeHtml(o.name)}</h3>
       <dl>
-        <dt>Od Slunce</dt><dd>${o.distLy ? `${o.dl} ly<br>${fmtPcFromLy(o.distLy)}` : "neznámá (na mapě jen směr)"}</dd>
+        <dt>Od Slunce</dt><dd>${o.distLy ? `${withUnit(o.dl)}<br>${fmtPcFromLy(o.distLy)}` : "neznámá (na mapě jen směr)"}</dd>
         <dt>Hmotnost</dt><dd>${o.m > 0 ? `${o.ml} M☉` : escapeHtml(o.ml)}</dd>
         <dt>Status</dt><dd>${o.s}</dd>
-        ${positionRows(o.pos, o.l, o.b)}
+        ${positionRows(o.pos, o.l, o.b, o.distLy)}
       </dl>
       <p>${escapeHtml(o.no)}</p>
       <div class="src">${SRC[o.src] ?? ""}</div>`;
   }
+}
+
+/** Jednotku za číslo, ne za poznámku v závorce („≈ 26 600 (R₀ …)“ → „≈ 26 600 ly (R₀ …)“); slovní údaj bez jednotky. */
+function withUnit(dl: string): string {
+  if (!/\d/.test(dl.split(" (")[0])) return dl;
+  const k = dl.indexOf(" (");
+  return k < 0 ? `${dl} ly` : `${dl.slice(0, k)} ly${dl.slice(k)}`;
 }

@@ -125,7 +125,6 @@ Aktualizovat na konci každého sezení.
 - Otevřená legenda na mobilu zabere ~600 px (sbalitelná tlačítkem Vrstvy)
 - BlackCAT jen ve verzi 2016 (VizieR); aktuální web BlackCAT (novější tranzienty) z cloudu nedostupný
 - Gaia BH (plán etapy 3): BH1–3 v ručním seznamu jsou; jiný katalog kandidátů z Gaia zatím ne
-- Galaktické souřadnice v kartě mají desetinnou tečku (l 13.95°), jinde čárku – sjednotit
 - **JPL SSD: k převzetí dat na veřejný web chtějí svolení (FAQ) – napsat jim před etapou 6**
 - Sluneční soustava: poloměr Eris, Haumea, Makemake chybí (JPL neuvádí); Saturn bez prstenců
 - Planetky a komety: dvoučásticové dráhy – daleko od roku 2026 jen orientační (stupně), po blízkých průletech (Apophis 2029) úplně mimo;
@@ -230,6 +229,10 @@ Aktualizovat na konci každého sezení.
   `src/core/names.ts`; hledání najde „plejady“, „M45“, „Helvetios“, „Dimidium“, „mlhovina srdce“; v seznamu jméno vedle
   katalogového, v kartě „Česky: …“ / „Jméno hvězdy schválené IAU: …“, jména planet v tabulce, česká jména jako popisky na mapě;
   jména IAU z Wikidata neúplná (viz ZDROJE.md)
+
+- 2026-10-01 (cloud): **návrh 4 – doba cesty** v kartě všech objektů se vzdáleností (světlo, Voyager 1 16,92 km/s z Horizons,
+  letadlo 900 km/h, auto 100 km/h), ověřeno proti Pythonu (Proxima: 75 tis. let Voyagerem); galaktické souřadnice
+  s desetinnou čárkou (známý nedostatek vyřešen); karta černé díry: jednotka „ly“ před závorku
 
 ## Rozdělané
 - nic

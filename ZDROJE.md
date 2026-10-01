@@ -11,6 +11,8 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 | Spirální ramena | 7 ramen, logaritmické spirály se zlomem (β_kink, R_kink, ψ<, ψ>, šířka, rozsah β) | Reid et al. 2019, tab. 2 – **převzato z knihovny SpiralMap 0.27** (Prusty & Khanna 2025, MIT, https://github.com/Abhaypru/SpiralMap), článek z cloudu nedostupný; ověřeno proti maserům z tab. 1 (CDS J/ApJ/885/131, `pipeline/overit_ramena.py`), Perseus navíc shodně citován v práci o rameni Persea (2026, ApJ, doi:10.3847/1538-4357/ae64f5). **Ověřit přímo v článku na PC.** |
 | Obyvatelná zóna | S_eff(Teff) – polynom 4. stupně, konzervativní (runaway – maximum greenhouse) a optimistická (recent Venus – early Mars); L = R² (Teff / 5772 K)⁴ | Kopparapu et al. 2014, ApJ 787, L29 – koeficienty z původního kódu autorů, CDS J/ApJ/787/L29 (`HZs.f90`); kontrola: Slunce 0,95–1,68 au. Platí 2 600–7 200 K, do ±200 K extrapolováno s označením |
 | Velikostní třídy planet | Země < 1,25 R⊕ ≤ super-Země < 2 ≤ Neptun < 6 ≤ Jupiter < 15 ≤ větší | Borucki et al. 2011, ApJ 736, 19 (abstrakt, ADS 2011ApJ...736...19B) |
+| Rychlost Voyageru 1 (doba cesty v kartě) | 16,92 km/s vůči Slunci | JPL Horizons, cíl −31, vektory vůči Slunci (500@10) k 1. 10. 2026; auto 100 km/h a letadlo 900 km/h jsou zvolené ilustrační hodnoty |
+| Světelný rok | 9 460 730 472 580,8 km | IAU (juliánský rok × c) |
 | Příčka | úhel ~27°, blízký konec v 1. kvadrantu (l > 0) | schematické, převzato z prototypu (opravena strana) – k ověření |
 | Průměr disku, tloušťka disku | 87 400 ly; 700–1 500 ly (tenký), ~8 500 ly (tlustý) | převzato z prototypu, **k ověření v etapě 5** |
 

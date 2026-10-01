@@ -261,7 +261,7 @@ export class CatalogLayer implements Layer {
       <dl>
         <dt>Od Slunce</dt><dd>${dist}</dd>
         ${met ? `<dt>Vzdálenost z</dt><dd>${escapeHtml(met)}</dd>` : ""}
-        ${positionRows(o.pos, O.l[i], O.b[i])}
+        ${positionRows(o.pos, O.l[i], O.b[i], o.distLy)}
         ${rows}
       </dl>
       <div class="src">${O.zdroj[i] != null ? escapeHtml(D.zdroje[O.zdroj[i]!]) : ""}<br>Katalog: ${escapeHtml(this.meta.zdroj)} (stav ${D.stazeno.slice(0, 10)}).</div>`;

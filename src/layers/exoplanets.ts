@@ -323,7 +323,7 @@ export class ExoplanetLayer implements Layer {
         <dt>Třída hvězdy</dt><dd><i class="dot" style="background:var(${c.info.color})"></i>${clsTxt}<br><span class="dim">${escapeHtml(c.info.desc)}</span></dd>
         <dt>Hvězda</dt><dd>${star}</dd>
         ${S.vmag[i] != null ? `<dt>Jasnost V</dt><dd>${fmtNum(S.vmag[i]!, 2)} mag</dd>` : ""}
-        ${positionRows(o.pos, S.l[i], S.b[i])}
+        ${positionRows(o.pos, S.l[i], S.b[i], o.distLy)}
       </dl>
       ${exoSchemaHtml(this.systemSpec(o), `var(${c.info.color})`, S.rs[i])}
       <div class="tablewrap"><table class="planets">
