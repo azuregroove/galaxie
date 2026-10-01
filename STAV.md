@@ -253,28 +253,25 @@ Aktualizovat na konci každého sezení.
 - nic
 
 ## Další krok
-**Aktuální větev: `claude/confident-lovelace-1lqe2y`** (navazuje na `claude/sharp-cerf-bzaom6`; push jen se souhlasem).
-Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve a navázat bodem 2 (schéma exoplanet).
-Ráďa má na PC tuto větev (`git pull origin claude/sharp-cerf-bzaom6`, `npm run dev -- --host`).
-Commit + push průběžné práce Ráďa v tomto sezení povolil („klidně to mezitím komitni a pushni“) – v novém chatu se raději zeptat.
+**Aktuální větev: `claude/confident-lovelace-1lqe2y`** (vše commitnuté a pushnuté 1. 10. 2026, poslední 8e83310+).
+Nový chat: přečíst CLAUDE.md (sekce Etapy – zbývající body jsou rozepsané tam) + tento soubor z téhle větve.
+Na PC: `git fetch origin`, `git switch claude/confident-lovelace-1lqe2y`, `git pull`, `npm install`, `npm run dev`.
+Mapa jako soukromý artefakt: https://claude.ai/artifact/C7E2DwT3ir8g85U8s3ThkW (aktualizovat publikací dist/).
+Pravidlo z 1. 10.: po každém dokončeném bodu se zastavit, říct co je hotovo; commit + push předchozího bodu až po Ráďově souhlasu.
 
-**Pořadí dohodnuté s Ráďou 30. 9. 2026:**
-1. ~~3c – planetky a komety~~ hotovo 30. 9. (vzorek); zbývá „plný katalog na vyžádání“ (návrh: dlaždice podle skupin/H,
-   načítání po skupinách) a MPC (z cloudu blokované)
-2. **Bod 4 – obrázky (DALŠÍ):** ~~Wikidata → Commons~~ ~~výřezy hips2fits~~ hotovo; zbývá u exoplanet generované schéma
-   (rozhodnutí 30. 9.: „exoplanety generované schéma, umělecké představy jen označené“), malá offline sada; ověřit podmínky DSS (https://archive.stsci.edu/dss/copyright.html – z cloudu blokované, na PC nebo povolit doménu)
-3. Než bude projekt „hotový“: projít internet, aktualizovat všechna data a čísla z ověřených zdrojů;
-   ~~podobné projekty a návrh~~ hotovo 1. 10. (NAVRHY.md) – čeká na Ráďův výběr
-4. Přepínač „Star Trek“: 3D bubliny teritorií (Federace, Klingoni, Romulané, Cardassiané…) z dostupných zdrojů.
-   Pozor: fikce – jasně označit jako fanouškovskou vrstvu, u každé polohy zdroj a míru nejistoty; nepřebírat
-   chráněné mapy (např. oficiální Star Charts) doslova, jen fakta a vlastní odvození; ochranné známky Paramount – ověřit
-5. Úplně nakonec: e-mail JPL SSD kvůli svolení k datům (před etapou 6 – nasazení)
+**Další na řadě (navrženo Ráďovi):** etapa 4 – přístupnost (bod 11), pak výlety (bod 13); body 7 a 8 až po povolení domén
+(arxiv.org, export.arxiv.org, dataverse.harvard.edu, zenodo.org, www.nature.com).
+
+**Dlouhodobě (z 30. 9.):**
+- Než bude projekt „hotový“: aktualizovat všechna data a čísla z ověřených zdrojů
+- Přepínač „Star Trek“: 3D bubliny teritorií (Federace, Klingoni, Romulané, Cardassiané…) z dostupných zdrojů.
+  Pozor: fikce – jasně označit jako fanouškovskou vrstvu, u každé polohy zdroj a míru nejistoty; nepřebírat
+  chráněné mapy (např. oficiální Star Charts) doslova, jen fakta a vlastní odvození; ochranné známky Paramount – ověřit
+- Úplně nakonec: e-mail JPL SSD kvůli svolení k datům (před etapou 6 – nasazení)
 
 - Ráďa: změřit výkon na PC/GPU a na telefonu (hlavně Soustava s 3 187 planetkami); na PC už vyzkoušeno 30. 9. („boží“)
 - Na PC: `py -m pip install psrqpy` a `py pipeline\neutronove_hvezdy.py` (aktuální ATNF místo verze 2016)
-- Bod 4: obrázky (Wikidata/Commons, hips2fits) – domény už povolené
 - Případně HASH (planetární mlhoviny) na PC
-- Etapa 4 dál: karty s popisy a obrázky, česká jména (Plejády, Jesličky…), licence
 - 2026-09-30: Ráďa odsouhlasil commit + push 3c do claude/sharp-cerf-bzaom6
 - Git: 2026-09-29 Ráďa odsouhlasil commit + push a přesun sezení do cloudu (cloudové kredity);
   další push/PR/Actions dál jen s jeho souhlasem

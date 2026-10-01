@@ -50,14 +50,31 @@ Později: prohlídky s komentářem („výlety“), porovnávání objektů, č
 obrázky a odkazy, sdílení pohledu přes #kotvu.
 
 ## Etapy (každá končí funkčním buildem)
-1. Kostra aplikace + převod prototypu + datová pipeline pro 1 katalog (exoplanety)
-2. Výkon: tisíce objektů, LOD, vyhledávání, filtry, mobilní ovládání
-3. Hvězdokupy, mlhoviny, pulsary, černé díry
-4. Karty objektů s popisy a obrázky, licence
-5. Stavba Galaxie podle modelů, vzorek hvězd z Gaia, doladění vzhledu
-6. Nasazení na GitHub Pages
-7. PWA (instalace na plochu, offline režim)
+Stav 1. 10. 2026: etapy 1–3 hotové; z 5 hotová ramena (Reid 2019 + Gaia) a jasné hvězdy. Podrobnosti v STAV.md a NAVRHY.md.
+1. ~~Kostra aplikace + převod prototypu + datová pipeline pro 1 katalog (exoplanety)~~
+2. ~~Výkon: tisíce objektů, LOD, vyhledávání, filtry, mobilní ovládání~~
+3. ~~Hvězdokupy, mlhoviny, pulsary, černé díry~~
+4. Karty objektů s popisy a obrázky, licence – hotovo: obrázky Commons, výřezy DSS, schéma soustavy, obyvatelná
+   zóna, velikostní třídy planet, jména IAU a česká jména, doba cesty, pohled z objektu. Zbývá:
+   - české popisy významných objektů (Wikipedie CC BY-SA, s autorem)
+   - doplnit jména IAU z oficiálního seznamu WGSN (Wikidata neúplná – Ran, Ægir, Draugr…)
+   - propojit jasné hvězdy s hvězdami s exoplanetami (ε Eri, τ Cet jsou v seznamu dvakrát)
+   - přístupnost: textové popisy pro čtečky, ovládání seznamu a karty klávesnicí (NAVRHY.md bod 11)
+   - „výlety“ s komentářem: posloupnost kotev #o=… s textem (NAVRHY.md bod 13)
+   - časová osa objevů, porovnání objektů
+5. Stavba Galaxie podle modelů, vzorek hvězd z Gaia, doladění vzhledu – hotovo: ramena Reid 2019, ramena z Gaia,
+   jasné hvězdy V ≤ 4,5. Zbývá (data na arXiv, Harvard Dataverse, Zenodo – nejdřív povolit domény):
+   - Radcliffeova vlna, Místní bublina, Gouldův pás (NAVRHY.md bod 7)
+   - 3D prachová mapa Edenhofer et al. 2024 do 1,25 kpc (NAVRHY.md bod 8)
+   - vzorek Gaia do 100 pc v dlaždicích/octree; ověřit rozměry disku a tab. 2 Reid 2019 přímo v článku
+   - galaxie Místní skupiny – rozšíření rozsahu, jen pokud Ráďa schválí (NAVRHY.md bod 12)
+   - planetky a komety: plný katalog na vyžádání (dlaždice podle skupin), MPC
+6. Nasazení na GitHub Pages – předtím: svolení JPL SSD, podmínky DSS, licence map Gaia ramen, podmínky CDS;
+   aktualizace všech dat (NASA archiv je teď z cloudu dostupný, ATNF a HASH na PC)
+   - potom automatická aktualizace exoplanet přes GitHub Actions – jen s Ráďovým souhlasem (NAVRHY.md bod 10)
+7. PWA (instalace na plochu, offline režim) – přibalit fonty, malá offline sada obrázků
 8. Mobilní aplikace přes Capacitor (Android, případně iOS)
+- Mimo etapy (přání Ráďi): přepínač „Star Trek“ – fanouškovská vrstva teritorií, jasně označená fikce (viz STAV.md)
 
 ## Pravidla práce
 - Na začátku každého sezení si přečti C:\Klouí\galaxie\STAV.md (hotovo, rozdělané,

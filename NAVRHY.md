@@ -42,3 +42,5 @@ pohled Soustava s elipsami a Sluneční soustava k datu.
 13. **Výlety s komentářem** (už v plánu) podle vzoru skriptů Gaia Sky: posloupnost kotev `#o=…` s textem.
 
 Doporučení: nejdřív 1, 2, 4, 5 (malé a viditelné), potom 3 a 9, větší věci (6–8) do etapy 5.
+
+**Stav 1. 10. 2026:** hotovo 1, 2, 3, 4, 5, 6, 9. Zbývající body (7, 8, 10–13) jsou zařazené do etap v CLAUDE.md.
