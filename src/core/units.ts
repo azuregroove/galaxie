@@ -34,3 +34,11 @@ export const signed = (n: number, s: string): string => `${n >= 0 ? "+" : "−"}
 export function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 }
+
+/** Vzdálenost pro čtečku obrazovky: „ly“ by přečetla jako dvě písmena. */
+export function spokenLy(ly: number): string {
+  const s = smart(ly);
+  if (/,/.test(s)) return `${s} světelného roku`;
+  const n = Math.round(ly);
+  return `${s} ${n === 1 ? "světelný rok" : n >= 2 && n <= 4 ? "světelné roky" : "světelných let"}`;
+}

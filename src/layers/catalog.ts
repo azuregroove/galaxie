@@ -229,6 +229,10 @@ export class CatalogLayer implements Layer {
     return { l: O.l[i], b: O.b[i], fovDeg: this.id === "neutronove-hvezdy" ? 0.2 : 0.5 };
   }
 
+  kindName(mo: MapObject): string {
+    return this.data.typy[(mo as Obj).typ].nazev;
+  }
+
   cardHtml(mo: MapObject): string {
     const o = mo as Obj;
     const D = this.data;

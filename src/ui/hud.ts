@@ -1,7 +1,7 @@
 import { AdditiveBlending, Sprite, SpriteMaterial, Vector3 } from "three";
 import type { Frame } from "../core/coords";
 import type { Manifest, MapObject } from "../core/types";
-import { escapeHtml, fmt, fmtLy, fmtPcFromLy } from "../core/units";
+import { escapeHtml, fmt, fmtLy, fmtPcFromLy, spokenLy } from "../core/units";
 import type { Layer } from "../layers/layer";
 import type { OverlayKey, Overlays } from "../scene/overlays";
 import { Stage } from "../scene/stage";
@@ -25,6 +25,7 @@ export class Hud {
   private marker: Sprite;
   readonly filters: FilterPanel;
   private toastTimer = 0;
+  private rows = new Map<HTMLElement, MapObject>();
 
   private stage: Stage;
   private frame: Frame;
@@ -61,12 +62,14 @@ export class Hud {
     this.buildSearch();
     this.buildPicking();
     this.buildMobile();
+    this.buildKeys();
     this.renderList();
     stage.onFrame(() => {
       layers.forEach((L) => L.update?.(stage));
       this.updateScale();
       if (this.selected && this.marker.visible) {
-        const s = stage.camera.position.distanceTo(this.selected.anchor) * 0.035 * (1 + 0.15 * Math.sin(performance.now() / 300));
+        const pulse = reducedMotion() ? 0 : 0.15 * Math.sin(performance.now() / 300);
+        const s = stage.camera.position.distanceTo(this.selected.anchor) * 0.035 * (1 + pulse);
         this.marker.scale.set(s, s, 1);
       }
     });
@@ -103,12 +106,15 @@ export class Hud {
         h.className = "legName";
         h.textContent = L.name;
         h.title = "Zapnout / vypnout celou skupinu";
+        h.setAttribute("aria-pressed", "true");
+        h.setAttribute("aria-label", `${L.name}: celá skupina`);
         h.onclick = () => {
           const on = !L.filters.some((f) => f.on);
           for (const [b, f] of chips) {
             L.setFilter(f.key, on);
             b.setAttribute("aria-pressed", String(on));
           }
+          h.setAttribute("aria-pressed", String(on));
           this.afterVisibilityChange();
         };
         row.appendChild(h);
@@ -121,6 +127,7 @@ export class Hud {
         b.onclick = () => {
           L.setFilter(f.key, !f.on);
           b.setAttribute("aria-pressed", String(f.on));
+          row.querySelector(".legName")?.setAttribute("aria-pressed", String(L.filters.some((x) => x.on)));
           this.afterVisibilityChange();
         };
         row.appendChild(b);
@@ -163,6 +170,10 @@ export class Hud {
         const first = $("list").querySelector<HTMLButtonElement>(".row");
         first?.click();
       }
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        $("list").querySelector<HTMLButtonElement>(".row")?.focus();
+      }
       if (e.key === "Escape") {
         input.value = "";
         this.query = "";
@@ -171,11 +182,46 @@ export class Hud {
       }
     });
     togglable($("listToggle"), $("listPanel"), "seznam");
+
+    // šipky mezi řádky; Tab z hledání vede rovnou na aktuální řádek, ne přes všech 150
+    $("list").addEventListener("keydown", (e) => {
+      const rows = [...this.rows.keys()];
+      const i = rows.indexOf(document.activeElement as HTMLElement);
+      if (i < 0) return;
+      const to = { ArrowDown: i + 1, ArrowUp: i - 1, PageDown: i + 10, PageUp: i - 10, Home: 0, End: rows.length - 1 }[e.key];
+      if (to == null) return;
+      e.preventDefault();
+      if (to < 0) input.focus();
+      else this.focusRow(rows[Math.min(to, rows.length - 1)]);
+    });
+  }
+
+  private focusRow(r: HTMLElement): void {
+    for (const x of this.rows.keys()) x.tabIndex = x === r ? 0 : -1;
+    r.focus();
+  }
+
+  /** Jedna věta o objektu pro čtečku obrazovky: jméno, typ, vzdálenost. */
+  private describe(o: MapObject, extra?: string): string {
+    const L = this.layers.find((x) => x.id === o.layer);
+    const kind = L?.kindName?.(o) ?? L?.name ?? "";
+    const dist = o.distLy != null && o.distLy > 0 ? `${spokenLy(o.distLy)} od Slunce`
+      : o.layer === "slunecni-soustava" ? "" : "vzdálenost neznámá, na mapě jen směr";
+    return [o.name + (o.nick && o.nick !== extra ? ` (${o.nick})` : ""), extra, kind, dist].filter(Boolean).join(", ");
+  }
+
+  private announce(text: string): void {
+    // vyprázdnit a znovu naplnit, jinak čtečka stejný text podruhé nepřečte
+    const a = $("announce");
+    a.textContent = "";
+    requestAnimationFrame(() => (a.textContent = text));
   }
 
   private renderList(): void {
     const list = $("list");
+    const hadFocus = this.rows.get(document.activeElement as HTMLElement);
     list.textContent = "";
+    this.rows.clear();
     const q = this.query;
     const matches = this.all.filter((o) => !o.hidden && (!q || this.index.get(o)!.includes(q)));
     if (q) {
@@ -191,10 +237,22 @@ export class Hud {
       const hit = q && !norm(o.name).includes(q) ? o.aliases?.find((a) => norm(a).includes(q)) : undefined;
       const extra = hit && hit !== o.nick ? hit : o.nick;
       r.innerHTML = `<i style="background:${o.color}"></i><span class="nm">${escapeHtml(o.name)}${extra ? ` <span class="dim">· ${escapeHtml(extra)}</span>` : ""}</span><span class="ds">${o.distLy != null ? fmtLy(o.distLy) : "?"}</span>`;
+      r.setAttribute("aria-label", this.describe(o, extra));
+      if (o === this.selected) r.setAttribute("aria-current", "true");
+      r.tabIndex = -1;
       r.onclick = () => this.select(o, true);
       frag.appendChild(r);
+      this.rows.set(r, o);
     }
     list.appendChild(frag);
+    const rows = [...this.rows.keys()];
+    const current = rows.find((r) => this.rows.get(r) === (hadFocus ?? this.selected)) ?? rows[0];
+    if (current) current.tabIndex = 0;
+    // seznam se po výběru překreslí; fokus musí zůstat na stejném objektu, jinak by spadl na <body>
+    if (hadFocus) {
+      if (current && this.rows.get(current) === hadFocus) current.focus({ preventScroll: false });
+      else $("search").focus();
+    }
     $("listCount").textContent = matches.length > LIST_LIMIT
       ? `${fmt(LIST_LIMIT)} nejbližších z ${fmt(matches.length)}`
       : `${fmt(matches.length)} ${objWord(matches.length)}`;
@@ -206,7 +264,8 @@ export class Hud {
     this.layers.forEach((L) => L.onSelect?.(o));
     const L = this.layers.find((x) => x.id === o.layer)!;
     const card = $("card");
-    card.innerHTML = `<button class="close" aria-label="Zavřít">×</button>${L.cardHtml(o)}`;
+    card.innerHTML = `<button class="close" aria-label="Zavřít kartu">×</button>${L.cardHtml(o)}`;
+    card.querySelector("h3")?.setAttribute("id", "cardTitle");
     if (o.nick) {
       const n = document.createElement("div");
       n.className = "nick";
@@ -242,6 +301,7 @@ export class Hud {
     this.marker.visible = true;
     this.fitCenter();
     this.renderList();
+    if (fly) this.announce(`Vybráno: ${this.describe(o)}. Podrobnosti jsou v kartě objektu.`);
     if (fly) this.stage.flyTo(o.anchor, L.flyDistance(o));
   }
 
@@ -277,12 +337,21 @@ export class Hud {
   }
 
   private closeCard(): void {
-    $("card").hidden = true;
+    const card = $("card");
+    const was = this.selected;
+    const focusInside = card.contains(document.activeElement);
+    card.hidden = true;
     this.layers.forEach((L) => L.onSelect?.(null));
     this.stage.setCenterShift(0);
     this.selected = null;
     this.marker.visible = false;
     this.renderList();
+    if (focusInside) {
+      // fokus ze zavřené karty vrátit tam, odkud uživatel přišel
+      const row = [...this.rows].find(([, o]) => o === was)?.[0];
+      if (row) this.focusRow(row);
+      else $("search").focus();
+    }
   }
 
   private showAbout(): void {
@@ -295,8 +364,8 @@ export class Hud {
       <span class="dim">Licence: ${escapeHtml(k.licence)} · staženo ${escapeHtml(k.stazeno.slice(0, 10))}${k.vyrez ? " · <b>jen testovací výřez</b>" : ""}</span></p>
       ${k.poznamka ? `<p class="dim">${escapeHtml(k.poznamka)}</p>` : ""}
       ${k.citace ? `<p class="cite">${escapeHtml(k.citace)}</p>` : ""}`).join("");
-    card.innerHTML = `<button class="close" aria-label="Zavřít">×</button>
-      <div class="kind">O mapě</div><h3>Zdroje dat</h3>
+    card.innerHTML = `<button class="close" aria-label="Zavřít kartu">×</button>
+      <div class="kind">O mapě</div><h3 id="cardTitle" tabindex="-1">Zdroje dat</h3>
       <p>Poloha objektů je vůči Slunci. Vzdálenost Slunce od centra Galaxie R₀ = ${(m.r0_pc / 1000).toLocaleString("cs-CZ")} kpc
       (${escapeHtml(m.r0_zdroj)}). Spirální ramena podle Reid et al. 2019 (ApJ 885, 131, tab. 2; parametry
       přes knihovnu SpiralMap, MIT); ztlumené úseky jsou mimo rozsah modelu, doložené jen masery. Příčka a výplň disku
@@ -304,6 +373,7 @@ export class Hud {
     card.hidden = false;
     card.querySelector<HTMLButtonElement>(".close")!.onclick = () => this.closeCard();
     this.fitCenter();
+    card.querySelector<HTMLElement>("h3")!.focus();
   }
 
   // ---------- spodní lišta ----------
@@ -411,6 +481,28 @@ export class Hud {
     }
   }
 
+  // ---------- klávesnice ----------
+  private buildKeys(): void {
+    const typing = (t: EventTarget | null) => t instanceof HTMLElement && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable);
+    addEventListener("keydown", (e) => {
+      // pohled Soustava má vlastní ovládání a mapa pod ním stojí
+      if (e.defaultPrevented || this.stage.paused || e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.key === "/" && !typing(e.target)) {
+        e.preventDefault();
+        if ($("listPanel").classList.contains("closed")) $("listToggle").click();
+        $<HTMLInputElement>("search").focus();
+        $<HTMLInputElement>("search").select();
+      } else if (e.key === "Escape" && !$("card").hidden && !typing(e.target)) {
+        e.preventDefault();
+        this.closeCard();
+      }
+    });
+    $("skip").onclick = () => {
+      if ($("listPanel").classList.contains("closed")) $("listToggle").click();
+      $("search").focus();
+    };
+  }
+
   // ---------- klik do scény ----------
   private buildPicking(): void {
     const el = this.stage.renderer.domElement;
@@ -471,3 +563,6 @@ export class Hud {
   }
 
 }
+
+const motionQuery = matchMedia("(prefers-reduced-motion: reduce)");
+const reducedMotion = () => motionQuery.matches;

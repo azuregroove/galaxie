@@ -249,17 +249,29 @@ Aktualizovat na konci každého sezení.
   „Jasné hvězdy“ (typy O/B…M barvami tříd), hledání i „alfa Ori“, „beta Cen“; ověřeno Playwright
   - známé: hvězdy s exoplanetami (ε Eri, τ Cet…) jsou v seznamu dvakrát (jasná hvězda + systém)
 
+- 2026-10-01 (cloud, nové sezení): **návrh 11 – přístupnost** (build OK, Playwright desktop 1400×860 klávesnicí + mobil 390×844, bez JS chyb)
+  - seznam: šipky ↑↓, PageUp/PageDown, Home/End, ↓ z hledání do seznamu, ↑ z prvního řádku zpět; Tab vede jen na aktuální řádek
+    (roving tabindex, ne přes 150 řádků); po výběru zůstane fokus na stejném objektu i po překreslení seznamu
+  - klávesy: „/“ = hledat (otevře seznam), Esc = zavřít kartu a vrátit fokus do seznamu; tlačítko „Přejít na hledání“ jako první Tab
+  - čtečky: každý řádek má popis „jméno (české jméno), typ, 40,5 světelného roku od Slunce“ (`spokenLy`, „ly“ by četla jako písmena),
+    výběr ohlásí živá oblast `#announce`, karta je oblast pojmenovaná nadpisem (dřív `aria-live` četlo celou kartu), mapa má
+    `role="img"` s popisem a odkazem na nápovědu kláves; popisky na mapě a v Soustavě `aria-hidden` (duplikát seznamu)
+  - nové `Layer.kindName()` (typ objektu slovy) ve všech vrstvách
+  - legenda: tlačítko skupiny má `aria-pressed`; Soustava: fokus na nadpis, mapa pod ní `inert`, po zavření fokus zpět na tlačítko,
+    vybrané těleso se ohlásí (`aria-live`); `prefers-reduced-motion` vypne i pulzování značky a CSS přechody
+  - **netestováno se skutečnou čtečkou** (NVDA/TalkBack) – jen strom vlastností a fokus v Playwrightu
+
 ## Rozdělané
-- nic
+- nic (bod 11 necommitnutý – čeká na Ráďův souhlas)
 
 ## Další krok
-**Aktuální větev: `claude/confident-lovelace-1lqe2y`** (vše commitnuté a pushnuté 1. 10. 2026, poslední 8e83310+).
+**Aktuální větev: `claude/jolly-thompson-pyvslt`** (navazuje na `claude/confident-lovelace-1lqe2y`, 1b473f0).
 Nový chat: přečíst CLAUDE.md (sekce Etapy – zbývající body jsou rozepsané tam) + tento soubor z téhle větve.
-Na PC: `git fetch origin`, `git switch claude/confident-lovelace-1lqe2y`, `git pull`, `npm install`, `npm run dev`.
+Na PC: `git fetch origin`, `git switch claude/jolly-thompson-pyvslt`, `git pull`, `npm install`, `npm run dev`.
 Mapa jako soukromý artefakt: https://claude.ai/artifact/C7E2DwT3ir8g85U8s3ThkW (aktualizovat publikací dist/).
 Pravidlo z 1. 10.: po každém dokončeném bodu se zastavit, říct co je hotovo; commit + push předchozího bodu až po Ráďově souhlasu.
 
-**Další na řadě (navrženo Ráďovi):** etapa 4 – přístupnost (bod 11), pak výlety (bod 13); body 7 a 8 až po povolení domén
+**Další na řadě (navrženo Ráďovi):** etapa 4 – výlety (bod 13) (přístupnost hotová 1. 10.); body 7 a 8 až po povolení domén
 (arxiv.org, export.arxiv.org, dataverse.harvard.edu, zenodo.org, www.nature.com).
 
 **Dlouhodobě (z 30. 9.):**

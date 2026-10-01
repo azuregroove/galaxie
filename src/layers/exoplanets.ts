@@ -281,6 +281,11 @@ export class ExoplanetLayer implements Layer {
     return { l: S.l[mo.index], b: S.b[mo.index], fovDeg: 0.15 };
   }
 
+  kindName(mo: MapObject): string {
+    const n = (mo as Sys).planets.length;
+    return `Planetární systém, ${n} ${plural(n)}`;
+  }
+
   cardHtml(mo: MapObject): string {
     const o = mo as Sys;
     const S = this.data.systemy;

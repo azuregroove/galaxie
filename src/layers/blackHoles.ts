@@ -147,6 +147,11 @@ export class BlackHoleLayer implements Layer {
     return { l: o.l, b: o.b, fovDeg: 0.15 };
   }
 
+  kindName(mo: MapObject): string {
+    const n = TYPES[(mo as BH).t].name;
+    return `Černá díra, ${n[0].toLowerCase()}${n.slice(1)}`;
+  }
+
   cardHtml(mo: MapObject): string {
     const o = mo as BH;
     const T = TYPES[o.t];

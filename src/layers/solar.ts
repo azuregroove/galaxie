@@ -67,6 +67,10 @@ export class SolarLayer implements Layer {
     });
   }
 
+  kindName(): string {
+    return "Naše planetární soustava";
+  }
+
   cardHtml(): string {
     return `<div class="kind" style="color:var(--sun)">Naše planetární soustava</div>
       <h3>Sluneční soustava</h3>

@@ -59,7 +59,7 @@ Stav 1. 10. 2026: etapy 1–3 hotové; z 5 hotová ramena (Reid 2019 + Gaia) a j
    - české popisy významných objektů (Wikipedie CC BY-SA, s autorem)
    - doplnit jména IAU z oficiálního seznamu WGSN (Wikidata neúplná – Ran, Ægir, Draugr…)
    - propojit jasné hvězdy s hvězdami s exoplanetami (ε Eri, τ Cet jsou v seznamu dvakrát)
-   - přístupnost: textové popisy pro čtečky, ovládání seznamu a karty klávesnicí (NAVRHY.md bod 11)
+   - ~~přístupnost: textové popisy pro čtečky, ovládání seznamu a karty klávesnicí (NAVRHY.md bod 11)~~ (1. 10.)
    - „výlety“ s komentářem: posloupnost kotev #o=… s textem (NAVRHY.md bod 13)
    - časová osa objevů, porovnání objektů
 5. Stavba Galaxie podle modelů, vzorek hvězd z Gaia, doladění vzhledu – hotovo: ramena Reid 2019, ramena z Gaia,

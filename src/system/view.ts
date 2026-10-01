@@ -118,6 +118,7 @@ export class SystemView {
   private smallSel: BodyView | null = null;
   private smallTex: Texture | null = null;
   private down: { x: number; y: number } | null = null;
+  private returnFocus: HTMLElement | null = null;
 
   private stage: Stage;
   private glow: Texture;
@@ -131,13 +132,13 @@ export class SystemView {
     this.root.setAttribute("aria-label", "Pohled na planetární soustavu");
     this.root.innerHTML = `
       <div class="sysCanvas"></div>
-      <div class="sysLabels"></div>
+      <div class="sysLabels" aria-hidden="true"></div>
       <header class="hud sysHead">
         <button class="close" aria-label="Zavřít soustavu">×</button>
         <div class="kind">Soustava</div>
-        <h3 class="sysName"></h3>
+        <h3 class="sysName" tabindex="-1"></h3>
         <div class="sysStar dim"></div>
-        <div class="sysFocus dim"></div>
+        <div class="sysFocus dim" aria-live="polite"></div>
       </header>
       <nav class="hud sysBar">
         <button class="btn" data-a="play" aria-pressed="true">Pauza</button>
@@ -167,7 +168,10 @@ export class SystemView {
       this.syncDate();
     };
     addEventListener("keydown", (e) => {
-      if (!this.root.hidden && e.key === "Escape") this.close();
+      if (!this.root.hidden && e.key === "Escape") {
+        e.preventDefault();
+        this.close();
+      }
     });
     addEventListener("resize", () => this.resize());
     const bar = this.q(".sysBar");
@@ -199,7 +203,11 @@ export class SystemView {
     this.spec = spec;
     this.ensureRenderer();
     this.build(spec);
+    if (this.root.hidden) this.returnFocus = document.activeElement as HTMLElement | null;
     this.root.hidden = false;
+    // mapa pod překryvem nesmí brát Tab ani čtečku
+    this.setInert(true);
+    this.q(".sysName").focus();
     this.stage.paused = true;
     this.resize();
     this.fit(true);
@@ -214,6 +222,13 @@ export class SystemView {
     cancelAnimationFrame(this.raf);
     this.stage.paused = false;
     this.clear();
+    this.setInert(false);
+    if (this.returnFocus?.isConnected) this.returnFocus.focus();
+    this.returnFocus = null;
+  }
+
+  private setInert(on: boolean): void {
+    for (const el of document.body.children) if (el !== this.root && el instanceof HTMLElement) el.inert = on;
   }
 
   private q<T extends HTMLElement>(sel: string): T {

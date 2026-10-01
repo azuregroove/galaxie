@@ -11,8 +11,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" />
   </head>
   <body>
-    <div id="stage"></div>
-    <div id="labels"></div>
+    <button class="skip" id="skip">Přejít na hledání a seznam objektů</button>
+    <div id="stage" role="img" aria-label="Trojrozměrná mapa Mléčné dráhy. Všechny objekty najdeš i v seznamu a hledání." aria-describedby="keysHelp"></div>
+    <div id="labels" aria-hidden="true"></div>
+    <div id="announce" class="sr-only" role="status" aria-live="polite"></div>
     <div id="status" role="status">Načítám data…</div>
     <div id="toast" role="status" hidden></div>
     <div class="hud" id="touchHint" hidden>
@@ -41,10 +43,10 @@
         </div>
       </div>
       <div id="filters" hidden></div>
-      <div id="list"></div>
+      <div id="list" role="group" aria-label="Objekty"></div>
     </aside>
 
-    <section class="hud" id="card" hidden aria-live="polite"></section>
+    <section class="hud" id="card" hidden aria-labelledby="cardTitle"></section>
 
     <nav class="hud" id="bar">
       <button class="btn" id="barToggle" aria-controls="bar" title="Schovat nebo ukázat lištu nástrojů"><span class="open">Skrýt lištu ▾</span><span class="shut">Nástroje ▴</span></button>
@@ -69,7 +71,7 @@
         <button class="btn" id="about">Zdroje</button>
       </div>
       </div>
-      <span class="help">Tah = otáčení · kolečko = zoom · pravé tl. = posun · WASD/QE = let · klik = přelet · dvojklik = přiblížit</span>
+      <span class="help" id="keysHelp">Tah = otáčení · kolečko = zoom · pravé tl. = posun · WASD/QE = let · klik = přelet · dvojklik = přiblížit<span class="keys"> · / = hledat · šipky = seznam · Esc = zavřít kartu</span></span>
       <div id="scale"><div id="scaleTxt">–</div><div id="scaleLine"></div><div id="readout"></div></div>
     </nav>
 
