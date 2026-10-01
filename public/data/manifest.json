@@ -46,6 +46,17 @@
       "stazeno": "2026-09-29T22:28:35Z"
     },
     {
+      "id": "jmena",
+      "soubor": "jmena.json",
+      "nazev": "Vlastní jména (IAU, česká)",
+      "zdroj": "Wikidata: jména hvězd a exoplanet schválená IAU (P2561, pojmenoval = IAU) a české štítky",
+      "url": "https://www.wikidata.org/",
+      "licence": "Wikidata CC0",
+      "poznamka": "Jména IAU na Wikidata nejsou úplná (chybí např. Ran, Ægir, Draugr); oficiální seznam WGSN z cloudu nedostupný.",
+      "objektu": 253,
+      "stazeno": "2026-10-01T15:44:43Z"
+    },
+    {
       "id": "mala-telesa",
       "soubor": "mala-telesa.json",
       "nazev": "Planetky a komety (vzorek)",

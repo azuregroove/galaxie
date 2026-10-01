@@ -14,6 +14,7 @@ import { Overlays } from "./scene/overlays";
 import { Stage } from "./scene/stage";
 import { SystemView } from "./system/view";
 import { initImages } from "./ui/images";
+import { applyNames, type NamesData } from "./core/names";
 import { Anchor } from "./ui/anchor";
 import { Hud } from "./ui/hud";
 import { Labels } from "./ui/labels";
@@ -41,6 +42,8 @@ async function main() {
     ]);
 
     if (file("obrazky")) initImages(DATA + file("obrazky"));
+    // jména jsou jen doplněk – když se nenačtou, mapa jede dál bez nich
+    const names = file("jmena") ? await getJson<NamesData>(file("jmena")!).catch(() => null) : null;
     const frame = new Frame(manifest.r0_pc);
     const stage = new Stage(document.getElementById("stage")!, css("--void"));
     const backdrop = buildBackdrop(stage.glow);
@@ -69,6 +72,7 @@ async function main() {
     if (bh) layers.push(new BlackHoleLayer(bh, frame, stage, css));
     cats.forEach((c, i) => layers.push(new CatalogLayer(c as CatalogData, manifest.katalogy.find((k) => k.id === generic[i])!, frame, stage.glow, css)));
     layers.forEach((L) => stage.scene.add(L.group));
+    if (names) applyNames(layers.flatMap((L) => L.objects), names);
 
     const hud = new Hud(stage, frame, layers, overlays, labels, manifest);
     stage.jumpTo(frame.sun.clone().add(new Vector3(9000, 0, 0)), new Vector3(-23000, 52000, 42000));

@@ -77,7 +77,7 @@ export class Hud {
   private labelList(): DynLabel[] {
     if (!this.showLabels) return [];
     const out: DynLabel[] = [];
-    const text = (o: MapObject) => (o.pos ? o.name : `${o.name} (jen směr)`);
+    const text = (o: MapObject) => (o.pos ? o.label ?? o.name : `${o.label ?? o.name} (jen směr)`);
     if (this.selected) out.push({ key: this.selected, text: text(this.selected), pos: this.selected.anchor, priority: 1000 });
     for (const L of this.layers) {
       L.labelCandidates(this.stage).forEach((o, i) => {
@@ -189,7 +189,8 @@ export class Hud {
       r.className = "row" + (o === this.selected ? " on" : "");
       // při hledání podle planety ukaž, která planeta odpovídá
       const hit = q && !norm(o.name).includes(q) ? o.aliases?.find((a) => norm(a).includes(q)) : undefined;
-      r.innerHTML = `<i style="background:${o.color}"></i><span class="nm">${escapeHtml(o.name)}${hit ? ` <span class="dim">· ${escapeHtml(hit)}</span>` : ""}</span><span class="ds">${o.distLy != null ? fmtLy(o.distLy) : "?"}</span>`;
+      const extra = hit && hit !== o.nick ? hit : o.nick;
+      r.innerHTML = `<i style="background:${o.color}"></i><span class="nm">${escapeHtml(o.name)}${extra ? ` <span class="dim">· ${escapeHtml(extra)}</span>` : ""}</span><span class="ds">${o.distLy != null ? fmtLy(o.distLy) : "?"}</span>`;
       r.onclick = () => this.select(o, true);
       frag.appendChild(r);
     }
@@ -206,6 +207,14 @@ export class Hud {
     const L = this.layers.find((x) => x.id === o.layer)!;
     const card = $("card");
     card.innerHTML = `<button class="close" aria-label="Zavřít">×</button>${L.cardHtml(o)}`;
+    if (o.nick) {
+      const n = document.createElement("div");
+      n.className = "nick";
+      n.innerHTML = o.layer === "exoplanety"
+        ? `Jméno hvězdy schválené IAU: <b>${escapeHtml(o.nick)}</b>`
+        : `Česky: <b>${escapeHtml(o.nick)}</b>`;
+      card.querySelector("h3")?.after(n);
+    }
     card.hidden = false;
     card.scrollTop = 0;
     card.querySelector<HTMLButtonElement>(".close")!.onclick = () => this.closeCard();

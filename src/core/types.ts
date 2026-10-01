@@ -35,6 +35,12 @@ export interface MapObject {
   color: string;
   /** Další jména pro vyhledávání (např. planety systému). */
   aliases?: string[];
+  /** vlastní jméno: u hvězd s exoplanetami jméno IAU, jinak české jméno (jmena.json) */
+  nick?: string;
+  /** text popisku na mapě, když se liší od name */
+  label?: string;
+  /** jména planet schválená IAU: planeta → jméno */
+  planetNames?: Record<string, string>;
   major?: boolean;
   hidden?: boolean;
   /** Bez vzdálenosti: jen v seznamu a hledání, na mapě se ukáže směr až po výběru. */

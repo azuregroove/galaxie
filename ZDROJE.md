@@ -110,3 +110,14 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
   obs_copyright „Digitized Sky Survey - STScI/NASA, Colored & Healpixed by CDS“, obs_copyright_url http://archive.stsci.edu/dss/copyright.html.
   Poděkování (obs_ack): „The Digitized Sky Surveys were produced at the Space Telescope Science Institute under U.S. Government grant NAG W-2166. …“
 - **Podmínky užití DSS neověřené** – stránka STScI je z cloudu blokovaná. Ověřit před zveřejněním (etapa 6).
+
+### Vlastní jména – Wikidata (`pipeline/jmena.py` → `jmena.json`)
+- Jména hvězd a exoplanet schválená IAU: Wikidata, P2561 (jméno) s kvalifikátorem P3938 (pojmenoval) = IAU (Q6867),
+  dotaz WDQS 1. 10. 2026: 281 jmen; napárováno 114 hvězd a 133 planet ve 128 systémech (katalogová označení P528,
+  záložně poloha do 0,02°). Většina nenapárovaných jsou jasné hvězdy bez exoplanet v PSCompPars.
+- **Neúplné:** na Wikidata chybí u části jmen kvalifikátor „pojmenoval IAU“ (např. Ran a Ægir u ε Eri, Draugr u PSR B1257+12 b).
+  Oficiální seznam WGSN (iau.org, exopla.net) je z cloudu nedostupný – na PC stáhnout a doplnit.
+- Česká jména (Plejády, Mlhovina Srdce…) a „M45“: české štítky a názvy cs Wikipedie z `obrazky.json` (125 objektů);
+  jména obsahující „pulsar“ se u jiných vrstev nepřebírají (Krabí mlhovina měla položku pulsaru).
+- Licence: Wikidata CC0.
+

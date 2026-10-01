@@ -303,7 +303,7 @@ export class ExoplanetLayer implements Layer {
       const faci = P.zarizeni[p] != null ? C.zarizeni[P.zarizeni[p]!] : "";
       const cls = [P.sporna[p] ? "disputed" : "", this.planetFilterOn && !this.planetPasses(p) ? "filtered" : ""].filter(Boolean).join(" ");
       return `<tr${cls ? ` class="${cls}"` : ""}${P.sporna[p] ? ' title="Existence planety je sporná (pl_controv_flag)"' : ""}>
-        <th scope="row" title="${escapeHtml(sizeClass(P.r[p]).name)}"><i class="dot" style="background:${sizeClass(P.r[p]).color}"></i>${escapeHtml(P.jmeno[p])}${P.sporna[p] ? " ⚠" : ""}</th>
+        <th scope="row" title="${escapeHtml(sizeClass(P.r[p]).name)}"><i class="dot" style="background:${sizeClass(P.r[p]).color}"></i>${escapeHtml(P.jmeno[p])}${P.sporna[p] ? " ⚠" : ""}${o.planetNames?.[P.jmeno[p]] ? `<br><span class="dim" title="jméno schválené IAU">${escapeHtml(o.planetNames[P.jmeno[p]])}</span>` : ""}</th>
         <td>${v(P.r[p], 2)}</td><td>${v(P.m[p], 1)}</td><td>${v(P.p[p], 2)}</td><td>${v(P.a[p], 3)}</td>
         <td>${v(P.teq[p], 0)}</td><td title="${escapeHtml(faci)}">${P.rok[p] ?? "–"}<br><span class="dim">${met}</span></td></tr>`;
     }).join("");

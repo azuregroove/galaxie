@@ -226,6 +226,11 @@ Aktualizovat na konci každého sezení.
   Jupiter 1 912, větší 242, neznámý 50; filtr „jen Země“ → 475 systémů (ověřeno proti Pythonu)
   - jen 50 planet bez poloměru → PSCompPars zjevně poloměry dopočítává (pozn. ve schématu platí)
 
+- 2026-10-01 (cloud): **návrh 3 – vlastní jména** (build OK, Playwright bez JS chyb): `pipeline/jmena.py` → `jmena.json` (14 kB),
+  `src/core/names.ts`; hledání najde „plejady“, „M45“, „Helvetios“, „Dimidium“, „mlhovina srdce“; v seznamu jméno vedle
+  katalogového, v kartě „Česky: …“ / „Jméno hvězdy schválené IAU: …“, jména planet v tabulce, česká jména jako popisky na mapě;
+  jména IAU z Wikidata neúplná (viz ZDROJE.md)
+
 ## Rozdělané
 - nic
 
