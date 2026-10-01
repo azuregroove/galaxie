@@ -220,6 +220,12 @@ Aktualizovat na konci každého sezení.
   (2 566 K) extrapolace označená, e/f/g v konzervativní zóně; hledání řadí přesnou shodu jména dopředu
   - zjištěno: NASA Exoplanet Archive je teď z cloudu dostupný (HTTP 200)
 
+- 2026-10-01 (cloud): **návrh 2 – velikostní třídy planet** (Borucki et al. 2011): `src/core/planetSize.ts`, filtr
+  „Velikost planety“ (v kotvě `velikost=`), barevné tečky v tabulce karty, barvy ve schématu i v pohledu Soustava
+  (dřívější neozdrojované hranice 1,6/4/10 R⊕ nahrazeny); počty: Země 576, super-Země 1 198, Neptun 2 394,
+  Jupiter 1 912, větší 242, neznámý 50; filtr „jen Země“ → 475 systémů (ověřeno proti Pythonu)
+  - jen 50 planet bez poloměru → PSCompPars zjevně poloměry dopočítává (pozn. ve schématu platí)
+
 ## Rozdělané
 - nic
 

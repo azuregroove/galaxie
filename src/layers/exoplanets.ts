@@ -19,6 +19,7 @@ import { aFromPeriod, periodFromA } from "../system/kepler";
 import type { OrbitBody, SystemSpec } from "../system/types";
 import type { SystemView } from "../system/view";
 import { habitableZone } from "../core/hz";
+import { SIZE_CLASSES, sizeClass } from "../core/planetSize";
 import { exoSchemaHtml } from "../ui/exoSchema";
 import { positionRows } from "./common";
 import { NO_FILTER, passDist, type Facet, type FilterState, type Layer, type LayerFilter, type SkyPos } from "./layer";
@@ -133,6 +134,9 @@ export class ExoplanetLayer implements Layer {
         options: data.ciselniky.metoda_cz.map((label, value) => ({ value, label, count: mc[value] }))
           .filter((o) => o.count > 0).sort((a, b) => b.count - a.count) },
       { kind: "range", id: "rok", name: "Rok objevu", min: Math.min(...years), max: Math.max(...years) },
+      { kind: "checks", id: "velikost", name: "Velikost planety (Borucki 2011)",
+        options: SIZE_CLASSES.map((c) => ({ value: c.value, label: `${c.name}${c.range ? ` (${c.range})` : ""}`,
+          count: P.r.filter((r) => sizeClass(r).value === c.value).length })).filter((o) => o.count > 0) },
     ];
     const m = new ShaderMaterial({
       uniforms: {
@@ -179,11 +183,13 @@ export class ExoplanetLayer implements Layer {
     const P = this.data.planety;
     if (met && (P.metoda[p] == null || !met.includes(P.metoda[p]!))) return false;
     if (yr && (P.rok[p] == null || P.rok[p]! < yr[0] || P.rok[p]! > yr[1])) return false;
+    const vel = f.checks.velikost;
+    if (vel && !vel.includes(sizeClass(P.r[p]).value)) return false;
     return true;
   }
 
   private get planetFilterOn(): boolean {
-    return !!(this.filter.checks.metoda || this.filter.ranges.rok);
+    return !!(this.filter.checks.metoda || this.filter.ranges.rok || this.filter.checks.velikost);
   }
 
   private refresh(): void {
@@ -297,7 +303,7 @@ export class ExoplanetLayer implements Layer {
       const faci = P.zarizeni[p] != null ? C.zarizeni[P.zarizeni[p]!] : "";
       const cls = [P.sporna[p] ? "disputed" : "", this.planetFilterOn && !this.planetPasses(p) ? "filtered" : ""].filter(Boolean).join(" ");
       return `<tr${cls ? ` class="${cls}"` : ""}${P.sporna[p] ? ' title="Existence planety je sporná (pl_controv_flag)"' : ""}>
-        <th scope="row">${escapeHtml(P.jmeno[p])}${P.sporna[p] ? " ⚠" : ""}</th>
+        <th scope="row" title="${escapeHtml(sizeClass(P.r[p]).name)}"><i class="dot" style="background:${sizeClass(P.r[p]).color}"></i>${escapeHtml(P.jmeno[p])}${P.sporna[p] ? " ⚠" : ""}</th>
         <td>${v(P.r[p], 2)}</td><td>${v(P.m[p], 1)}</td><td>${v(P.p[p], 2)}</td><td>${v(P.a[p], 3)}</td>
         <td>${v(P.teq[p], 0)}</td><td title="${escapeHtml(faci)}">${P.rok[p] ?? "–"}<br><span class="dim">${met}</span></td></tr>`;
     }).join("");

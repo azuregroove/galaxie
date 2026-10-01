@@ -1,3 +1,4 @@
+import { sizeClass } from "../core/planetSize";
 import { escapeHtml, fmtNum } from "../core/units";
 import type { SystemSpec } from "../system/types";
 
@@ -19,7 +20,7 @@ export function exoSchemaHtml(spec: SystemSpec, starColor: string, rs: number | 
     <div class="schemaHead">Schéma soustavy <span class="dim">· generované z dat</span></div>
     ${sizesSvg(spec, starColor, rs)}
     ${bodies.length ? orbitsSvg(spec, starColor) : ""}
-    <figcaption>Nahoře velikosti ve skutečném poměru (velká hvězda jen jako výsek okraje); poloměr může být
+    <figcaption>Barva planety = velikostní třída (Borucki et al. 2011), viz tečky v tabulce. Nahoře velikosti ve skutečném poměru (velká hvězda jen jako výsek okraje); poloměr může být
     v archivu dopočtený z hmotnosti, hlavně u planet objevených měřením radiálních rychlostí. Dole vzdálenosti od hvězdy,
     <b>logaritmická</b> osa; čárka = rozsah od periastra k apoastru podle výstřednosti.
     ${bodies.some((b) => b.aEst) ? "* vzdálenost dopočtená z oběžné doby (3. Keplerův zákon)." : ""}
@@ -52,7 +53,7 @@ function sizesSvg(spec: SystemSpec, starColor: string, rs: number | null): strin
     // místo podle širšího z kruhu a popisku (písmo 9,5 px mono ≈ 5,8 px na znak)
     const half = Math.max(r, it.label.length * 2.9 + 2);
     x += half;
-    parts.push(`<circle cx="${x.toFixed(1)}" cy="${cy}" r="${r.toFixed(2)}" class="${it.ref ? "ref" : "pl"}${it.disputed ? " disputed" : ""}"/>`);
+    parts.push(`<circle cx="${x.toFixed(1)}" cy="${cy}" r="${r.toFixed(2)}" class="${it.ref ? "ref" : "pl"}${it.disputed ? " disputed" : ""}"${it.ref || it.disputed ? "" : ` style="fill:${sizeClass(it.r).color}"`}/>`);
     parts.push(`<text x="${x.toFixed(1)}" y="${cy + 30 + 12}" class="${it.ref ? "refT" : "plT"}">${escapeHtml(it.label)}</text>`);
     x += half + 6;
   }
@@ -111,7 +112,7 @@ function orbitsSvg(spec: SystemSpec, starColor: string): string {
     if (b.e > 0) {
       out.push(`<line x1="${X(b.a * (1 - b.e)).toFixed(1)}" y1="${axisY - 10}" x2="${X(b.a * (1 + b.e)).toFixed(1)}" y2="${axisY - 10}" class="ecc"/>`);
     }
-    out.push(`<circle cx="${x.toFixed(1)}" cy="${axisY - 10}" r="3" class="pl${b.disputed ? " disputed" : ""}"/>`);
+    out.push(`<circle cx="${x.toFixed(1)}" cy="${axisY - 10}" r="3" class="pl${b.disputed ? " disputed" : ""}"${b.disputed ? "" : ` style="fill:${sizeClass(b.r).color}"`}/>`);
     const label = short(spec, b.name) + (b.aEst ? "*" : "");
     const w = label.length * 6 + 4;
     const row = x - lastX[0] >= w ? 0 : x - lastX[1] >= w ? 1 : 0;

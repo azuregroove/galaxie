@@ -25,6 +25,7 @@ import {
   type Texture,
 } from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { sizeClass } from "../core/planetSize";
 import { escapeHtml, fmtNum } from "../core/units";
 import type { Stage } from "../scene/stage";
 import { fillImage } from "../ui/images";
@@ -49,13 +50,7 @@ const CHILD_MIN_PX = 6;
 const SOLAR_REF: [string, number][] = [["Merkur", 0.39], ["Venuše", 0.72], ["Země", 1.0], ["Mars", 1.52], ["Jupiter", 5.2]];
 
 /** Barva exoplanety podle poloměru (hrubé skupiny, jen pro orientaci). */
-function planetColor(r: number | null): string {
-  if (r == null) return "#8a93a6";
-  if (r < 1.6) return "#c9a27e";
-  if (r < 4) return "#7fd0d8";
-  if (r < 10) return "#6f98ea";
-  return "#e3bb82";
-}
+const planetColor = (r: number | null): string => sizeClass(r).color;
 
 /** Velikost tečky v pixelech v režimu „zvětšeno“: roste s poloměrem, ale ne lineárně. */
 const bodyPx = (b: OrbitBody) => (b.r == null ? (b.kind === "moon" ? 2 : 3) : Math.max(2, 3 + 2.4 * Math.log2(1 + b.r)));
@@ -417,7 +412,7 @@ export class SystemView {
       if (spec.star.rs == null) notes.push("Poloměr hvězdy není známý, kreslí se jako 1 R☉.");
       if (spec.hz) notes.push(`Zelené mezikruží = obyvatelná zóna (Kopparapu et al. 2014): konzervativní ${fmtNum(spec.hz.cons[0], 3)}–${fmtNum(spec.hz.cons[1], 3)} au, slabší optimistická ${fmtNum(spec.hz.opt[0], 3)}–${fmtNum(spec.hz.opt[1], 3)} au; z teploty a poloměru hvězdy${spec.hz.extrapolated ? ", <b>teplota mimo rozsah modelu 2 600–7 200 K – extrapolace</b>" : ""}.`);
       if (spec.skipped.length) notes.push(`Bez dráhy (chybí a i perioda): ${escapeHtml(spec.skipped.join(", "))}.`);
-      notes.push("Barva planety podle poloměru: hnědá < 1,6 R⊕ (spíš kamenná), tyrkysová < 4 R⊕, modrá < 10 R⊕, béžová ≥ 10 R⊕ (plynný obr), šedá = neznámý.");
+      notes.push("Barva planety podle velikostní třídy (Borucki et al. 2011): hnědá = velikost Země (< 1,25 R⊕), tyrkysová = super-Země (1,25–2), modrá = velikost Neptunu (2–6), béžová = velikost Jupiteru (6–15), cihlová = větší (≥ 15), šedá = poloměr neznámý.");
     }
     return `${table}<ul>${notes.map((n) => `<li>${n}</li>`).join("")}</ul><p class="src">${escapeHtml(spec.source)}</p>`;
   }
