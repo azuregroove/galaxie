@@ -43,4 +43,4 @@ pohled Soustava s elipsami a Sluneční soustava k datu.
 
 Doporučení: nejdřív 1, 2, 4, 5 (malé a viditelné), potom 3 a 9, větší věci (6–8) do etapy 5.
 
-**Stav 1. 10. 2026:** hotovo 1, 2, 3, 4, 5, 6, 9, 11. Zbývající body (7, 8, 10, 12, 13) jsou zařazené do etap v CLAUDE.md.
+**Stav 1. 10. 2026:** hotovo 1, 2, 3, 4, 5, 6, 9, 11, 13 (první dva výlety). Zbývající body (7, 8, 10, 12) jsou zařazené do etap v CLAUDE.md.

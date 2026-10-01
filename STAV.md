@@ -261,8 +261,23 @@ Aktualizovat na konci každého sezení.
     vybrané těleso se ohlásí (`aria-live`); `prefers-reduced-motion` vypne i pulzování značky a CSS přechody
   - **netestováno se skutečnou čtečkou** (NVDA/TalkBack) – jen strom vlastností a fokus v Playwrightu
 
+- 2026-10-01 (cloud): bod 11 commitnut a pushnut (33927c4, Ráďa odsouhlasil) do `claude/jolly-thompson-pyvslt`
+- 2026-10-01 (cloud): **návrh 13 – výlety s komentářem** (build OK, Playwright desktop 1400×860 šipkami + mobil 390×844 tlačítky, bez JS chyb)
+  - Ráďa schválil: ruční přepínání (bez automatického přehrávání), nejdřív výlety 1 a 2, komentáře 2–4 věty
+  - `src/ui/tours.ts`, data `public/data/vylety.json`: zastávka = objekt „vrstva:jméno“ a/nebo předvolený pohled, nadpis, text, zdroj;
+    {d}/{pc}/{voyager} doplní aplikace z dat; zastávka s chybějícím objektem se vynechá (varování v konzoli)
+  - tlačítko „Výlety ▸“ první v liště → nabídka v kartě; blok výletu nahoře v kartě objektu (‹ Zpět · n/N · Další › · Ukončit),
+    šipky ← →, Esc/× ukončí; kotva `#vylet=sousedstvi&krok=3`; zastávky se ohlásí čtečce
+  - výlet „Naše sousedství“ (8 zastávek: Slunce, α Cen, Proxima, Barnardova, Sirius, ε Eri, TRAPPIST-1, zpět) a
+    „Černé díry Galaxie“ (7: přehled, Gaia BH1, Gaia BH3, Cyg X-1, V404 Cyg, Omega Cen, Sgr A*)
+  - `pipeline/overit_vylety.py` – kontrola odkazů po aktualizaci dat (teď v pořádku)
+  - Hud: `views`, `cardExtra`, `onCardClose`, `showPanel()`, `announce()` veřejné
+  - **oprava staré chyby:** na mobilu se lišta nástrojů neposouvala (šířka 1 204 px) → tlačítka za „Centrum“ (Popisky…Zdroje) byla
+    nedosažitelná; teď se posouvá vodorovně (posuvník je skrytý, není vidět, že jde posouvat)
+  - Wikipedie z cloudu blokovaná → fakta jen z našich dat + ověřené dotazy (ZDROJE.md)
+
 ## Rozdělané
-- nic (bod 11 necommitnutý – čeká na Ráďův souhlas)
+- nic (bod 13 commitnut a pushnut 1. 10. s Ráďovým souhlasem)
 
 ## Další krok
 **Aktuální větev: `claude/jolly-thompson-pyvslt`** (navazuje na `claude/confident-lovelace-1lqe2y`, 1b473f0).
@@ -271,7 +286,7 @@ Na PC: `git fetch origin`, `git switch claude/jolly-thompson-pyvslt`, `git pull`
 Mapa jako soukromý artefakt: https://claude.ai/artifact/C7E2DwT3ir8g85U8s3ThkW (aktualizovat publikací dist/).
 Pravidlo z 1. 10.: po každém dokončeném bodu se zastavit, říct co je hotovo; commit + push předchozího bodu až po Ráďově souhlasu.
 
-**Další na řadě (navrženo Ráďovi):** etapa 4 – výlety (bod 13) (přístupnost hotová 1. 10.); body 7 a 8 až po povolení domén
+**Další na řadě:** další výlety (zrození a smrt hvězd, stavba Galaxie, obyvatelné světy) podle Ráďovy zpětné vazby k 1 a 2; body 7 a 8 až po povolení domén
 (arxiv.org, export.arxiv.org, dataverse.harvard.edu, zenodo.org, www.nature.com).
 
 **Dlouhodobě (z 30. 9.):**

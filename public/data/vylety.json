@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "poznamka": "Zástupné značky {d} (ly), {pc} a {voyager} doplní aplikace z dat objektu. Kontrola odkazů: pipeline/overit_vylety.py",
+  "vylety": [
+    {
+      "id": "sousedstvi",
+      "nazev": "Naše sousedství",
+      "popis": "nejbližší hvězdy a jejich planety do 41 ly",
+      "zastavky": [
+        {
+          "o": "slunecni-soustava:Sluneční soustava",
+          "pohled": "near",
+          "nadpis": "Start: Slunce",
+          "text": "Jsme doma. Slunce je v mapě počátkem souřadnic a všechny vzdálenosti se měří od něj. Do centra Galaxie je odsud asi 26 600 světelných let (R₀ = 8,15 kpc).\n\nNa tomhle výletu zůstaneme v těsném okolí: nejvzdálenější zastávka je 40 světelných let daleko, zhruba šestisetina cesty do centra.",
+          "zdroj": "R₀ podle Reid et al. 2019 (ApJ 885, 131)"
+        },
+        {
+          "o": "hvezdy:α¹ Cen",
+          "nadpis": "Alfa Centauri A a B",
+          "text": "Nejbližší hvězdná soustava, {d} od nás. Rychlostí sondy Voyager 1 by sem cesta trvala {voyager}.\n\nα Centauri A má spektrální typ G2 V stejně jako Slunce. Její průvodce α Centauri B je typu K1 V, tedy o něco chladnější.",
+          "zdroj": "Hipparcos (van Leeuwen 2007), Yale BSC5; rychlost Voyageru 1 z JPL Horizons"
+        },
+        {
+          "o": "exoplanety:Proxima Cen",
+          "nadpis": "Proxima Centauri",
+          "text": "Nejbližší hvězda vůbec, {d}. Červený trpaslík typu M5.5 V, na obloze kousek od Alfy Centauri. Pouhým okem ho neuvidíš, má jasnost jen 11 magnitud.\n\nMá dvě planety. Proxima b (objev 2016) má minimální hmotnost asi 1,1 Země a oběhne hvězdu za 11,2 dne. Proxima d (2025) je ještě lehčí, asi čtvrtina Země. Obě našli metodou radiálních rychlostí, která měří jen spodní mez hmotnosti. Kde leží vůči obyvatelné zóně, ukazuje schéma v kartě.",
+          "zdroj": "NASA Exoplanet Archive (PSCompPars)"
+        },
+        {
+          "o": "exoplanety:Barnard's star",
+          "nadpis": "Barnardova hvězda",
+          "text": "Červený trpaslík typu M3.5–4 V, {d} od nás. Ze všech hvězd katalogu Hipparcos se po obloze posouvá nejrychleji: 10,4″ za rok, takže vzdálenost rovnou průměru Měsíce urazí zhruba za 180 let.\n\nOd roku 2024 u ní metodou radiálních rychlostí našli čtyři malé planety (b, c, d, e). Všechny jsou lehčí než Země, minimální hmotnosti mají 0,19 až 0,34 Země.",
+          "zdroj": "NASA Exoplanet Archive (PSCompPars); vlastní pohyb Hipparcos (van Leeuwen 2007, VizieR I/311)"
+        },
+        {
+          "o": "hvezdy:Sirius A",
+          "nadpis": "Sirius",
+          "text": "Nejjasnější hvězda noční oblohy (V = −1,44), {d} od nás. Je to horká bílá hvězda spektrálního typu A1 V.\n\nMá průvodce Sirius B, bílého trpaslíka (spektrální typ DA1.9). Je to vyhaslé jádro hvězdy, která už svůj život prožila.",
+          "zdroj": "Hipparcos (van Leeuwen 2007), Yale BSC5; Sirius B: SIMBAD"
+        },
+        {
+          "o": "exoplanety:eps Eri",
+          "nadpis": "Epsilon Eridani",
+          "text": "Hvězda typu K2 V, {d} od nás. S teplotou 5 020 K je chladnější a menší než Slunce (5 772 K).\n\nObíhá ji planeta ε Eridani b s hmotností asi jednoho Jupiteru, jednou za 7,3 roku ve vzdálenosti 3,5 au, tedy blíž, než je Jupiter od Slunce (5,2 au).",
+          "zdroj": "NASA Exoplanet Archive (PSCompPars); teplota Slunce: IAU 2015 B3"
+        },
+        {
+          "o": "exoplanety:TRAPPIST-1",
+          "nadpis": "TRAPPIST-1",
+          "text": "Ultrachladný červený trpaslík typu M8 V, {d} od nás. Má teplotu jen 2 566 K a poloměr 0,12 Slunce.\n\nObíhá ho sedm planet podobné velikosti jako Země (0,76 až 1,13 jejího poloměru), všechny objevené tranzitní metodou v letech 2016–2017. Celá soustava by se vešla dovnitř dráhy Merkuru: nejvzdálenější planeta h obíhá ve vzdálenosti 0,062 au, Merkur ve 0,39 au. Tlačítkem Soustava v kartě si pustíš jejich oběh.",
+          "zdroj": "NASA Exoplanet Archive (PSCompPars); dráha Merkuru: JPL (Standish)"
+        },
+        {
+          "pohled": "sun",
+          "nadpis": "Zpátky u Slunce",
+          "text": "Všechno, co jsme navštívili, se vejde do koule o poloměru 41 světelných let kolem Slunce. Z tohoto pohledu je vidět, jak malý kousek Galaxie to je: do jejího centra je to 26 600 světelných let.\n\nPokračovat můžeš výletem Černé díry Galaxie.",
+          "zdroj": "R₀ podle Reid et al. 2019"
+        }
+      ]
+    },
+    {
+      "id": "cerne-diry",
+      "nazev": "Černé díry Galaxie",
+      "popis": "od nejbližší známé po Sagittarius A* v centru",
+      "zastavky": [
+        {
+          "pohled": "top",
+          "nadpis": "Černé díry na mapě",
+          "text": "Vrstva Černé díry obsahuje potvrzené hvězdné černé díry, kandidáty z katalogu BlackCAT a Sagittarius A* v centru Galaxie.\n\nČernou díru samotnou vidět nejde. Většinu známých prozradil průvodce: hvězda, která kolem ní obíhá, nebo hmota, která z průvodce přetéká a padá do ní.",
+          "zdroj": "Wikipedie (údaje v mapě), BlackCAT – Corral-Santana et al. 2016"
+        },
+        {
+          "o": "cerne-diry:Gaia BH1",
+          "nadpis": "Gaia BH1: nejbližší známá",
+          "text": "Nejbližší známá černá díra, {d} od nás, s hmotností asi 9,7 Slunce.\n\nJe „spící“: nic do ní nepadá, takže nezáří v rentgenu. Prozradil ji pohyb průvodce, hvězdy podobné Slunci s oběžnou dobou 186 dní, v datech družice Gaia.",
+          "zdroj": "Wikipedie (údaje v mapě); poloha SIMBAD"
+        },
+        {
+          "o": "cerne-diry:Gaia BH3",
+          "nadpis": "Gaia BH3: nejhmotnější hvězdná",
+          "text": "{d} od nás. S hmotností 32,7 Slunce je to nejhmotnější známá hvězdná černá díra v Galaxii.\n\nTaky spí a taky ji našla Gaia. Průvodce je stará hvězda chudá na kovy (prvky těžší než helium) s oběžnou dobou 11,6 roku.",
+          "zdroj": "Wikipedie (údaje v mapě); poloha SIMBAD"
+        },
+        {
+          "o": "cerne-diry:Cygnus X-1",
+          "nadpis": "Cygnus X-1: první objevená",
+          "text": "Historicky první objevená černá díra, hmotnost 15–21 Sluncí. Vzdálenost je jen odhad, 6 000 až 8 000 světelných let.\n\nNa rozdíl od spících ji prozrazuje rentgenové záření. Hmota z průvodce, modrého veleobra, padá k černé díře a přitom se zahřeje tak, že září v rentgenu.",
+          "zdroj": "Wikipedie (údaje v mapě); poloha SIMBAD"
+        },
+        {
+          "o": "cerne-diry:V404 Cygni",
+          "nadpis": "V404 Cygni",
+          "text": "Na obloze kousek od Cygnu X-1, obě leží v souhvězdí Labutě. Hmotnost 9–12 Sluncí, vzdálenost {d}.\n\nTu má změřenou radiovou paralaxou, tedy geometricky, ne odhadem. V roce 2015 prodělala mohutné vzplanutí.",
+          "zdroj": "Wikipedie (údaje v mapě); poloha SIMBAD"
+        },
+        {
+          "o": "cerne-diry:Omega Centauri (IMBH)",
+          "nadpis": "Omega Centauri: černá díra střední hmotnosti?",
+          "text": "Omega Centauri, {d} od nás, je největší kulová hvězdokupa Galaxie. V jejím středu je od roku 2024 kandidát na černou díru střední hmotnosti, aspoň 8 200 Sluncí.\n\nTakové černé díry by vyplnily mezeru mezi hvězdnými a supermasivními. Výsledek je ale dál zpochybňován, proto je v mapě jako kandidát.",
+          "zdroj": "Wikipedie (údaje v mapě)"
+        },
+        {
+          "o": "cerne-diry:Sagittarius A*",
+          "nadpis": "Sagittarius A*: srdce Galaxie",
+          "text": "{d} od nás, v samém centru Galaxie. Supermasivní černá díra o hmotnosti 4,15 milionu Sluncí, asi 127 000krát víc než Gaia BH3.\n\nTady výlet končí. Zpátky ke Slunci tě vrátí tlačítko Slunce v liště.",
+          "zdroj": "Wikipedie (údaje v mapě); R₀ podle Reid et al. 2019"
+        }
+      ]
+    }
+  ]
+}

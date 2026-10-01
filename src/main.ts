@@ -19,6 +19,7 @@ import { applyNames, type NamesData } from "./core/names";
 import { Anchor } from "./ui/anchor";
 import { Hud } from "./ui/hud";
 import { Labels } from "./ui/labels";
+import { Tours } from "./ui/tours";
 
 const css = (n: string) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const DATA = `${import.meta.env.BASE_URL}data/`;
@@ -80,7 +81,9 @@ async function main() {
 
     const hud = new Hud(stage, frame, layers, overlays, labels, manifest);
     stage.jumpTo(frame.sun.clone().add(new Vector3(9000, 0, 0)), new Vector3(-23000, 52000, 42000));
-    const anchor = new Anchor(stage, hud, layers);
+    const tours = new Tours(DATA + "vylety.json", hud, stage, layers);
+    document.getElementById("tours")!.onclick = () => void tours.menu();
+    const anchor = new Anchor(stage, hud, layers, tours);
     anchor.apply(location.hash);
     stage.start();
     status.remove();

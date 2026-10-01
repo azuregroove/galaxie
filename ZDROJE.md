@@ -133,3 +133,12 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 - Kontrola: Sirius 8,5 ly, Vega 25,1 ly, Deneb 1 412 ly, Polárka 433 ly (Hipparcos; jiné metody dávají Polárce ~320–430 ly).
 - Licence: data CDS s citací (podmínky CDS neověřené), Wikidata CC0.
 
+
+### Výlety s komentářem (`public/data/vylety.json`, kontrola `pipeline/overit_vylety.py`)
+- Texty napsané pro tuto mapu (Klouí, 1. 10. 2026), zdroj uvedený u každé zastávky. Vzdálenosti a doba cesty Voyagerem
+  se doplňují z dat objektu ({d}, {pc}, {voyager}); ostatní čísla převzatá z našich datových souborů (PSCompPars, Hipparcos/BSC5,
+  seznam černých děr) a ručně přepsaná do textu – po aktualizaci dat zkontrolovat.
+- Navíc ověřeno 1. 10. 2026: vlastní pohyb Barnardovy hvězdy 10 359 mas/rok = největší v Hipparcos (van Leeuwen 2007, VizieR I/311,
+  dotaz na |pm| > 3 000 mas/rok); Sirius B = bílý trpaslík, spektrální typ DA1.9 (SIMBAD přes Sesame).
+  Teplota Slunce 5 772 K (IAU 2015 B3), Merkur a = 0,387 au (Standish, viz Sluneční soustava).
+- Wikipedie z cloudu nedostupná – texty z ní nepřebírané.

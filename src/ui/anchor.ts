@@ -3,11 +3,12 @@ import type { MapObject } from "../core/types";
 import { NO_FILTER, type FilterState, type Layer } from "../layers/layer";
 import type { Stage } from "../scene/stage";
 import type { Hud } from "./hud";
+import type { Tours } from "./tours";
 
 /*
  * Sdílení pohledu přes #kotvu, např.
  *   #o=exoplanety:TRAPPIST-1&c=-26581.2,-33.9,-12.4,-26600.3,-30.1,5.2&d=10-100&rok=2020-2022&metoda=3.9
- * c = kamera (x,y,z) a cíl pohledu (x,y,z) ve scéně v ly; o = vybraný objekt; zbytek filtry.
+ * c = kamera (x,y,z) a cíl pohledu (x,y,z) ve scéně v ly; o = vybraný objekt; vylet + krok (od 1); zbytek filtry.
  */
 const round = (v: number) => (Math.abs(v) >= 100 ? v.toFixed(1) : v.toFixed(3)).replace(/\.?0+$/, "");
 const sig = (v: number) => String(+v.toPrecision(4));
@@ -50,11 +51,13 @@ export class Anchor {
   private stage: Stage;
   private hud: Hud;
   private layers: Layer[];
+  private tours: Tours | null;
 
-  constructor(stage: Stage, hud: Hud, layers: Layer[]) {
+  constructor(stage: Stage, hud: Hud, layers: Layer[], tours: Tours | null = null) {
     this.stage = stage;
     this.hud = hud;
     this.layers = layers;
+    this.tours = tours;
     addEventListener("hashchange", () => this.apply(location.hash, true));
     // dvakrát za sekundu stačí; replaceState nezanáší historii prohlížeče
     setInterval(() => this.write(), 500);
@@ -67,6 +70,11 @@ export class Anchor {
     const { camera, controls } = this.stage;
     q.set("c", [...camera.position.toArray(), ...controls.target.toArray()].map(round).join(","));
     encodeFilters(this.hud.filters.current, q);
+    const t = this.tours?.current;
+    if (t) {
+      q.set("vylet", t.id);
+      q.set("krok", String(t.step + 1));
+    }
     return "#" + q.toString().replace(/%2C/g, ",").replace(/%3A/g, ":");
   }
 
@@ -92,6 +100,14 @@ export class Anchor {
       else this.stage.jumpTo(target, pos.sub(target));
     }
 
+    const tour = q.get("vylet");
+    if (tour && this.tours) {
+      // výlet si objekt i pohled nastaví sám; data výletů se teprve načítají
+      const step = Math.max(1, parseInt(q.get("krok") ?? "1", 10) || 1) - 1;
+      void this.tours.start(tour, step);
+      this.last = hash;
+      return true;
+    }
     const ref = q.get("o");
     let obj: MapObject | undefined;
     if (ref) {

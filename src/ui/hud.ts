@@ -26,6 +26,11 @@ export class Hud {
   readonly filters: FilterPanel;
   private toastTimer = 0;
   private rows = new Map<HTMLElement, MapObject>();
+  /** Doplní do každé karty vlastní blok (výlet); volá se po sestavení karty. */
+  cardExtra: ((card: HTMLElement) => void) | null = null;
+  /** Karta se zavřela (křížkem, Esc, filtrem). */
+  onCardClose: (() => void) | null = null;
+  readonly views: Record<string, () => void>;
 
   private stage: Stage;
   private frame: Frame;
@@ -52,6 +57,14 @@ export class Hud {
     this.marker = new Sprite(new SpriteMaterial({ map: stage.glow, color: 0xffffff, transparent: true, depthWrite: false, blending: AdditiveBlending, opacity: 0.9 }));
     this.marker.visible = false;
     stage.scene.add(this.marker);
+    const SUN = frame.sun;
+    this.views = {
+      near: () => stage.flyTo(SUN, 250, new Vector3(-0.35, 0.75, 0.55)),
+      sun: () => stage.flyTo(SUN, 14000, new Vector3(-0.35, 0.75, 0.55)),
+      top: () => stage.flyTo(new Vector3(), 125000, new Vector3(0.0001, 1, 0.02)),
+      edge: () => stage.flyTo(new Vector3(), 95000, new Vector3(0.02, 0.04, 1)),
+      gc: () => stage.flyTo(new Vector3(), 20000, new Vector3(-0.6, 0.5, 0.6)),
+    };
 
     this.filters = new FilterPanel(layers, (f) => {
       layers.forEach((L) => L.applyFilter(f));
@@ -210,7 +223,7 @@ export class Hud {
     return [o.name + (o.nick && o.nick !== extra ? ` (${o.nick})` : ""), extra, kind, dist].filter(Boolean).join(", ");
   }
 
-  private announce(text: string): void {
+  announce(text: string): void {
     // vyprázdnit a znovu naplnit, jinak čtečka stejný text podruhé nepřečte
     const a = $("announce");
     a.textContent = "";
@@ -293,6 +306,7 @@ export class Hud {
       b.onclick = () => this.lookFrom(o);
       card.querySelector(".btn.detail, h3")?.after(b);
     }
+    this.cardExtra?.(card);
     const img = document.createElement("div");
     img.className = "imgs";
     card.appendChild(img);
@@ -340,6 +354,7 @@ export class Hud {
     const card = $("card");
     const was = this.selected;
     const focusInside = card.contains(document.activeElement);
+    const wasOpen = !card.hidden;
     card.hidden = true;
     this.layers.forEach((L) => L.onSelect?.(null));
     this.stage.setCenterShift(0);
@@ -352,9 +367,27 @@ export class Hud {
       if (row) this.focusRow(row);
       else $("search").focus();
     }
+    if (wasOpen) this.onCardClose?.();
+  }
+
+  /** Karta bez objektu (zastávka výletu jen s pohledem). */
+  showPanel(): HTMLElement {
+    this.selected = null;
+    this.layers.forEach((L) => L.onSelect?.(null));
+    this.marker.visible = false;
+    const card = $("card");
+    card.innerHTML = `<button class="close" aria-label="Zavřít kartu">×</button>`;
+    card.querySelector<HTMLButtonElement>(".close")!.onclick = () => this.closeCard();
+    card.hidden = false;
+    card.scrollTop = 0;
+    this.cardExtra?.(card);
+    this.fitCenter();
+    this.renderList();
+    return card;
   }
 
   private showAbout(): void {
+    if (!$("card").hidden) this.onCardClose?.();
     this.selected = null;
     this.marker.visible = false;
     const card = $("card");
@@ -378,15 +411,7 @@ export class Hud {
 
   // ---------- spodní lišta ----------
   private buildBar(): void {
-    const SUN = this.frame.sun;
-    const views: Record<string, () => void> = {
-      near: () => this.stage.flyTo(SUN, 250, new Vector3(-0.35, 0.75, 0.55)),
-      sun: () => this.stage.flyTo(SUN, 14000, new Vector3(-0.35, 0.75, 0.55)),
-      top: () => this.stage.flyTo(new Vector3(), 125000, new Vector3(0.0001, 1, 0.02)),
-      edge: () => this.stage.flyTo(new Vector3(), 95000, new Vector3(0.02, 0.04, 1)),
-      gc: () => this.stage.flyTo(new Vector3(), 20000, new Vector3(-0.6, 0.5, 0.6)),
-    };
-    document.querySelectorAll<HTMLButtonElement>("[data-view]").forEach((b) => (b.onclick = () => views[b.dataset.view!]()));
+    document.querySelectorAll<HTMLButtonElement>("[data-view]").forEach((b) => (b.onclick = () => this.views[b.dataset.view!]()));
     document.querySelectorAll<HTMLButtonElement>("[data-tog]").forEach((b) => (b.onclick = () => {
       const k = b.dataset.tog!;
       const on = k === "labels" ? (this.showLabels = !this.showLabels) : this.overlays.toggle(k as OverlayKey);
