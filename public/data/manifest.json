@@ -25,12 +25,12 @@
       "citace": "This research has made use of the NASA Exoplanet Archive, which is operated by the California Institute of Technology, under contract with the National Aeronautics and Space Administration under the Exoplanet Exploration Program.",
       "poznamka": "PSCompPars skládá parametry z více publikací, nemusí být vzájemně konzistentní.",
       "vyrez": false,
-      "planet": 6372,
-      "systemu": 4779,
-      "systemu_se_vzdalenosti": 4751,
+      "planet": 6375,
+      "systemu": 4780,
+      "systemu_se_vzdalenosti": 4752,
       "max_d_pc": 8500.0,
-      "stazeno": "2026-09-30T21:15:48Z",
-      "planet_s_vystrednosti": 5305
+      "stazeno": "2026-10-01T17:41:17Z",
+      "planet_s_vystrednosti": 5309
     },
     {
       "id": "gaia-ramena",

@@ -22,6 +22,7 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 ### Exoplanety – NASA Exoplanet Archive, PSCompPars
 - Web: https://exoplanetarchive.ipac.caltech.edu/ (TAP, tabulka `pscomppars`)
 - Stav 29. 9. 2026: 6 372 planet, 6 344 se vzdáleností, 4 779 hostitelských systémů, nejvzdálenější 8 500 pc (ověřeno dotazem TAP).
+- Stav 1. 10. 2026 (staženo 17:41 UTC z cloudu): 6 375 planet, 6 347 se vzdáleností, 4 780 systémů, nejvzdálenější 8 500 pc.
 - Licence: veřejná data NASA/Caltech-IPAC. Archiv žádá citaci:
   > This research has made use of the NASA Exoplanet Archive, which is operated by the California Institute of Technology, under contract with the National Aeronautics and Space Administration under the Exoplanet Exploration Program.
 - Pozor: PSCompPars skládá parametry z více publikací, nemusí být vzájemně konzistentní. Hvězdné parametry

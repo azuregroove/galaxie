@@ -329,8 +329,15 @@ Aktualizovat na konci každého sezení.
   - z cloudu dál blokované: arxiv, export.arxiv, dataverse.harvard.edu, zenodo, nature.com, gea.esac.esa.int (Gaia archiv), archive.stsci.edu;
     dostupné: NASA Exoplanet Archive, JPL SSD, CDS VizieR, cs.wikipedia (s limitem)
 
+- 2026-10-01 (cloud): oprava popisů pushnutá (33ecf17, Ráďa odsouhlasil)
+- 2026-10-01 (cloud): **aktualizace exoplanet z cloudu** (`exoplanety.py`, 6 s): 6 375 planet / 4 780 systémů (4 752 se vzdáleností),
+  dřív 6 372 / 4 779; nové HD 148797 b, c (F6, 172 pc) a TOI-2427 c; změněné hmotnosti HIP 67522 b (71,4 → 13,8 M⊕), c (48,3 → 22,0)
+  a parametry TOI-2427 b. `overit_vylety.py` v pořádku; úvod „Obyvatelných světů“ přepočten (24 planet, 20 u M) – beze změny, stejný seznam.
+  Build OK, Playwright desktop + mobil: karta HD 148797 se schématem, hlavička 4 780, bez JS chyb. ZDROJE.md doplněn.
+  - pro Python v cloudu: `pip install --ignore-installed packaging astropy pandas numpy psrqpy` (debianí packaging jinak blokuje instalaci)
+
 ## Rozdělané
-- oprava `cleanExtract` – necommitnutá, čeká na Ráďův souhlas
+- nic (aktualizace exoplanet pushnutá 1. 10. s Ráďovým souhlasem)
 
 ## Další krok
 **Aktuální větev: `claude/vigilant-clarke-yii046`** (= `claude/jolly-thompson-pyvslt` + oprava popisů; push až po souhlasu).
