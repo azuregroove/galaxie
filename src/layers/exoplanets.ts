@@ -18,6 +18,7 @@ import type { Stage } from "../scene/stage";
 import { aFromPeriod, periodFromA } from "../system/kepler";
 import type { OrbitBody, SystemSpec } from "../system/types";
 import type { SystemView } from "../system/view";
+import { exoSchemaHtml } from "../ui/exoSchema";
 import { positionRows } from "./common";
 import { NO_FILTER, passDist, type Facet, type FilterState, type Layer, type LayerFilter, type SkyPos } from "./layer";
 
@@ -316,6 +317,7 @@ export class ExoplanetLayer implements Layer {
         ${S.vmag[i] != null ? `<dt>Jasnost V</dt><dd>${fmtNum(S.vmag[i]!, 2)} mag</dd>` : ""}
         ${positionRows(o.pos, S.l[i], S.b[i])}
       </dl>
+      ${exoSchemaHtml(this.systemSpec(o), `var(${c.info.color})`, S.rs[i])}
       <div class="tablewrap"><table class="planets">
         <thead><tr><th>Planeta</th><th title="poloměr v poloměrech Země">R⊕</th><th title="hmotnost v hmotnostech Země (nebo M·sin i)">M⊕</th>
         <th title="oběžná doba ve dnech">P [d]</th><th title="velká poloosa">a [au]</th><th title="rovnovážná teplota">T [K]</th><th>Objev</th></tr></thead>

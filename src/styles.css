@@ -144,6 +144,9 @@ table.planets .dim { font-size: 10px; }
 .btn { font: 500 12px var(--f-body); color: var(--fg); background: rgba(143, 180, 255, 0.08); border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; cursor: pointer; }
 .btn:hover { background: rgba(143, 180, 255, 0.18); }
 .btn[aria-pressed="true"] { background: rgba(143, 180, 255, 0.24); border-color: rgba(143, 180, 255, 0.5); }
+.armGain { display: flex; align-items: center; gap: 6px; font: 500 12px var(--f-body); color: var(--fg); background: rgba(143, 180, 255, 0.08); border: 1px solid var(--line); border-radius: 6px; padding: 0 8px; white-space: nowrap; }
+.armGain input { width: 96px; accent-color: var(--accent); margin: 0; }
+.armGain span { font: 400 11px var(--f-mono); color: var(--dim); min-width: 4ch; text-align: right; font-variant-numeric: tabular-nums; }
 .sep { width: 1px; height: 22px; background: var(--line); }
 #scale { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; font: 500 11px var(--f-mono); font-variant-numeric: tabular-nums; }
 #scaleLine { height: 6px; border: 1px solid var(--fg); border-top: 0; }
@@ -167,6 +170,8 @@ table.planets .dim { font-size: 10px; }
   .legend { gap: 6px; }
   /* dotykové plochy aspoň ~40 px */
   .btn { min-height: 40px; }
+  .armGain { min-height: 40px; box-sizing: border-box; }
+  .armGain input { min-height: 34px; }
   .btn.small { min-height: 34px; }
   .chip { padding: 6px 10px; font-size: 11px; min-height: 32px; }
   .row { padding: 10px 8px; }
@@ -242,3 +247,23 @@ table.planets .dim { font-size: 10px; }
 .imgs figure.sky > a { position: relative; display: block; aspect-ratio: 1; max-width: 330px; background: #000; border-radius: 6px; }
 .imgs figure.sky img { width: 100%; height: 100%; max-height: none; }
 .imgs figure.sky > a::after { content: ""; position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px; border: 1.5px solid rgba(255, 179, 92, 0.85); border-radius: 50%; pointer-events: none; }
+
+.schema { margin: 4px 0 10px; font-size: 11px; color: var(--dim); line-height: 1.45; }
+.schemaHead { font: 600 13px var(--f-display); color: var(--fg); letter-spacing: 0.03em; margin-bottom: 4px; }
+.schemaHead .dim { font: 400 11px var(--f-body); letter-spacing: 0; }
+.schemaSvg { display: block; width: 100%; height: auto; background: rgba(143, 180, 255, 0.04); border-radius: 6px; margin-bottom: 6px; }
+.schemaSvg text { font: 400 9.5px var(--f-mono); text-anchor: middle; }
+.schemaSvg text.start { text-anchor: start; }
+.schemaSvg .plT { fill: var(--fg); }
+.schemaSvg .refT { fill: var(--dim); }
+.schemaSvg .pl { fill: #c9d6ee; }
+.schemaSvg .pl.disputed { fill: none; stroke: var(--warn); stroke-dasharray: 2 2; }
+.schemaSvg .ref { fill: none; stroke: var(--dim); stroke-dasharray: 3 2; }
+.schemaSvg .star { opacity: 0.9; }
+.schemaSvg .star.unknown { opacity: 0.35; }
+.schemaSvg .axis { stroke: var(--dim); stroke-width: 1; }
+.schemaSvg .refL { stroke: var(--line); stroke-dasharray: 2 3; }
+.schemaSvg .ecc { stroke: rgba(201, 214, 238, 0.45); stroke-width: 2; }
+.schemaSvg .tick { stroke: var(--line); }
+.schemaNote { margin-bottom: 6px; }
+.schema figcaption { margin-top: 2px; }

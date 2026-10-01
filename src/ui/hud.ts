@@ -31,6 +31,7 @@ export class Hud {
   private layers: Layer[];
   private overlays: Overlays;
   private manifest: Manifest;
+  private labels: Labels;
 
   constructor(stage: Stage, frame: Frame, layers: Layer[], overlays: Overlays, labels: Labels, manifest: Manifest) {
     this.stage = stage;
@@ -38,12 +39,14 @@ export class Hud {
     this.layers = layers;
     this.overlays = overlays;
     this.manifest = manifest;
+    this.labels = labels;
     for (const L of layers) for (const o of L.objects) {
       this.all.push(o);
       this.index.set(o, norm([o.name, ...(o.aliases ?? [])].join(" ")));
     }
     this.all.sort((a, b) => (a.distLy ?? 1e12) - (b.distLy ?? 1e12));
     labels.setProvider(() => this.labelList());
+    overlays.sunLabel.pick = this.all.find((o) => o.layer === "slunecni-soustava");
 
     this.marker = new Sprite(new SpriteMaterial({ map: stage.glow, color: 0xffffff, transparent: true, depthWrite: false, blending: AdditiveBlending, opacity: 0.9 }));
     this.marker.visible = false;
@@ -392,7 +395,15 @@ export class Hud {
       }
       return best;
     };
+    const byLabel = (e: PointerEvent): MapObject | null => {
+      const k = this.labels.hitTest(e.clientX, e.clientY);
+      return k && this.all.includes(k as MapObject) ? (k as MapObject) : null;
+    };
     el.addEventListener("pointerdown", (e) => (downAt = [e.clientX, e.clientY]));
+    el.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse" || e.buttons) return;
+      el.style.cursor = byLabel(e) ? "pointer" : "";
+    });
     el.addEventListener("pointerup", (e) => {
       if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 6) return;
       const rect = el.getBoundingClientRect();
@@ -409,12 +420,13 @@ export class Hud {
         // V hustém přehledu je v dosahu prstu skoro vždy nějaký objekt, takže dvojklep by nikdy
         // nepřiblížil. Výběr proto chvíli počká, jestli nepřijde druhý klep.
         clearTimeout(pending);
+        const hit = byLabel(e);
         pending = window.setTimeout(() => {
-          const best = pick(px, py, 32, rect);
+          const best = hit ?? pick(px, py, 32, rect);
           if (best) this.select(best, true);
         }, 300);
       } else {
-        const best = pick(px, py, 20, rect);
+        const best = byLabel(e) ?? pick(px, py, 20, rect);
         if (best) {
           this.select(best, true);
           lastTap = null;

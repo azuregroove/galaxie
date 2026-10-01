@@ -12,11 +12,14 @@ import {
 /** Poloměr disku D25 (87 400 ly / 2), stejně jako v prototypu. */
 export const DISK_R = 43700;
 
+/** Výchozí zesílení jasu ramen; původní 1 bylo přes vrstvy objektů skoro neviditelné. */
+export const ARM_GAIN_DEFAULT = 2.5;
+
 /**
  * Schematický oblak hvězd Galaxie převzatý z prototypu.
  * Ramena NEJSOU podle modelu z literatury – nahradí je etapa 5 (Reid et al. 2019).
  */
-export function buildBackdrop(glow: Texture, sun: Vector3): Points {
+export function buildBackdrop(glow: Texture, sun: Vector3): Points<BufferGeometry, ShaderMaterial> {
   let seed = 7;
   const rnd = () => {
     seed = (seed * 16807) % 2147483647;
@@ -34,6 +37,7 @@ export function buildBackdrop(glow: Texture, sun: Vector3): Points {
   const pos = new Float32Array(N * 3);
   const col = new Float32Array(N * 3);
   const siz = new Float32Array(N);
+  const armMask = new Float32Array(N);
   const k = Math.tan((12 * Math.PI) / 180);
   const r0 = 22500;
   const phases = [Math.PI, Math.PI / 2, 0, -Math.PI / 2];
@@ -65,6 +69,7 @@ export function buildBackdrop(glow: Texture, sun: Vector3): Points {
       c.copy(blue).lerp(white, rnd() * 0.6);
       if (rnd() < 0.05) c.copy(pink);
       s = 0.9;
+      armMask[i] = 1;
     } else if (t < 0.76) {
       const u = rnd() * 9000 - 4500;
       const ang = Math.PI + 0.2;
@@ -73,6 +78,7 @@ export function buildBackdrop(glow: Texture, sun: Vector3): Points {
       y = gauss() * 250;
       c.copy(blue).lerp(white, 0.5);
       s = 0.8;
+      armMask[i] = 1;
     } else {
       const r = Math.sqrt(rnd()) * (DISK_R + 6000);
       const phi = rnd() * Math.PI * 2;
@@ -91,12 +97,16 @@ export function buildBackdrop(glow: Texture, sun: Vector3): Points {
   g.setAttribute("position", new BufferAttribute(pos, 3));
   g.setAttribute("color", new BufferAttribute(col, 3));
   g.setAttribute("sz", new BufferAttribute(siz, 1));
+  g.setAttribute("arm", new BufferAttribute(armMask, 1));
   const m = new ShaderMaterial({
-    uniforms: { map: { value: glow } },
+    uniforms: { map: { value: glow }, armGain: { value: 1 } },
+    // Zesílení ramen jde i do velikosti bodu: z dálky má bod 1 px a samotná barva by se rychle saturovala.
     vertexShader: /* glsl */ `
-      attribute float sz; varying vec3 vC;
-      void main(){ vC = color; vec4 mv = modelViewMatrix * vec4(position, 1.);
-        gl_PointSize = clamp(sz * 260. / -mv.z, 1., 5.); gl_Position = projectionMatrix * mv; }`,
+      attribute float sz; attribute float arm; uniform float armGain; varying vec3 vC;
+      void main(){ float g = mix(1., armGain, arm); vC = color * g;
+        vec4 mv = modelViewMatrix * vec4(position, 1.);
+        float ps = clamp(sz * 260. / -mv.z, 1., 5.) * mix(1., clamp(.75 + .25 * armGain, .75, 1.8), arm);
+        gl_PointSize = g <= 0. ? 0. : ps; gl_Position = projectionMatrix * mv; }`,
     fragmentShader: /* glsl */ `
       uniform sampler2D map; varying vec3 vC;
       void main(){ vec4 t = texture2D(map, gl_PointCoord); gl_FragColor = vec4(vC * .55, t.a * .8); }`,

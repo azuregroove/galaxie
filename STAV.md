@@ -134,6 +134,7 @@ Aktualizovat na konci každého sezení.
 - Jupiter 115 a Saturn 291 měsíců = počet řádků tabulky JPL (vč. předběžných označení) – oficiální počty neověřeny
 - Nepravidelné měsíce: dráhy dlouhé přímky přes obraz (ztlumeno), polohy za roky orientační
 - Legenda exoplanet má teď 9 přepínačů – na mobilu delší
+- Schéma exoplanet: poloměry z PSCompPars mohou být dopočtené z hmotnosti (archiv to v našich datech neoznačuje)
 - Spirální ramena schematická; rozměry disku (87 400 ly, tloušťky) převzaté z prototypu, neověřené
 - Slunce leží v rovině (skutečných ~20 pc nad rovinou zanedbáno)
 - Výkon Etapy 2 v cloudu měřit nejde (WebGL běží softwarově na CPU) – ověřit na PC a na skutečném telefonu
@@ -186,11 +187,23 @@ Aktualizovat na konci každého sezení.
   - při chybě záložní server alaskybis (z cloudu blokovaný), pak text „nepodařilo se načíst“
   - **podmínky užití DSS neověřené** (archive.stsci.edu z cloudu blokované) – ověřit před etapou 6
 
+- 2026-10-01 (cloud): **opravy + schéma exoplanet** (build OK, Playwright desktop 1400×860 + mobil 390×844 s dotykem, bez JS chyb)
+  - klik na popisek (jméno exoplanety, Slunce) vybere objekt: popisky dál nechytají události (táhnutí scény funguje),
+    `Labels.hitTest` vrací objekt podle obdélníků z posledního snímku; dřív klik na text o ~28 px vedle tečky trefil jinou
+    hvězdu (51 Peg → Gl 49) nebo nic (Slunce). Kurzor ruky nad popiskem
+  - posuvník „Ramena“ v liště (0 = vyp … 500 %, výchozí 250 %, localStorage `galaxie.armGain`): uniform `armGain`
+    v shaderu kulisy zesiluje jas i velikost bodů ramen a místního ramene; ramena dál schematická
+  - **bod 2 – schéma soustavy v kartě exoplanet** (`src/ui/exoSchema.ts`, SVG): velikosti planet ve skutečném poměru se
+    Zemí a Jupiterem (nominální poloměry IAU 2015 B3) a výsek hvězdy; vzdálenosti na log. ose s Merkurem/Zemí/Jupiterem/Neptunem,
+    čárka periastron–apoastron podle e, * = a z 3. Keplerova zákona; planety bez poloměru jen vypsané
+  - mapa zveřejněna jako soukromý artefakt: https://claude.ai/artifact/C7E2DwT3ir8g85U8s3ThkW (verze z dist/, 4,2 MB);
+    načtení v prostředí artefaktu neověřené, náhledy Commons a hips2fits tam nejspíš blokuje CSP
+
 ## Rozdělané
 - nic
 
 ## Další krok
-**Aktuální větev: `claude/sharp-cerf-bzaom6`** (vše pushnuté; obsahuje i starší `claude/galaxie-project-status-re4n0y`).
+**Aktuální větev: `claude/confident-lovelace-1lqe2y`** (navazuje na `claude/sharp-cerf-bzaom6`; push jen se souhlasem).
 Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve a navázat bodem 2 (schéma exoplanet).
 Ráďa má na PC tuto větev (`git pull origin claude/sharp-cerf-bzaom6`, `npm run dev -- --host`).
 Commit + push průběžné práce Ráďa v tomto sezení povolil („klidně to mezitím komitni a pushni“) – v novém chatu se raději zeptat.

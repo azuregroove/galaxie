@@ -16,7 +16,7 @@ import {
 } from "three";
 import { Frame } from "../core/coords";
 import { fmtLy, fmtPcFromLy } from "../core/units";
-import type { Labels } from "../ui/labels";
+import type { Label, Labels } from "../ui/labels";
 import { DISK_R } from "./backdrop";
 import type { Stage } from "./stage";
 
@@ -65,6 +65,7 @@ export type OverlayKey = "rings" | "ecl" | "dims" | "grid";
 export class Overlays {
   readonly groups: Record<OverlayKey, Group> = { rings: new Group(), ecl: new Group(), dims: new Group(), grid: new Group() };
   readonly show: Record<OverlayKey, boolean> = { rings: true, ecl: true, dims: true, grid: true };
+  readonly sunLabel: Label;
 
   constructor(stage: Stage, frame: Frame, labels: Labels, css: (n: string) => string) {
     const { scene } = stage;
@@ -138,7 +139,7 @@ export class Overlays {
     const sun = glowSprite(stage, css("--sun"), 1);
     sun.position.copy(SUN);
     scene.add(sun);
-    labels.add("Slunce", SUN, "sun", () => true, 900);
+    this.sunLabel = labels.add("Slunce", SUN, "sun", () => true, 900);
     stage.onFrame(() => sun.scale.setScalar(stage.camera.position.distanceTo(SUN) * 0.02));
   }
 

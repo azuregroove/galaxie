@@ -10,6 +10,8 @@ export interface Label {
   priority: number;
   /** Vrací, zda má být popisek v tomto snímku vidět (před kontrolou, že je na obrazovce). */
   visible: () => boolean;
+  /** Co vybrat kliknutím na popisek; bez toho popisek kliknout nejde. */
+  pick?: unknown;
 }
 
 /** Popisek objektu dodaný vrstvami; DOM prvek dostane z poolu. */
@@ -68,6 +70,8 @@ export class Labels {
   /** Počet popisků umístěných v posledním snímku (pro ladění a testy). */
   shown = 0;
   hiddenByCollision = 0;
+  /** Obdélníky klikatelných popisků z posledního snímku (popisky samy události nechytají, ať jde táhnout scénu). */
+  private hitRects: [Rect, unknown][] = [];
 
   private root: HTMLElement;
   private stage: Stage;
@@ -193,7 +197,10 @@ export class Labels {
 
     const show = new Map<HTMLDivElement, string>();
     this.lastPlace.clear();
+    this.hitRects = [];
     for (const [c, [r, pi]] of want) {
+      const pick = c.stat ? c.stat.pick : c.key;
+      if (pick !== undefined && (c.kind === "obj" || c.kind === "sun")) this.hitRects.push([r, pick]);
       const slot = slotFor.get(c);
       if (slot && slot.text !== c.text) {
         slot.el.textContent = c.text;
@@ -211,6 +218,15 @@ export class Labels {
       }
     }
     this.shown = want.size;
+  }
+
+  /** Objekt, na jehož popisek ukazuje bod (souřadnice v okně); s malou rezervou kolem textu. */
+  hitTest(x: number, y: number, pad = 4): unknown {
+    for (let i = this.hitRects.length - 1; i >= 0; i--) {
+      const [r, key] = this.hitRects[i];
+      if (x >= r[0] - pad && x <= r[0] + r[2] + pad && y >= r[1] - pad && y <= r[1] + r[3] + pad) return key;
+    }
+    return undefined;
   }
 
   private measureObstacles(): void {

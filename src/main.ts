@@ -7,7 +7,7 @@ import { CatalogLayer, type CatalogData } from "./layers/catalog";
 import { ExoplanetLayer, type ExoData } from "./layers/exoplanets";
 import { SolarLayer } from "./layers/solar";
 import type { Layer } from "./layers/layer";
-import { buildBackdrop } from "./scene/backdrop";
+import { ARM_GAIN_DEFAULT, buildBackdrop } from "./scene/backdrop";
 import { Overlays } from "./scene/overlays";
 import { Stage } from "./scene/stage";
 import { SystemView } from "./system/view";
@@ -41,7 +41,9 @@ async function main() {
     if (file("obrazky")) initImages(DATA + file("obrazky"));
     const frame = new Frame(manifest.r0_pc);
     const stage = new Stage(document.getElementById("stage")!, css("--void"));
-    stage.scene.add(buildBackdrop(stage.glow, frame.sun));
+    const backdrop = buildBackdrop(stage.glow, frame.sun);
+    stage.scene.add(backdrop);
+    armSlider(backdrop.material.uniforms.armGain);
     const labels = new Labels(document.getElementById("labels")!, stage);
     const overlays = new Overlays(stage, frame, labels, css);
 
@@ -71,6 +73,28 @@ async function main() {
     status.textContent = `Nepodařilo se načíst data: ${(err as Error).message}`;
     status.classList.add("error");
   }
+}
+
+function armSlider(u: { value: number }): void {
+  const input = document.getElementById("armGain") as HTMLInputElement | null;
+  const out = document.getElementById("armGainVal");
+  if (!input) return;
+  let v = ARM_GAIN_DEFAULT;
+  try {
+    const saved = parseFloat(localStorage.getItem("galaxie.armGain") ?? "");
+    if (saved >= 0 && saved <= 5) v = saved;
+  } catch { /* soukromé okno */ }
+  const set = (x: number) => {
+    u.value = x;
+    input.value = String(x);
+    if (out) out.textContent = x === 0 ? "vyp" : `${Math.round(x * 100)} %`;
+  };
+  set(v);
+  input.addEventListener("input", () => {
+    const x = parseFloat(input.value);
+    set(x);
+    try { localStorage.setItem("galaxie.armGain", String(x)); } catch { /* nevadí */ }
+  });
 }
 
 main();
