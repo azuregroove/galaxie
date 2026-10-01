@@ -135,7 +135,7 @@ Aktualizovat na konci každého sezení.
 - Nepravidelné měsíce: dráhy dlouhé přímky přes obraz (ztlumeno), polohy za roky orientační
 - Legenda exoplanet má teď 9 přepínačů – na mobilu delší
 - Schéma exoplanet: poloměry z PSCompPars mohou být dopočtené z hmotnosti (archiv to v našich datech neoznačuje)
-- Spirální ramena schematická; rozměry disku (87 400 ly, tloušťky) převzaté z prototypu, neověřené
+- Parametry ramen převzaté ze SpiralMap, ne přímo z článku – ověřit tab. 2 na PC; rozměry disku (87 400 ly, tloušťky) převzaté z prototypu, neověřené
 - Slunce leží v rovině (skutečných ~20 pc nad rovinou zanedbáno)
 - Výkon Etapy 2 v cloudu měřit nejde (WebGL běží softwarově na CPU) – ověřit na PC a na skutečném telefonu
 - Mobilní ovládání testované jen emulací dotyku v Playwrightu, ne na fyzickém telefonu
@@ -198,6 +198,18 @@ Aktualizovat na konci každého sezení.
     čárka periastron–apoastron podle e, * = a z 3. Keplerova zákona; planety bez poloměru jen vypsané
   - mapa zveřejněna jako soukromý artefakt: https://claude.ai/artifact/C7E2DwT3ir8g85U8s3ThkW (verze z dist/, 4,2 MB);
     načtení v prostředí artefaktu neověřené, náhledy Commons a hips2fits tam nejspíš blokuje CSP
+
+- 2026-10-01 (cloud): **ramena podle Reid et al. 2019** (build OK, Playwright bez JS chyb)
+  - `src/scene/arms.ts`: 7 ramen (3 kpc, Pravítko/Norma, Štít–Kentaur, Střelec–Kýl, Místní, Perseus, Vnější), parametry
+    tab. 2 převzaté ze SpiralMap 0.27 (MIT) – arXiv/IOP z cloudu blokované
+  - ověření `pipeline/overit_ramena.py` proti 199 maserům (CDS J/ApJ/885/131 tab. 1): rozsahy β modelu = rozsahy maserů
+    (Místní −8…34°, Vnější −16…71°, Perseus −23…115°), medián odchylky 0,1–0,3 kpc (≈ šířka ramene);
+    slabé místo: rameno 3 kpc (model jen β 15–18°, masery 5–119°, odchylka velká)
+  - kulisa: body rovnoměrně po délce ramen, šířka ±1σ = šířka/2 úměrně R; úseky jen s masery mimo model (Štít–Kentaur
+    −29…168°, 3 kpc 5…119°) ztlumené; popisky jmen ramen (od vzdálenosti 12 000 ly, schované při jasu 0)
+  - ramena pokrývají jen známou část (hlavně 1. a 2. kvadrant) – druhá strana Galaxie v modelu není
+  - příčka otočena: blízký konec teď v 1. kvadrantu (dřív omylem ve 4.) – úhel ~27° dál neověřený
+  - posuvník Ramena do 750 %, výchozí 150 %
 
 ## Rozdělané
 - nic

@@ -6,20 +6,21 @@ import {
   Points,
   ShaderMaterial,
   type Texture,
-  type Vector3,
 } from "three";
+import { LY_PER_PC } from "../core/units";
+import { ARMS, armRadius, armXZ, type Arm } from "./arms";
 
 /** Poloměr disku D25 (87 400 ly / 2), stejně jako v prototypu. */
 export const DISK_R = 43700;
 
-/** Výchozí zesílení jasu ramen; původní 1 bylo přes vrstvy objektů skoro neviditelné. */
-export const ARM_GAIN_DEFAULT = 2.5;
+/** Výchozí zesílení jasu ramen; s modelem Reid 2019 jsou body hustší, 1,5 stačí. */
+export const ARM_GAIN_DEFAULT = 1.5;
 
 /**
- * Schematický oblak hvězd Galaxie převzatý z prototypu.
- * Ramena NEJSOU podle modelu z literatury – nahradí je etapa 5 (Reid et al. 2019).
+ * Oblak hvězd Galaxie jako kulisa. Ramena podle modelu Reid et al. 2019 (arms.ts), ztlumeně i tam, kde je
+ * rameno doložené jen masery mimo rozsah modelu. Příčka a výplň disku jsou dál schematické.
  */
-export function buildBackdrop(glow: Texture, sun: Vector3): Points<BufferGeometry, ShaderMaterial> {
+export function buildBackdrop(glow: Texture): Points<BufferGeometry, ShaderMaterial> {
   let seed = 7;
   const rnd = () => {
     seed = (seed * 16807) % 2147483647;
@@ -38,15 +39,32 @@ export function buildBackdrop(glow: Texture, sun: Vector3): Points<BufferGeometr
   const col = new Float32Array(N * 3);
   const siz = new Float32Array(N);
   const armMask = new Float32Array(N);
-  const k = Math.tan((12 * Math.PI) / 180);
-  const r0 = 22500;
-  const phases = [Math.PI, Math.PI / 2, 0, -Math.PI / 2];
   const warm = new Color("#ffd9a0");
   const blue = new Color("#a9c4ff");
   const white = new Color("#e8ecff");
   const pink = new Color("#ff9fc8");
-  const barAng = (-27 * Math.PI) / 180;
+  // blízký konec příčky míří do 1. kvadrantu (l > 0), úhel ~27° ke spojnici Slunce–centrum
+  const barAng = (27 * Math.PI) / 180;
   const c = new Color();
+  const lyPerKpc = LY_PER_PC * 1000;
+
+  // body po délce ramen rovnoměrně: kumulativní délka po krocích 1°
+  const steps: { arm: Arm; beta: number; cum: number }[] = [];
+  let total = 0;
+  for (const arm of ARMS) {
+    for (let beta = arm.extMin; beta < arm.extMax; beta++) {
+      total += armRadius(arm, beta + 0.5) * (Math.PI / 180);
+      steps.push({ arm, beta, cum: total });
+    }
+  }
+  const pickStep = (u: number) => {
+    let lo = 0, hi = steps.length - 1;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (steps[mid].cum < u) lo = mid + 1; else hi = mid;
+    }
+    return steps[lo];
+  };
 
   for (let i = 0; i < N; i++) {
     let x: number, y: number, z: number, s: number;
@@ -58,26 +76,21 @@ export function buildBackdrop(glow: Texture, sun: Vector3): Points<BufferGeometr
       y = h;
       c.copy(warm).lerp(white, rnd() * 0.3);
       s = 1.2;
-    } else if (t < 0.72) {
-      const arm = Math.floor(rnd() * 4);
-      const r = 3500 + Math.pow(rnd(), 0.8) * (DISK_R + 4000 - 3500);
-      const phi = phases[arm] - Math.log(r / r0) / k;
-      const spread = 700 + r * 0.045;
-      x = Math.cos(phi) * r + gauss() * spread;
-      z = Math.sin(phi) * r + gauss() * spread;
-      y = gauss() * (260 + r * 0.004);
+    } else if (t < 0.74) {
+      const st = pickStep(rnd() * total);
+      const beta = st.beta + rnd();
+      const R = armRadius(st.arm, beta);
+      // šířka ramene roste úměrně poloměru (stejně jako v SpiralMap); šířku bereme jako ±1σ
+      const sigma = (st.arm.width / 2) * (R / st.arm.rKink);
+      [x, z] = armXZ(R + gauss() * sigma, beta, lyPerKpc);
+      const along = gauss() * sigma * lyPerKpc * 0.5;
+      x += along * Math.sin((beta * Math.PI) / 180);
+      z -= along * Math.cos((beta * Math.PI) / 180);
+      y = gauss() * (150 + R * lyPerKpc * 0.003);
       c.copy(blue).lerp(white, rnd() * 0.6);
       if (rnd() < 0.05) c.copy(pink);
+      if (beta < st.arm.betaMin || beta > st.arm.betaMax) c.multiplyScalar(0.45);
       s = 0.9;
-      armMask[i] = 1;
-    } else if (t < 0.76) {
-      const u = rnd() * 9000 - 4500;
-      const ang = Math.PI + 0.2;
-      x = sun.x + Math.cos(ang) * u * 0.4 + gauss() * 700;
-      z = sun.z + u + gauss() * 700;
-      y = gauss() * 250;
-      c.copy(blue).lerp(white, 0.5);
-      s = 0.8;
       armMask[i] = 1;
     } else {
       const r = Math.sqrt(rnd()) * (DISK_R + 6000);

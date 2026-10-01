@@ -131,9 +131,7 @@ export class Overlays {
     const edgeOn = () => far() && Math.abs(stage.camera.position.clone().sub(stage.controls.target).normalize().y) < 0.5;
     labels.add("tenký disk ≈ 700–1 500 ly · 220–450 pc", new Vector3(x, thin + 900, 0), "anno", edgeOn);
     labels.add("tlustý disk ≈ 8 500 ly · 2,6 kpc", new Vector3(x + 2500, thick + 900, 0), "anno", edgeOn);
-    labels.add("Rameno Orionu–Labutě (místní)", SUN.clone().add(new Vector3(-2200, 0, -5200)), "anno",
-      () => this.show.dims && stage.viewDistance > 5000 && stage.viewDistance < 80000);
-    labels.add("ramena jsou schematická", new Vector3(DISK_R * 0.55, 0, DISK_R * 0.62), "anno", far);
+    labels.add("ramena: model Reid et al. 2019", new Vector3(DISK_R * 0.55, 0, DISK_R * 0.62), "anno", far);
 
     // Slunce: velikost záře konstantní na obrazovce
     const sun = glowSprite(stage, css("--sun"), 1);

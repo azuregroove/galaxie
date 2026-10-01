@@ -7,7 +7,9 @@ import { CatalogLayer, type CatalogData } from "./layers/catalog";
 import { ExoplanetLayer, type ExoData } from "./layers/exoplanets";
 import { SolarLayer } from "./layers/solar";
 import type { Layer } from "./layers/layer";
+import { ARMS, armRadius, armXZ } from "./scene/arms";
 import { ARM_GAIN_DEFAULT, buildBackdrop } from "./scene/backdrop";
+import { LY_PER_PC } from "./core/units";
 import { Overlays } from "./scene/overlays";
 import { Stage } from "./scene/stage";
 import { SystemView } from "./system/view";
@@ -41,11 +43,18 @@ async function main() {
     if (file("obrazky")) initImages(DATA + file("obrazky"));
     const frame = new Frame(manifest.r0_pc);
     const stage = new Stage(document.getElementById("stage")!, css("--void"));
-    const backdrop = buildBackdrop(stage.glow, frame.sun);
+    const backdrop = buildBackdrop(stage.glow);
     stage.scene.add(backdrop);
     armSlider(backdrop.material.uniforms.armGain);
     const labels = new Labels(document.getElementById("labels")!, stage);
     const overlays = new Overlays(stage, frame, labels, css);
+    const armGain = backdrop.material.uniforms.armGain;
+    for (const a of ARMS) {
+      // popisek doprostřed rozsahu modelu, kousek nad rovinu, ať nesplývá s body ramene
+      const beta = (a.betaMin + a.betaMax) / 2;
+      const [x, z] = armXZ(armRadius(a, beta), beta, LY_PER_PC * 1000);
+      labels.add(a.name, new Vector3(x, 400, z), "anno", () => armGain.value > 0 && stage.viewDistance > 12000, 200);
+    }
 
     const layers: Layer[] = [];
     const systemView = new SystemView(stage, stage.glow);

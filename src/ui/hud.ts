@@ -265,7 +265,9 @@ export class Hud {
     card.innerHTML = `<button class="close" aria-label="Zavřít">×</button>
       <div class="kind">O mapě</div><h3>Zdroje dat</h3>
       <p>Poloha objektů je vůči Slunci. Vzdálenost Slunce od centra Galaxie R₀ = ${(m.r0_pc / 1000).toLocaleString("cs-CZ")} kpc
-      (${escapeHtml(m.r0_zdroj)}). Spirální ramena na pozadí jsou zatím jen schematická.</p>${cats}`;
+      (${escapeHtml(m.r0_zdroj)}). Spirální ramena podle Reid et al. 2019 (ApJ 885, 131, tab. 2; parametry
+      přes knihovnu SpiralMap, MIT); ztlumené úseky jsou mimo rozsah modelu, doložené jen masery. Příčka a výplň disku
+      jsou schematické.</p>${cats}`;
     card.hidden = false;
     card.querySelector<HTMLButtonElement>(".close")!.onclick = () => this.closeCard();
     this.fitCenter();
