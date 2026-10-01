@@ -211,6 +211,10 @@ Aktualizovat na konci každého sezení.
   - příčka otočena: blízký konec teď v 1. kvadrantu (dřív omylem ve 4.) – úhel ~27° dál neověřený
   - posuvník Ramena do 750 %, výchozí 150 %
 
+- 2026-10-01 (cloud): **NAVRHY.md** – přehled podobných projektů (NASA Eyes on Exoplanets, Gaia Sky, OpenSpace, Galaxy Map,
+  SpaceMap, Universe Map, GalacticResource, Milky Way Explorer) a 13 návrhů vylepšení; weby z cloudu blokované,
+  funkce jen z výsledků vyhledávání
+
 ## Rozdělané
 - nic
 
@@ -225,8 +229,8 @@ Commit + push průběžné práce Ráďa v tomto sezení povolil („klidně to 
    načítání po skupinách) a MPC (z cloudu blokované)
 2. **Bod 4 – obrázky (DALŠÍ):** ~~Wikidata → Commons~~ ~~výřezy hips2fits~~ hotovo; zbývá u exoplanet generované schéma
    (rozhodnutí 30. 9.: „exoplanety generované schéma, umělecké představy jen označené“), malá offline sada; ověřit podmínky DSS (https://archive.stsci.edu/dss/copyright.html – z cloudu blokované, na PC nebo povolit doménu)
-3. Než bude projekt „hotový“: projít internet, aktualizovat všechna data a čísla z ověřených zdrojů; najít podobné projekty
-   a sepsat, čím mapu vylepšit (návrh Ráďovi)
+3. Než bude projekt „hotový“: projít internet, aktualizovat všechna data a čísla z ověřených zdrojů;
+   ~~podobné projekty a návrh~~ hotovo 1. 10. (NAVRHY.md) – čeká na Ráďův výběr
 4. Přepínač „Star Trek“: 3D bubliny teritorií (Federace, Klingoni, Romulané, Cardassiané…) z dostupných zdrojů.
    Pozor: fikce – jasně označit jako fanouškovskou vrstvu, u každé polohy zdroj a míru nejistoty; nepřebírat
    chráněné mapy (např. oficiální Star Charts) doslova, jen fakta a vlastní odvození; ochranné známky Paramount – ověřit
