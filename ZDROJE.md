@@ -141,4 +141,7 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 - Navíc ověřeno 1. 10. 2026: vlastní pohyb Barnardovy hvězdy 10 359 mas/rok = největší v Hipparcos (van Leeuwen 2007, VizieR I/311,
   dotaz na |pm| > 3 000 mas/rok); Sirius B = bílý trpaslík, spektrální typ DA1.9 (SIMBAD přes Sesame).
   Teplota Slunce 5 772 K (IAU 2015 B3), Merkur a = 0,387 au (Standish, viz Sluneční soustava).
+- Výlety 3–5: ramena – vzdálenosti Místního ramene (střed 0,38 kpc vně), Střelce–Kýlu (1,35 kpc dovnitř, β = 2°) a Persea
+  (1,92 kpc vně) spočtené ze vzorce a parametrů v src/scene/arms.ts; počty kulových hvězdokup a planet v obyvatelné zóně
+  spočtené z našich dat 1. 10. 2026; hustota LHS 1140 b = m/r³ z PSCompPars.
 - Wikipedie z cloudu nedostupná – texty z ní nepřebírané.

@@ -276,8 +276,19 @@ Aktualizovat na konci každého sezení.
     nedosažitelná; teď se posouvá vodorovně (posuvník je skrytý, není vidět, že jde posouvat)
   - Wikipedie z cloudu blokovaná → fakta jen z našich dat + ověřené dotazy (ZDROJE.md)
 
+- 2026-10-01 (cloud): commit f30cb0f (výlety 1+2) pushnut s Ráďovým souhlasem
+- 2026-10-01 (cloud): **výlety 3–5 + pomalejší přelety** (build OK, Playwright: všech 5 výletů krok po kroku, žádná nevyplněná značka, bez JS chyb)
+  - Ráďa: přelety „jednou tak pomalejší“ → mapa 1,3 → 2,6 s, Soustava 1,1 → 2,2 s (prefers-reduced-motion dál okamžitě)
+  - „Zrození a smrt hvězd“ (8): Orion A, NGC 6611 (Orlí mlhovina), Plejády, Hyády, Betelgeuze, Helix, Krabí pulsar, pulsar Vela
+  - „Stavba Galaxie“ (6): shora, Slunce v Místním rameni (vzdálenosti ramen spočtené z parametrů Reid 2019), z boku + halo
+    (103 ze 165 kulových hvězdokup dál než 1 kpc od roviny), M13, centrum, ramena z Gaia
+  - „Obyvatelné světy“ (8): úvod (24 planet < 2 R⊕ v konzervativní zóně, 20 u červených trpaslíků – stejný výpočet jako hz.ts),
+    Proxima b, Teegarden c, TRAPPIST-1 e/f/g, LHS 1140 b, TOI-700 d, Kepler-442 b, Země
+  - nová značka {z} (výška nad rovinou); overit_vylety.py hlásí i nejednoznačná jména (M16 je v mlhovinách dvakrát)
+  - čísla v textech přepsaná ručně z dat → po aktualizaci katalogů projít (hlavně počty v úvodu „Obyvatelných světů“)
+
 ## Rozdělané
-- nic (bod 13 commitnut a pushnut 1. 10. s Ráďovým souhlasem)
+- nic (výlety 3–5 a zpomalení commitnuté a pushnuté 1. 10. s Ráďovým souhlasem)
 
 ## Další krok
 **Aktuální větev: `claude/jolly-thompson-pyvslt`** (navazuje na `claude/confident-lovelace-1lqe2y`, 1b473f0).
@@ -286,7 +297,7 @@ Na PC: `git fetch origin`, `git switch claude/jolly-thompson-pyvslt`, `git pull`
 Mapa jako soukromý artefakt: https://claude.ai/artifact/C7E2DwT3ir8g85U8s3ThkW (aktualizovat publikací dist/).
 Pravidlo z 1. 10.: po každém dokončeném bodu se zastavit, říct co je hotovo; commit + push předchozího bodu až po Ráďově souhlasu.
 
-**Další na řadě:** další výlety (zrození a smrt hvězd, stavba Galaxie, obyvatelné světy) podle Ráďovy zpětné vazby k 1 a 2; body 7 a 8 až po povolení domén
+**Další na řadě:** podle Ráďovy zpětné vazby k výletům; pak zbytek etapy 4 (české popisy, WGSN, propojení jasných hvězd s exoplanetami, časová osa); body 7 a 8 až po povolení domén
 (arxiv.org, export.arxiv.org, dataverse.harvard.edu, zenodo.org, www.nature.com).
 
 **Dlouhodobě (z 30. 9.):**

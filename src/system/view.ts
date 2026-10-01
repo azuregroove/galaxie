@@ -664,7 +664,7 @@ export class SystemView {
     }
     if (this.flight) {
       const fl = this.flight;
-      const k = ease(Math.min(1, (now - fl.t0) / 1100));
+      const k = ease(Math.min(1, (now - fl.t0) / 2200));
       const goal = this.focus ? this.focus.world : this.tmp.set(0, 0, 0);
       this.controls!.target.lerpVectors(fl.fromT, goal, k);
       const d = Math.exp(Math.log(fl.fromD) + (Math.log(fl.toD) - Math.log(fl.fromD)) * k);

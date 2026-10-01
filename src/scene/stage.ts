@@ -89,7 +89,7 @@ export class Stage {
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     this.flight = {
       t0: performance.now(),
-      dur: reduced ? 1 : 1300,
+      dur: reduced ? 1 : 2600,
       fromP: this.camera.position.clone(),
       fromT: this.controls.target.clone(),
       toT: target.clone(),

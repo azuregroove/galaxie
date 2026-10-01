@@ -9,7 +9,7 @@ import type { Hud } from "./hud";
 /*
  * Výlety s komentářem: posloupnost zastávek z public/data/vylety.json.
  * Zastávka odkazuje na objekt jménem („vrstva:jméno“, jako #kotva), ne souřadnicemi kamery,
- * aby přežila aktualizaci dat. Čísla v textu ({d}, {pc}, {voyager}) se doplní z dat.
+ * aby přežila aktualizaci dat. Čísla v textu ({d}, {pc}, {voyager}, {z}) se doplní z dat.
  */
 export interface TourStop {
   o?: string;
@@ -210,6 +210,8 @@ export class Tours {
 export function fill(text: string, o: MapObject | null): string {
   const d = o?.distLy;
   if (d == null || !(d > 0)) return text;
+  const z = o!.pos?.y;
+  if (z != null) text = text.replaceAll("{z}", `${fmtLy(Math.abs(z))} ${z >= 0 ? "nad" : "pod"} rovinou Galaxie`);
   return text
     .replaceAll("{d}", fmtLy(d))
     .replaceAll("{pc}", fmtPcFromLy(d))

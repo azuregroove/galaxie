@@ -11,21 +11,21 @@ from pathlib import Path
 
 DATA = Path(__file__).resolve().parent.parent / "public" / "data"
 VIEWS = {"near", "sun", "top", "edge", "gc"}
-MARKS = ("{d}", "{pc}", "{voyager}")
+MARKS = ("{d}", "{pc}", "{voyager}", "{z}")
 
 
-def names() -> dict[str, set[str]]:
+def names() -> dict[str, list[str]]:
     manifest = json.loads((DATA / "manifest.json").read_text(encoding="utf-8"))
-    out: dict[str, set[str]] = {"slunecni-soustava": {"Sluneční soustava"}}
+    out: dict[str, list[str]] = {"slunecni-soustava": ["Sluneční soustava"]}
     for k in manifest["katalogy"]:
         path = DATA / k["soubor"]
         if not path.exists():
             continue
         d = json.loads(path.read_text(encoding="utf-8"))
         if k["id"] == "exoplanety":
-            out[k["id"]] = set(d["systemy"]["jmeno"])
+            out[k["id"]] = list(d["systemy"]["jmeno"])
         elif isinstance(d.get("objekty"), dict) and "jmeno" in d["objekty"]:
-            out[k["id"]] = set(d["objekty"]["jmeno"])
+            out[k["id"]] = list(d["objekty"]["jmeno"])
     return out
 
 
@@ -39,8 +39,13 @@ def main() -> int:
             ref = z.get("o")
             if ref:
                 layer, _, name = ref.partition(":")
-                if name not in known.get(layer, set()):
+                n = known.get(layer, []).count(name)
+                if n == 0:
                     print(f"CHYBA {where}: objekt {ref} v datech není")
+                    bad += 1
+                elif n > 1:
+                    # aplikace vezme první shodu, což nemusí být ten pravý (např. M16 je v mlhovinách dvakrát)
+                    print(f"CHYBA {where}: jméno {ref} má v datech {n} objekty")
                     bad += 1
             elif any(m in z["text"] for m in MARKS):
                 print(f"CHYBA {where}: zástupná značka bez objektu")
