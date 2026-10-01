@@ -191,7 +191,7 @@ Aktualizovat na konci každého sezení.
   - klik na popisek (jméno exoplanety, Slunce) vybere objekt: popisky dál nechytají události (táhnutí scény funguje),
     `Labels.hitTest` vrací objekt podle obdélníků z posledního snímku; dřív klik na text o ~28 px vedle tečky trefil jinou
     hvězdu (51 Peg → Gl 49) nebo nic (Slunce). Kurzor ruky nad popiskem
-  - posuvník „Ramena“ v liště (0 = vyp … 500 %, výchozí 250 %, localStorage `galaxie.armGain`): uniform `armGain`
+  - posuvník „Ramena“ v liště (0 = vyp … 750 %, výchozí 250 %, localStorage `galaxie.armGain`): uniform `armGain`
     v shaderu kulisy zesiluje jas i velikost bodů ramen a místního ramene; ramena dál schematická
   - **bod 2 – schéma soustavy v kartě exoplanet** (`src/ui/exoSchema.ts`, SVG): velikosti planet ve skutečném poměru se
     Zemí a Jupiterem (nominální poloměry IAU 2015 B3) a výsek hvězdy; vzdálenosti na log. ose s Merkurem/Zemí/Jupiterem/Neptunem,

@@ -82,7 +82,7 @@ function armSlider(u: { value: number }): void {
   let v = ARM_GAIN_DEFAULT;
   try {
     const saved = parseFloat(localStorage.getItem("galaxie.armGain") ?? "");
-    if (saved >= 0 && saved <= 5) v = saved;
+    if (saved >= 0 && saved <= 7.5) v = saved;
   } catch { /* soukromé okno */ }
   const set = (x: number) => {
     u.value = x;

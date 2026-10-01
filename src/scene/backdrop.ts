@@ -105,7 +105,7 @@ export function buildBackdrop(glow: Texture, sun: Vector3): Points<BufferGeometr
       attribute float sz; attribute float arm; uniform float armGain; varying vec3 vC;
       void main(){ float g = mix(1., armGain, arm); vC = color * g;
         vec4 mv = modelViewMatrix * vec4(position, 1.);
-        float ps = clamp(sz * 260. / -mv.z, 1., 5.) * mix(1., clamp(.75 + .25 * armGain, .75, 1.8), arm);
+        float ps = clamp(sz * 260. / -mv.z, 1., 5.) * mix(1., clamp(.75 + .25 * armGain, .75, 2.4), arm);
         gl_PointSize = g <= 0. ? 0. : ps; gl_Position = projectionMatrix * mv; }`,
     fragmentShader: /* glsl */ `
       uniform sampler2D map; varying vec3 vC;
