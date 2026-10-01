@@ -1,3 +1,4 @@
+import type { HabitableZone } from "../core/hz";
 import type { StarClassResult } from "../core/starClass";
 import type { SmallData } from "./small";
 
@@ -52,6 +53,8 @@ export interface SystemSpec {
     spType?: string;
   };
   bodies: OrbitBody[];
+  /** obyvatelná zóna hvězdy (jen u exoplanet se známou Teff a poloměrem) */
+  hz?: HabitableZone | null;
   /** planety, které nešlo vykreslit (chybí a i perioda) */
   skipped: string[];
   /** hmotnost hvězdy chyběla a pro dopočet a/P se použila 1 M☉ */

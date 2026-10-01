@@ -22,7 +22,8 @@ export function exoSchemaHtml(spec: SystemSpec, starColor: string, rs: number | 
     <figcaption>Nahoře velikosti ve skutečném poměru (velká hvězda jen jako výsek okraje); poloměr může být
     v archivu dopočtený z hmotnosti, hlavně u planet objevených měřením radiálních rychlostí. Dole vzdálenosti od hvězdy,
     <b>logaritmická</b> osa; čárka = rozsah od periastra k apoastru podle výstřednosti.
-    ${bodies.some((b) => b.aEst) ? "* vzdálenost dopočtená z oběžné doby (3. Keplerův zákon)." : ""}</figcaption>
+    ${bodies.some((b) => b.aEst) ? "* vzdálenost dopočtená z oběžné doby (3. Keplerův zákon)." : ""}
+    ${hzNote(spec)}</figcaption>
   </figure>`;
 }
 
@@ -71,8 +72,9 @@ function sizesSvg(spec: SystemSpec, starColor: string, rs: number | null): strin
 
 function orbitsSvg(spec: SystemSpec, starColor: string): string {
   const B = spec.bodies;
-  const lo = Math.min(...B.map((b) => b.a * (1 - b.e)));
-  const hi = Math.max(...B.map((b) => b.a * (1 + b.e)));
+  const hz = spec.hz;
+  const lo = Math.min(...B.map((b) => b.a * (1 - b.e)), hz ? hz.opt[0] : Infinity);
+  const hi = Math.max(...B.map((b) => b.a * (1 + b.e)), hz ? hz.opt[1] : 0);
   // osa aspoň přes jeden řád, ať se referenční dráhy dají přečíst
   let l0 = Math.floor(Math.log10(lo) * 2) / 2;
   let l1 = Math.ceil(Math.log10(hi) * 2) / 2;
@@ -82,6 +84,12 @@ function orbitsSvg(spec: SystemSpec, starColor: string): string {
   const H = 90, axisY = 60;
   const out: string[] = [];
   out.push(`<circle cx="8" cy="${axisY}" r="6" fill="${starColor}" class="star"/>`);
+  if (hz) {
+    const band = (r: [number, number], cls: string) =>
+      `<rect x="${X(r[0]).toFixed(1)}" y="4" width="${(X(r[1]) - X(r[0])).toFixed(1)}" height="${axisY - 4}" class="${cls}"/>`;
+    out.push(band(hz.opt, "hzOpt"), band(hz.cons, "hzCons"));
+    out.push(`<text x="${((X(hz.cons[0]) + X(hz.cons[1])) / 2).toFixed(1)}" y="13" class="hzT">obyvatelná zóna${hz.extrapolated ? "*" : ""}</text>`);
+  }
   out.push(`<line x1="${x0}" y1="${axisY}" x2="${x1}" y2="${axisY}" class="axis"/>`);
   for (let p = Math.ceil(l0); p <= Math.floor(l1); p++) {
     const v = 10 ** p;
@@ -113,4 +121,13 @@ function orbitsSvg(spec: SystemSpec, starColor: string): string {
     out.push(`<text x="${x.toFixed(1)}" y="${y}" class="plT">${escapeHtml(label)}</text>`);
   });
   return `<svg class="schemaSvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Vzdálenosti planet od hvězdy">${out.join("")}</svg>`;
+}
+
+function hzNote(spec: SystemSpec): string {
+  const hz = spec.hz;
+  if (!hz) return spec.star.teff == null || spec.star.rs == null
+    ? "Obyvatelná zóna chybí: hvězda nemá v datech teplotu nebo poloměr."
+    : "Obyvatelná zóna chybí: model platí jen pro hvězdy 2 600–7 200 K.";
+  return `Zelená = obyvatelná zóna podle Kopparapu et al. 2014 (tmavší konzervativní ${fmtNum(hz.cons[0], 3)}–${fmtNum(hz.cons[1], 3)} au,
+    světlejší optimistická), z teploty a poloměru hvězdy${hz.extrapolated ? "; <b>* teplota hvězdy je mimo rozsah modelu, zóna je extrapolovaná</b>" : ""}.`;
 }

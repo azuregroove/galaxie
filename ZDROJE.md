@@ -9,6 +9,7 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 | Vzdálenost Slunce od centra R₀ | 8,15 ± 0,15 kpc (≈ 26 580 ly) | Reid et al. 2019, ApJ 885, 131 ([arXiv:1910.03357](https://arxiv.org/abs/1910.03357)) |
 | Severní pól ekliptiky | l = 96,385°, b = 29,806° | přepočet astropy (prototyp) |
 | Spirální ramena | 7 ramen, logaritmické spirály se zlomem (β_kink, R_kink, ψ<, ψ>, šířka, rozsah β) | Reid et al. 2019, tab. 2 – **převzato z knihovny SpiralMap 0.27** (Prusty & Khanna 2025, MIT, https://github.com/Abhaypru/SpiralMap), článek z cloudu nedostupný; ověřeno proti maserům z tab. 1 (CDS J/ApJ/885/131, `pipeline/overit_ramena.py`), Perseus navíc shodně citován v práci o rameni Persea (2026, ApJ, doi:10.3847/1538-4357/ae64f5). **Ověřit přímo v článku na PC.** |
+| Obyvatelná zóna | S_eff(Teff) – polynom 4. stupně, konzervativní (runaway – maximum greenhouse) a optimistická (recent Venus – early Mars); L = R² (Teff / 5772 K)⁴ | Kopparapu et al. 2014, ApJ 787, L29 – koeficienty z původního kódu autorů, CDS J/ApJ/787/L29 (`HZs.f90`); kontrola: Slunce 0,95–1,68 au. Platí 2 600–7 200 K, do ±200 K extrapolováno s označením |
 | Příčka | úhel ~27°, blízký konec v 1. kvadrantu (l > 0) | schematické, převzato z prototypu (opravena strana) – k ověření |
 | Průměr disku, tloušťka disku | 87 400 ly; 700–1 500 ly (tenký), ~8 500 ly (tlustý) | převzato z prototypu, **k ověření v etapě 5** |
 

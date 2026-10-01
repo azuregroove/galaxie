@@ -18,6 +18,7 @@ import type { Stage } from "../scene/stage";
 import { aFromPeriod, periodFromA } from "../system/kepler";
 import type { OrbitBody, SystemSpec } from "../system/types";
 import type { SystemView } from "../system/view";
+import { habitableZone } from "../core/hz";
 import { exoSchemaHtml } from "../ui/exoSchema";
 import { positionRows } from "./common";
 import { NO_FILTER, passDist, type Facet, type FilterState, type Layer, type LayerFilter, type SkyPos } from "./layer";
@@ -263,6 +264,7 @@ export class ExoplanetLayer implements Layer {
     return {
       name: o.name,
       star: { cls: o.cls, rs: S.rs[i], teff: S.teff[i] },
+      hz: habitableZone(S.teff[i], S.rs[i]),
       bodies, skipped, solarRef: true, massAssumed: massAssumed && bodies.some((b) => b.aEst || b.pEst), noOrbitData,
       source: `Data: NASA Exoplanet Archive, PSCompPars (stav ${this.data.stazeno.slice(0, 10)}).`,
     };

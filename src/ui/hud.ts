@@ -178,6 +178,11 @@ export class Hud {
     list.textContent = "";
     const q = this.query;
     const matches = this.all.filter((o) => !o.hidden && (!q || this.index.get(o)!.includes(q)));
+    if (q) {
+      // přesná shoda jména (nebo aliasu) dopředu, jinak by „Kepler-186“ předběhl bližší „Kepler-1869“
+      const rank = (o: MapObject) => (norm(o.name) === q ? 0 : o.aliases?.some((a) => norm(a) === q) ? 1 : 2);
+      matches.sort((a, b) => rank(a) - rank(b));
+    }
     const frag = document.createDocumentFragment();
     for (const o of matches.slice(0, LIST_LIMIT)) {
       const r = document.createElement("button");

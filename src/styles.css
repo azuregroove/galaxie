@@ -267,3 +267,6 @@ table.planets .dim { font-size: 10px; }
 .schemaSvg .tick { stroke: var(--line); }
 .schemaNote { margin-bottom: 6px; }
 .schema figcaption { margin-top: 2px; }
+.schemaSvg .hzOpt { fill: rgba(90, 210, 120, 0.12); }
+.schemaSvg .hzCons { fill: rgba(90, 210, 120, 0.25); }
+.schemaSvg .hzT { fill: #7fdc98; font-size: 8.5px; }

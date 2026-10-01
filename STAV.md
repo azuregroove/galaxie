@@ -215,6 +215,11 @@ Aktualizovat na konci každého sezení.
   SpaceMap, Universe Map, GalacticResource, Milky Way Explorer) a 13 návrhů vylepšení; weby z cloudu blokované,
   funkce jen z výsledků vyhledávání
 
+- 2026-10-01 (cloud): **návrh 1 – obyvatelná zóna** (build OK, Playwright bez JS chyb): `src/core/hz.ts` (Kopparapu 2014,
+  koeficienty z HZs.f90 na CDS), pás ve schématu karty, zelené mezikruží v pohledu Soustava + poznámka; TRAPPIST-1
+  (2 566 K) extrapolace označená, e/f/g v konzervativní zóně; hledání řadí přesnou shodu jména dopředu
+  - zjištěno: NASA Exoplanet Archive je teď z cloudu dostupný (HTTP 200)
+
 ## Rozdělané
 - nic
 

@@ -10,6 +10,8 @@ import {
   LineDashedMaterial,
   LineLoop,
   Mesh,
+  RingGeometry,
+  DoubleSide,
   MeshBasicMaterial,
   PerspectiveCamera,
   Points,
@@ -323,6 +325,16 @@ export class SystemView {
     this.makeBody = (b) => make(b, 0, null, this.scene);
     this.buildSmall(spec.small ?? null);
 
+    if (spec.hz) {
+      // mezikruží v rovině drah; optimistická zóna slabší
+      for (const [r, op] of [[spec.hz.opt, 0.08], [spec.hz.cons, 0.16]] as const) {
+        const ring = new Mesh(new RingGeometry(r[0], r[1], 128),
+          new MeshBasicMaterial({ color: 0x5ad278, transparent: true, opacity: op, side: DoubleSide, depthWrite: false }));
+        ring.rotation.x = -Math.PI / 2;
+        this.scene.add(ring);
+      }
+    }
+
     for (const [name, a] of SOLAR_REF) {
       const pts: Vector3[] = [];
       for (let k = 0; k <= 180; k++) {
@@ -403,6 +415,7 @@ export class SystemView {
       else if (spec.bodies.some((b) => b.eUnknown)) notes.unshift("Planety s „?“ ve sloupci e nemají v archivu výstřednost, kreslí se kruh (slabší čára).");
       if (spec.bodies.some((b) => b.aEst || b.pEst)) notes.push(`* dopočteno 3. Keplerovým zákonem z hmotnosti hvězdy${spec.massAssumed ? " (hmotnost neznámá, použita 1 M☉)" : ""}.`);
       if (spec.star.rs == null) notes.push("Poloměr hvězdy není známý, kreslí se jako 1 R☉.");
+      if (spec.hz) notes.push(`Zelené mezikruží = obyvatelná zóna (Kopparapu et al. 2014): konzervativní ${fmtNum(spec.hz.cons[0], 3)}–${fmtNum(spec.hz.cons[1], 3)} au, slabší optimistická ${fmtNum(spec.hz.opt[0], 3)}–${fmtNum(spec.hz.opt[1], 3)} au; z teploty a poloměru hvězdy${spec.hz.extrapolated ? ", <b>teplota mimo rozsah modelu 2 600–7 200 K – extrapolace</b>" : ""}.`);
       if (spec.skipped.length) notes.push(`Bez dráhy (chybí a i perioda): ${escapeHtml(spec.skipped.join(", "))}.`);
       notes.push("Barva planety podle poloměru: hnědá < 1,6 R⊕ (spíš kamenná), tyrkysová < 4 R⊕, modrá < 10 R⊕, béžová ≥ 10 R⊕ (plynný obr), šedá = neznámý.");
     }
