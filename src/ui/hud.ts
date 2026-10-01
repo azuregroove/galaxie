@@ -7,7 +7,7 @@ import type { Layer } from "../layers/layer";
 import type { OverlayKey, Overlays } from "../scene/overlays";
 import { Stage } from "../scene/stage";
 import { FilterPanel } from "./filters";
-import { fillImage } from "./images";
+import { fillDescription, fillImage } from "./images";
 import { togglable, trackHeight } from "./panels";
 import type { DynLabel, Labels } from "./labels";
 
@@ -318,6 +318,10 @@ export class Hud {
       card.querySelector(".btn.detail, h3")?.after(b);
     }
     this.cardExtra?.(card);
+    const desc = document.createElement("div");
+    desc.className = "desc";
+    card.appendChild(desc);
+    void fillDescription(desc, L.id, o.name, () => this.selected === o && !card.hidden);
     const img = document.createElement("div");
     img.className = "imgs";
     card.appendChild(img);

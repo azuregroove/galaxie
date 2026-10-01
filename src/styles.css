@@ -322,3 +322,5 @@ table.planets .dim { font-size: 10px; }
 .timeline details { margin: 8px 0; font-size: 12px; }
 .timeline summary { cursor: pointer; color: var(--accent); }
 .timeline .tablewrap { max-height: 220px; overflow-y: auto; }
+#card .desc p { margin: 0 0 6px; }
+#card .desc .src { margin-bottom: 4px; }

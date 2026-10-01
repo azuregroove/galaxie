@@ -145,3 +145,8 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
   (1,92 kpc vně) spočtené ze vzorce a parametrů v src/scene/arms.ts; počty kulových hvězdokup a planet v obyvatelné zóně
   spočtené z našich dat 1. 10. 2026; hustota LHS 1140 b = m/r³ z PSCompPars.
 - Wikipedie z cloudu nedostupná – texty z ní nepřebírané.
+
+### Popisy z české Wikipedie (karta objektu)
+- Úvod článku z REST API cs Wikipedie (`/api/rest_v1/page/summary/`), načtený v prohlížeči až při otevření karty; nic se neukládá.
+- Licence textu CC BY-SA 4.0; karta uvádí článek, odkaz na autory (historie stránky), licenci a že text může být zkrácený.
+- Které objekty mají článek: odkazy na cs Wikipedii z Wikidata v `obrazky.json` (obrazky.py, u jasných hvězd obrazky_hvezdy.py podle HIP).

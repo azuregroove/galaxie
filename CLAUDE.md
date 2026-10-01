@@ -50,14 +50,14 @@ Později: prohlídky s komentářem („výlety“), porovnávání objektů, č
 obrázky a odkazy, sdílení pohledu přes #kotvu.
 
 ## Etapy (každá končí funkčním buildem)
-Stav 1. 10. 2026: etapy 1–3 hotové; z 5 hotová ramena (Reid 2019 + Gaia) a jasné hvězdy. Podrobnosti v STAV.md a NAVRHY.md.
+Stav 1. 10. 2026: etapy 1–3 hotové, 4 hotová (kromě porovnání objektů – odloženo); z 5 hotová ramena (Reid 2019 + Gaia) a jasné hvězdy. Podrobnosti v STAV.md a NAVRHY.md.
 1. ~~Kostra aplikace + převod prototypu + datová pipeline pro 1 katalog (exoplanety)~~
 2. ~~Výkon: tisíce objektů, LOD, vyhledávání, filtry, mobilní ovládání~~
 3. ~~Hvězdokupy, mlhoviny, pulsary, černé díry~~
 4. Karty objektů s popisy a obrázky, licence – hotovo: obrázky Commons, výřezy DSS, schéma soustavy, obyvatelná
    zóna, velikostní třídy planet, jména IAU a česká jména, doba cesty, pohled z objektu. Zbývá:
-   - české popisy významných objektů (Wikipedie CC BY-SA, s autorem)
-   - doplnit jména IAU z oficiálního seznamu WGSN (Wikidata neúplná – Ran, Ægir, Draugr…)
+   - ~~české popisy významných objektů~~ (1. 10., úvod článku cs Wikipedie načtený v kartě, CC BY-SA)
+   - jména IAU z WGSN – vynecháno (Ráďa 1. 10.; seznam na iau.org nedostupný)
    - ~~propojit jasné hvězdy s hvězdami s exoplanetami~~ (1. 10., 36 dvojic)
    - ~~přístupnost: textové popisy pro čtečky, ovládání seznamu a karty klávesnicí (NAVRHY.md bod 11)~~ (1. 10.)
    - ~~„výlety“ s komentářem (NAVRHY.md bod 13)~~ – 5 výletů hotových 1. 10. (další podle chuti)

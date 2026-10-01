@@ -7,8 +7,8 @@ import type { SkyPos } from "../layers/layer";
  * karty načte z Wikimedia Commons náhled, autor a licence. Bez autora a licence se obrázek neukáže, jen odkaz.
  */
 
-/** [QID, soubor na Commons, český štítek, článek cs Wikipedie, článek en Wikipedie] */
-type Entry = [string, string, string | null, string | null, string | null];
+/** [QID, soubor na Commons (u jasných hvězd může chybět), český štítek, článek cs Wikipedie, článek en Wikipedie] */
+type Entry = [string, string | null, string | null, string | null, string | null];
 
 interface ImageData {
   vrstvy: Record<string, Record<string, Entry>>;
@@ -123,6 +123,65 @@ const short = (s: string, n: number) => (s.length > n ? `${s.slice(0, n - 1).tri
 const wikiLink = (lang: string, title: string) =>
   `https://${lang}.wikipedia.org/wiki/${encodeURIComponent(title.replace(/ /g, "_"))}`;
 
+// REST API Wikipedie posílá CORS hlavičku pro libovolný původ (ověřeno 1. 10. 2026 s Origin azuregroove.github.io)
+const WIKI_SUMMARY = "https://cs.wikipedia.org/api/rest_v1/page/summary/";
+const DESC_MAX = 900;
+
+interface WikiSummary {
+  title: string;
+  extract: string;
+  page: string;
+}
+
+const summaries = new Map<string, Promise<WikiSummary | null>>();
+
+function summary(title: string): Promise<WikiSummary | null> {
+  let p = summaries.get(title);
+  if (!p) {
+    p = fetch(WIKI_SUMMARY + encodeURIComponent(title.replace(/ /g, "_")))
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => {
+        // rozcestník nebo prázdný úvod nemá smysl ukazovat jako popis objektu
+        if (!j || j.type !== "standard" || typeof j.extract !== "string" || !j.extract.trim()) return null;
+        return { title: j.title ?? title, extract: j.extract.trim(), page: j.content_urls?.desktop?.page ?? wikiLink("cs", title) };
+      })
+      .catch(() => null);
+    summaries.set(title, p);
+  }
+  return p;
+}
+
+/** Úvod článku zkrácený na celé věty. */
+function trimSentences(t: string, max: number): string {
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max);
+  const end = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf(".\n"));
+  return end > max / 3 ? cut.slice(0, end + 1) : `${cut.trimEnd()}…`;
+}
+
+/**
+ * Popis z české Wikipedie (úvod článku) – načte se až při otevření karty, nic se neukládá do dat mapy.
+ * Licence textu CC BY-SA 4.0: uvádíme článek, odkaz na autory (historie stránky) a licenci.
+ */
+export async function fillDescription(el: HTMLElement, layer: string, name: string, isCurrent: () => boolean = () => true): Promise<void> {
+  const d = await load();
+  const title = d?.vrstvy[layer]?.[name]?.[3];
+  if (!title || !isCurrent()) return;
+  el.innerHTML = `<p class="dim">Načítám popis z Wikipedie…</p>`;
+  const s = await summary(title);
+  if (!isCurrent()) return;
+  if (!s) {
+    el.innerHTML = "";
+    return;
+  }
+  const hist = `https://cs.wikipedia.org/w/index.php?${new URLSearchParams({ title: s.title, action: "history" })}`;
+  const paras = trimSentences(s.extract, DESC_MAX).split(/\n+/).map((p) => `<p>${escapeHtml(p)}</p>`).join("");
+  el.innerHTML = `<h4>Z Wikipedie</h4>${paras}
+    <div class="src">Text: článek <a href="${escapeHtml(s.page)}" target="_blank" rel="noopener">${escapeHtml(s.title)}</a> z české Wikipedie
+      (<a href="${escapeHtml(hist)}" target="_blank" rel="noopener">autoři</a>), licence
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.cs" target="_blank" rel="noopener">CC BY-SA 4.0</a>; může být zkrácený.</div>`;
+}
+
 /**
  * Doplní do prvku obrázek a odkazy k objektu (vrstva + jméno). Když obrázek k objektu není, prvek zůstane prázdný.
  * `isCurrent` hlídá, jestli je karta pořád otevřená pro stejný objekt (odpověď může přijít pozdě).
@@ -143,6 +202,10 @@ export async function fillImage(el: HTMLElement, layer: string, name: string, is
     `<a href="https://www.wikidata.org/wiki/${qid}" target="_blank" rel="noopener">Wikidata</a>`,
   ].filter(Boolean).join(" · ");
   const csName = cs && cs.toLowerCase() !== name.toLowerCase() ? `<div class="imgName">česky: <b>${escapeHtml(cs)}</b></div>` : "";
+  if (!file) {
+    el.innerHTML = `${csName}${sky ? skyCutout(sky) : ""}<div class="imgLinks">${links}</div>`;
+    return;
+  }
   el.innerHTML = `${csName}<div class="imgBox dim">Načítám obrázek…</div><div class="imgLinks">${links}</div>`;
   const info = await commons(file);
   if (!isCurrent()) return;

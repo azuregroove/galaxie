@@ -131,8 +131,10 @@
       "zdroj": "Wikidata (vlastnost P18), soubory Wikimedia Commons",
       "url": "https://www.wikidata.org/",
       "licence": "Wikidata CC0; každý obrázek má vlastní licenci a autora na Commons (zobrazeno v kartě)",
-      "objektu": 1739,
-      "stazeno": "2026-09-30T20:53:30Z"
+      "objektu": 2609,
+      "stazeno": "2026-09-30T20:53:30Z",
+      "hvezdy_stazeno": "2026-10-01T17:24:47Z",
+      "poznamka": "Jasné hvězdy doplněné podle označení HIP (P528, obrazky_hvezdy.py). Popis v kartě = úvod článku české Wikipedie, načtený až při otevření karty; text CC BY-SA 4.0, autoři v historii článku."
     },
     {
       "id": "slunecni-soustava",

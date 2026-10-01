@@ -307,17 +307,31 @@ Aktualizovat na konci každého sezení.
   - po zavření panelu se vrátí dřívější filtr roku; když kartu převezme výběr objektu, přehrávání se zastaví a filtr zůstane do zavření karty
   - Hud: `cardCloseHandlers` (místo jednoho onCardClose), `showPanel(fill)`
 
+- 2026-10-01 (cloud): časová osa pushnutá (6d155a1); Ráďa povolil domény cs.wikipedia.org, www.wikidata.org, query.wikidata.org, www.iau.org
+- 2026-10-01 (cloud): **WGSN (oficiální jména IAU) – Ráďa: vynechat.** Důvod: seznam na iau.org po přestavbě webu nedostupný
+  (stará i nová adresa 404, FAQ IAU odkazuje na mrtvý odkaz); pas.rochester.edu, exopla.net, en.wikipedia z cloudu blokované
+- 2026-10-01 (cloud): **etapa 4 – české popisy z Wikipedie (varianta 2a: načítání v kartě)** (build OK, Playwright s podvrženou odpovědí)
+  - `fillDescription` v `src/ui/images.ts`: úvod článku cs Wikipedie z REST API (`/api/rest_v1/page/summary/`) až při otevření karty,
+    zkrácený na celé věty (≤ 900 znaků), jen text (escapovaný), rozcestník/chyba/404 → nic; uvedeno: článek, odkaz „autoři“
+    (historie), CC BY-SA 4.0, „může být zkrácený“; CORS ověřen s Origin azuregroove.github.io
+  - `pipeline/obrazky_hvezdy.py`: jasné hvězdy do obrazky.json podle HIP (P528) – 870 z 909, obrázek 355, cs článek 172
+    (WDQS z cloudu prošel); obrázek nepovinný (Entry.file může být null → jen odkazy + výřez oblohy); po obrazky.py spustit znovu
+  - objektů s cs článkem celkem 566 + 172 hvězd; Aldebaran bez článku (položka s HIP na Wikidata nemá odkazy – chyba Wikidata)
+  - **z cloudu Wikimedia REST vrací 429 (sdílená IP) → skutečné popisy neověřené; ověřit na PC** (jako náhledy Commons)
+
 ## Rozdělané
-- nic (časová osa pushnutá 1. 10. s Ráďovým souhlasem; Ráďa povolil domény Wikipedie, Wikidata, IAU)
+- nic (popisy z Wikipedie pushnuté 1. 10. s Ráďovým souhlasem)
 
 ## Další krok
-**Aktuální větev: `claude/jolly-thompson-pyvslt`** (navazuje na `claude/confident-lovelace-1lqe2y`, 1b473f0).
+**Aktuální větev: `claude/jolly-thompson-pyvslt`** (navazuje na `claude/confident-lovelace-1lqe2y`; vše pushnuté 1. 10., poslední commit = popisy z Wikipedie).
 Nový chat: přečíst CLAUDE.md (sekce Etapy – zbývající body jsou rozepsané tam) + tento soubor z téhle větve.
 Na PC: `git fetch origin`, `git switch claude/jolly-thompson-pyvslt`, `git pull`, `npm install`, `npm run dev`.
 Mapa jako soukromý artefakt: https://claude.ai/artifact/C7E2DwT3ir8g85U8s3ThkW (aktualizovat publikací dist/).
 Pravidlo z 1. 10.: po každém dokončeném bodu se zastavit, říct co je hotovo; commit + push předchozího bodu až po Ráďově souhlasu.
 
-**Další na řadě:** podle Ráďovy zpětné vazby k výletům; pak zbytek etapy 4 (české popisy, WGSN, propojení jasných hvězd s exoplanetami, časová osa); body 7 a 8 až po povolení domén
+**Etapa 4 hotová** kromě porovnání objektů (Ráďa: zatím ne) a WGSN (Ráďa: vynechat). **Další na řadě:** navrhnout Ráďovi –
+etapa 5 (body 7, 8: Radcliffeova vlna, Místní bublina, prachová mapa – potřeba domény arXiv/Dataverse/Zenodo; vzorek Gaia do 100 pc),
+nebo příprava etapy 6 (svolení JPL, podmínky DSS/CDS, aktualizace dat). Na PC ověřit popisy z Wikipedie v kartě (Betelgeuze, Plejády); body 7 a 8 až po povolení domén
 (arxiv.org, export.arxiv.org, dataverse.harvard.edu, zenodo.org, www.nature.com).
 
 **Dlouhodobě (z 30. 9.):**

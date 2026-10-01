@@ -13,6 +13,7 @@ Párování:
     položky bez souřadnic se berou jen při shodě s hlavním jménem objektu (počet se vypíše)
   - tělesa Sluneční soustavy: podle rodičovského tělesa (P397 = Slunce nebo planeta) a jména
 
+Po něm spustit obrazky_hvezdy.py (doplní jasné hvězdy, tento skript je přepíše).
 Použití:  python obrazky.py        (3 dotazy SPARQL, při limitu WDQS i desítky minut; cache v raw/wikidata)
 """
 from __future__ import annotations
