@@ -151,6 +151,19 @@ function summary(title: string): Promise<WikiSummary | null> {
   return p;
 }
 
+/**
+ * Úvod článku bez zbytků po šablonách: REST API vypouští výslovnost a podobné vsuvky a nechává po nich
+ * prázdné závorky, mezeru před čárkou nebo zalomení uprostřed věty („Betelgeuze ,\nα Orionis…“).
+ */
+function cleanExtract(t: string): string {
+  return t
+    .replace(/\(\s*[,;]?\s*\)/g, "")
+    .replace(/[ \t\u00a0]+([,.;:])/g, "$1")
+    .replace(/([,;:])[ \t]*\n+\s*/g, "$1 ")
+    .replace(/[ \t]{2,}/g, " ")
+    .trim();
+}
+
 /** Úvod článku zkrácený na celé věty. */
 function trimSentences(t: string, max: number): string {
   if (t.length <= max) return t;
@@ -175,7 +188,7 @@ export async function fillDescription(el: HTMLElement, layer: string, name: stri
     return;
   }
   const hist = `https://cs.wikipedia.org/w/index.php?${new URLSearchParams({ title: s.title, action: "history" })}`;
-  const paras = trimSentences(s.extract, DESC_MAX).split(/\n+/).map((p) => `<p>${escapeHtml(p)}</p>`).join("");
+  const paras = trimSentences(cleanExtract(s.extract), DESC_MAX).split(/\n+/).map((p) => `<p>${escapeHtml(p)}</p>`).join("");
   el.innerHTML = `<h4>Z Wikipedie</h4>${paras}
     <div class="src">Text: článek <a href="${escapeHtml(s.page)}" target="_blank" rel="noopener">${escapeHtml(s.title)}</a> z české Wikipedie
       (<a href="${escapeHtml(hist)}" target="_blank" rel="noopener">autoři</a>), licence

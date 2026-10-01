@@ -319,11 +319,21 @@ Aktualizovat na konci každého sezení.
   - objektů s cs článkem celkem 566 + 172 hvězd; Aldebaran bez článku (položka s HIP na Wikidata nemá odkazy – chyba Wikidata)
   - **z cloudu Wikimedia REST vrací 429 (sdílená IP) → skutečné popisy neověřené; ověřit na PC** (jako náhledy Commons)
 
+- 2026-10-01 (cloud, nové sezení, větev `claude/vigilant-clarke-yii046` = jolly-thompson + změny níž):
+  - **popisy z Wikipedie poprvé ověřené naostro** (Wikimedia REST z cloudu chvíli prošel): Betelgeuze na mobilu – úvod 491 znaků
+    + CC BY-SA 4.0 + odkazy; náhled Plejád z Commons načten; ostatní dotazy 429 (sdílená IP) → karta správně bez popisu
+  - oprava: REST API po vypuštěné výslovnosti vrací „Betelgeuze ,\nα Orionis…“ → v kartě byl samostatný odstavec „Betelgeuze ,“;
+    `cleanExtract` v `src/ui/images.ts` maže prázdné závorky, mezeru před interpunkcí a zalomení za čárkou (otestováno na skutečném
+    úvodu + vzorech, čísla 1.5 a 10:30 nedotčena); build OK
+  - Chromium v cloudu nevěří certifikátu proxy → testy s externími zdroji jen s `ignoreHTTPSErrors` (vlastnost sandboxu, ne aplikace)
+  - z cloudu dál blokované: arxiv, export.arxiv, dataverse.harvard.edu, zenodo, nature.com, gea.esac.esa.int (Gaia archiv), archive.stsci.edu;
+    dostupné: NASA Exoplanet Archive, JPL SSD, CDS VizieR, cs.wikipedia (s limitem)
+
 ## Rozdělané
-- nic (popisy z Wikipedie pushnuté 1. 10. s Ráďovým souhlasem)
+- oprava `cleanExtract` – necommitnutá, čeká na Ráďův souhlas
 
 ## Další krok
-**Aktuální větev: `claude/jolly-thompson-pyvslt`** (navazuje na `claude/confident-lovelace-1lqe2y`; vše pushnuté 1. 10., poslední commit = popisy z Wikipedie).
+**Aktuální větev: `claude/vigilant-clarke-yii046`** (= `claude/jolly-thompson-pyvslt` + oprava popisů; push až po souhlasu).
 Nový chat: přečíst CLAUDE.md (sekce Etapy – zbývající body jsou rozepsané tam) + tento soubor z téhle větve.
 Na PC: `git fetch origin`, `git switch claude/jolly-thompson-pyvslt`, `git pull`, `npm install`, `npm run dev`.
 Mapa jako soukromý artefakt: https://claude.ai/artifact/C7E2DwT3ir8g85U8s3ThkW (aktualizovat publikací dist/).
