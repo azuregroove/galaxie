@@ -149,7 +149,8 @@ export class Labels {
     // tečky popsaných objektů nesmí zakrýt cizí popisek
     const screen: ([number, number] | null)[] = cands.map((c) => {
       this.tmp.copy(c.pos).project(camera);
-      if (this.tmp.z > 1 || Math.abs(this.tmp.x) > 1.2 || Math.abs(this.tmp.y) > 1.2) return null;
+      // negované podmínky chytí i NaN (bod přesně v kameře při pohledu z objektu)
+      if (!(this.tmp.z <= 1 && Math.abs(this.tmp.x) <= 1.2 && Math.abs(this.tmp.y) <= 1.2)) return null;
       return [((this.tmp.x + 1) / 2) * W, ((1 - this.tmp.y) / 2) * H];
     });
 

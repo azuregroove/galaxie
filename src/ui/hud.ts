@@ -226,6 +226,14 @@ export class Hud {
       b.onclick = () => L.openDetail!(o);
       card.querySelector("h3")?.after(b);
     }
+    if (o.pos && (o.distLy ?? 0) > 0) {
+      const b = document.createElement("button");
+      b.className = "btn detail";
+      b.textContent = "Pohled odtud ke Slunci ▸";
+      b.title = "Kamera se přesune do objektu a podívá se k nám";
+      b.onclick = () => this.lookFrom(o);
+      card.querySelector(".btn.detail, h3")?.after(b);
+    }
     const img = document.createElement("div");
     img.className = "imgs";
     card.appendChild(img);
@@ -235,6 +243,17 @@ export class Hud {
     this.fitCenter();
     this.renderList();
     if (fly) this.stage.flyTo(o.anchor, L.flyDistance(o));
+  }
+
+  /** Kamera do objektu, cíl pohledu Slunce; otáčení pak krouží kolem Slunce ve stejné vzdálenosti. */
+  private lookFrom(o: MapObject): void {
+    const sun = this.frame.sun;
+    const dir = o.anchor.clone().sub(sun);
+    this.marker.visible = false;
+    // na telefonu by karta zakryla půlku výhledu
+    if (matchMedia("(max-width:760px)").matches) this.closeCard();
+    this.stage.flyTo(sun, dir.length(), dir);
+    this.toast(`Pohled z ${o.label ?? o.name} ke Slunci (${fmtLy(o.distLy ?? dir.length())})`);
   }
 
   get selection(): MapObject | null {

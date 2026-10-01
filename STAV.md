@@ -234,6 +234,10 @@ Aktualizovat na konci každého sezení.
   letadlo 900 km/h, auto 100 km/h), ověřeno proti Pythonu (Proxima: 75 tis. let Voyagerem); galaktické souřadnice
   s desetinnou čárkou (známý nedostatek vyřešen); karta černé díry: jednotka „ly“ před závorku
 
+- 2026-10-01 (cloud): **návrh 5 – pohled z objektu ke Slunci**: tlačítko v kartě (objekty se vzdáleností), kamera do objektu,
+  cíl Slunce, otáčení krouží kolem Slunce; na mobilu se karta zavře; popisky ošetřené proti NaN (bod v kameře);
+  ověřeno Playwright desktop + mobil (Plejády: kamera 440 ly od Slunce)
+
 ## Rozdělané
 - nic
 
