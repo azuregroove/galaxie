@@ -35,7 +35,7 @@ async function main() {
     const manifest = await getJson<Manifest>("manifest.json");
     const file = (id: string) => manifest.katalogy.find((k) => k.id === id)?.soubor;
     // katalogy etapy 3 mají společný formát (pipeline/katalog.py); pořadí určuje pořadí v legendě
-    const generic = ["hvezdokupy", "mlhoviny", "neutronove-hvezdy"].filter(file);
+    const generic = ["hvezdy", "hvezdokupy", "mlhoviny", "neutronove-hvezdy"].filter(file);
     const [bh, exo, ...cats] = await Promise.all([
       file("cerne-diry") ? getJson<BlackHoleData>(file("cerne-diry")!) : null,
       file("exoplanety") ? getJson<ExoData>(file("exoplanety")!) : null,

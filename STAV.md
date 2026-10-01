@@ -243,6 +243,12 @@ Aktualizovat na konci každého sezení.
   vykreslení porovnáno s grafem z Pythonu (matplotlib) – tvary sedí; paprskovité protažení od Slunce je v datech
   (chyby vzdáleností, prach), kolem Slunce díra (nadhustota vůči místnímu průměru)
 
+- 2026-10-01 (cloud): body 7 a 8 (Radcliffeova vlna, Místní bublina, prachová mapa) **odloženy** – data na arXiv, Harvard
+  Dataverse, Zenodo, nature.com jsou z cloudu blokovaná; Ráďa povolí domény později
+- 2026-10-01 (cloud): **návrh 9 – jasné hvězdy**: `pipeline/hvezdy.py` → `hvezdy.json` (909 hvězd V ≤ 4,5, 134 kB), nová vrstva
+  „Jasné hvězdy“ (typy O/B…M barvami tříd), hledání i „alfa Ori“, „beta Cen“; ověřeno Playwright
+  - známé: hvězdy s exoplanetami (ε Eri, τ Cet…) jsou v seznamu dvakrát (jasná hvězda + systém)
+
 ## Rozdělané
 - nic
 

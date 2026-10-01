@@ -124,3 +124,12 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
   jména obsahující „pulsar“ se u jiných vrstev nepřebírají (Krabí mlhovina měla položku pulsaru).
 - Licence: Wikidata CC0.
 
+### Jasné hvězdy – Hipparcos + Yale BSC5 (`pipeline/hvezdy.py` → `hvezdy.json`)
+- Výběr V ≤ 4,5 mag z Hipparcos (ESA 1997, CDS I/239/hip_main): 909 hvězd; paralaxy z nové redukce (van Leeuwen 2007,
+  A&A 474, 653, CDS I/311), 907 s kladnou paralaxou; dotazy VizieR ASU 1. 10. 2026.
+- Spektrální typ a Bayerovo/Flamsteedovo označení, číslo HR: Yale Bright Star Catalogue 5. vyd. (Hoffleit & Warren 1991, CDS V/50),
+  párování přes HD; u Capelly dává Hipparcos chybný typ „M1: comp“, BSC5 „G5IIIe+G0III“.
+- Jména: české/anglické štítky Wikidata podle P528 „HIP n“ (190 s českým jménem); jinak Bayer, Flamsteed, HR.
+- Kontrola: Sirius 8,5 ly, Vega 25,1 ly, Deneb 1 412 ly, Polárka 433 ly (Hipparcos; jiné metody dávají Polárce ~320–430 ly).
+- Licence: data CDS s citací (podmínky CDS neověřené), Wikidata CC0.
+
