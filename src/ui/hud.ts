@@ -1,6 +1,7 @@
 import { AdditiveBlending, Sprite, SpriteMaterial, Vector3 } from "three";
 import type { Frame } from "../core/coords";
 import type { Manifest, MapObject } from "../core/types";
+import { shadowed } from "../core/twins";
 import { escapeHtml, fmt, fmtLy, fmtPcFromLy, spokenLy } from "../core/units";
 import type { Layer } from "../layers/layer";
 import type { OverlayKey, Overlays } from "../scene/overlays";
@@ -48,7 +49,7 @@ export class Hud {
     this.labels = labels;
     for (const L of layers) for (const o of L.objects) {
       this.all.push(o);
-      this.index.set(o, norm([o.name, ...(o.aliases ?? [])].join(" ")));
+      this.index.set(o, norm([o.name, ...(o.aliases ?? []), ...(o.searchNames ?? [])].join(" ")));
     }
     this.all.sort((a, b) => (a.distLy ?? 1e12) - (b.distLy ?? 1e12));
     labels.setProvider(() => this.labelList());
@@ -97,7 +98,7 @@ export class Hud {
     if (this.selected) out.push({ key: this.selected, text: text(this.selected), pos: this.selected.anchor, priority: 1000 });
     for (const L of this.layers) {
       L.labelCandidates(this.stage).forEach((o, i) => {
-        if (o === this.selected) return;
+        if (o === this.selected || o.twin === this.selected || shadowed(o)) return;
         // významné objekty přednostně, jinak pořadí, které vrstva vrátila
         out.push({ key: o, text: text(o), pos: o.anchor, priority: (o.major ? 600 : 300) - i * 0.01 });
       });
@@ -236,10 +237,10 @@ export class Hud {
     list.textContent = "";
     this.rows.clear();
     const q = this.query;
-    const matches = this.all.filter((o) => !o.hidden && (!q || this.index.get(o)!.includes(q)));
+    const matches = this.all.filter((o) => !o.hidden && !shadowed(o) && (!q || this.index.get(o)!.includes(q)));
     if (q) {
       // přesná shoda jména (nebo aliasu) dopředu, jinak by „Kepler-186“ předběhl bližší „Kepler-1869“
-      const rank = (o: MapObject) => (norm(o.name) === q ? 0 : o.aliases?.some((a) => norm(a) === q) ? 1 : 2);
+      const rank = (o: MapObject) => (norm(o.name) === q ? 0 : [...(o.aliases ?? []), ...(o.searchNames ?? [])].some((a) => norm(a) === q) ? 1 : 2);
       matches.sort((a, b) => rank(a) - rank(b));
     }
     const frag = document.createDocumentFragment();
@@ -247,8 +248,9 @@ export class Hud {
       const r = document.createElement("button");
       r.className = "row" + (o === this.selected ? " on" : "");
       // při hledání podle planety ukaž, která planeta odpovídá
-      const hit = q && !norm(o.name).includes(q) ? o.aliases?.find((a) => norm(a).includes(q)) : undefined;
-      const extra = hit && hit !== o.nick ? hit : o.nick;
+      const hit = q && !norm(o.name).includes(q) ? [...(o.aliases ?? []), ...(o.searchNames ?? [])].find((a) => norm(a).includes(q)) : undefined;
+      const own = o.nick ?? (o.label && o.label !== o.name ? o.label : undefined);
+      const extra = hit && hit !== own ? hit : own;
       r.innerHTML = `<i style="background:${o.color}"></i><span class="nm">${escapeHtml(o.name)}${extra ? ` <span class="dim">· ${escapeHtml(extra)}</span>` : ""}</span><span class="ds">${o.distLy != null ? fmtLy(o.distLy) : "?"}</span>`;
       r.setAttribute("aria-label", this.describe(o, extra));
       if (o === this.selected) r.setAttribute("aria-current", "true");
@@ -297,6 +299,15 @@ export class Hud {
       b.textContent = detail;
       b.onclick = () => L.openDetail!(o);
       card.querySelector("h3")?.after(b);
+    }
+    if (o.twin) {
+      const t = o.twin;
+      const TL = this.layers.find((x) => x.id === t.layer);
+      const p = document.createElement("p");
+      p.className = "twin";
+      p.innerHTML = `Táž hvězda ve vrstvě ${escapeHtml(TL?.name ?? t.layer)}: <button class="linkish">${escapeHtml(t.name)}</button>`;
+      p.querySelector("button")!.onclick = () => this.select(t, false);
+      card.querySelector(".nick, h3")?.after(p);
     }
     if (o.pos && (o.distLy ?? 0) > 0) {
       const b = document.createElement("button");
@@ -539,7 +550,7 @@ export class Hud {
       let best: MapObject | null = null;
       let bd = radius;
       for (const o of this.all) {
-        if (o.hidden || o.listOnly) continue;
+        if (o.hidden || o.listOnly || shadowed(o)) continue;
         tmp.copy(o.anchor).project(this.stage.camera);
         if (tmp.z > 1) continue;
         const d = Math.hypot(((tmp.x + 1) / 2) * rect.width - px, ((1 - tmp.y) / 2) * rect.height - py);

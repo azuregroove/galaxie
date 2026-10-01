@@ -43,6 +43,12 @@ export interface MapObject {
   planetNames?: Record<string, string>;
   major?: boolean;
   hidden?: boolean;
+  /** Jména jen pro hledání (nezobrazují se v kartě). */
+  searchNames?: string[];
+  /** Táž hvězda v jiném katalogu (jasná hvězda ↔ hostitel exoplanet). */
+  twin?: MapObject;
+  /** Dvojče, které ustupuje: v seznamu, popiscích a při klikání se ukazuje jen hlavní objekt. */
+  secondary?: boolean;
   /** Bez vzdálenosti: jen v seznamu a hledání, na mapě se ukáže směr až po výběru. */
   listOnly?: boolean;
 }

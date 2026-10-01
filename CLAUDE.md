@@ -58,7 +58,7 @@ Stav 1. 10. 2026: etapy 1–3 hotové; z 5 hotová ramena (Reid 2019 + Gaia) a j
    zóna, velikostní třídy planet, jména IAU a česká jména, doba cesty, pohled z objektu. Zbývá:
    - české popisy významných objektů (Wikipedie CC BY-SA, s autorem)
    - doplnit jména IAU z oficiálního seznamu WGSN (Wikidata neúplná – Ran, Ægir, Draugr…)
-   - propojit jasné hvězdy s hvězdami s exoplanetami (ε Eri, τ Cet jsou v seznamu dvakrát)
+   - ~~propojit jasné hvězdy s hvězdami s exoplanetami~~ (1. 10., 36 dvojic)
    - ~~přístupnost: textové popisy pro čtečky, ovládání seznamu a karty klávesnicí (NAVRHY.md bod 11)~~ (1. 10.)
    - ~~„výlety“ s komentářem (NAVRHY.md bod 13)~~ – 5 výletů hotových 1. 10. (další podle chuti)
    - časová osa objevů, porovnání objektů

@@ -16,6 +16,7 @@ import { Stage } from "./scene/stage";
 import { SystemView } from "./system/view";
 import { initImages } from "./ui/images";
 import { applyNames, type NamesData } from "./core/names";
+import { linkTwins } from "./core/twins";
 import { Anchor } from "./ui/anchor";
 import { Hud } from "./ui/hud";
 import { Labels } from "./ui/labels";
@@ -78,6 +79,11 @@ async function main() {
     cats.forEach((c, i) => layers.push(new CatalogLayer(c as CatalogData, manifest.katalogy.find((k) => k.id === generic[i])!, frame, stage.glow, css)));
     layers.forEach((L) => stage.scene.add(L.group));
     if (names) applyNames(layers.flatMap((L) => L.objects), names);
+    const starsL = layers.find((L) => L.id === "hvezdy"), exoL = layers.find((L) => L.id === "exoplanety");
+    if (starsL && exoL) linkTwins(starsL.objects, exoL.objects, (o) => {
+      const s = (o.layer === "hvezdy" ? starsL : exoL).skyPos?.(o);
+      return s ? Frame.dir(s.l, s.b) : null;
+    });
 
     const hud = new Hud(stage, frame, layers, overlays, labels, manifest);
     stage.jumpTo(frame.sun.clone().add(new Vector3(9000, 0, 0)), new Vector3(-23000, 52000, 42000));

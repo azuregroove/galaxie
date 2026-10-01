@@ -247,7 +247,7 @@ Aktualizovat na konci každého sezení.
   Dataverse, Zenodo, nature.com jsou z cloudu blokovaná; Ráďa povolí domény později
 - 2026-10-01 (cloud): **návrh 9 – jasné hvězdy**: `pipeline/hvezdy.py` → `hvezdy.json` (909 hvězd V ≤ 4,5, 134 kB), nová vrstva
   „Jasné hvězdy“ (typy O/B…M barvami tříd), hledání i „alfa Ori“, „beta Cen“; ověřeno Playwright
-  - známé: hvězdy s exoplanetami (ε Eri, τ Cet…) jsou v seznamu dvakrát (jasná hvězda + systém)
+  - ~~známé: hvězdy s exoplanetami (ε Eri, τ Cet…) jsou v seznamu dvakrát~~ vyřešeno 1. 10. (twins.ts)
 
 - 2026-10-01 (cloud, nové sezení): **návrh 11 – přístupnost** (build OK, Playwright desktop 1400×860 klávesnicí + mobil 390×844, bez JS chyb)
   - seznam: šipky ↑↓, PageUp/PageDown, Home/End, ↓ z hledání do seznamu, ↑ z prvního řádku zpět; Tab vede jen na aktuální řádek
@@ -287,8 +287,18 @@ Aktualizovat na konci každého sezení.
   - nová značka {z} (výška nad rovinou); overit_vylety.py hlásí i nejednoznačná jména (M16 je v mlhovinách dvakrát)
   - čísla v textech přepsaná ručně z dat → po aktualizaci katalogů projít (hlavně počty v úvodu „Obyvatelných světů“)
 
+- 2026-10-01 (cloud): výlety 3–5 + zpomalení pushnuté (cb6f45f); Ráďa: „je to good“
+- 2026-10-01 (cloud): **etapa 4 – propojení jasných hvězd s hostiteli exoplanet** (build OK, Playwright bez JS chyb)
+  - `src/core/twins.ts`: shoda do 2′ a rozdíl vzdáleností ≤ 25 % (bez vzdálenosti do 5″) → 36 dvojic (Aldebaran–alf Tau, ε Eri, τ Cet,
+    Pollux–HD 62509, μ² Sco…); rozdíly poloh 0,3–76″ = vlastní pohyb mezi epochami Hipparcos a Gaia/PSCompPars
+  - hlavní je systém s planetami, jasná hvězda se v seznamu, popiscích a při klikání schová, dokud je systém vidět
+    (vypnuté exoplanety → hvězda se vrátí); systém bez vzdálenosti (μ² Sco) ustoupí hvězdě, která ji má
+  - hledání najde objekt podle jmen obou (`searchNames`, v kartě se nezobrazují), systém dostane na mapě jméno hvězdy (Aldebaran),
+    v kartě odkaz „Táž hvězda ve vrstvě …“ oběma směry
+  - z cloudu teď nedostupné i Wikidata a WDQS (dřív šly), dál iau.org, exopla.net, Wikipedie → WGSN a popisy jen na PC
+
 ## Rozdělané
-- nic (výlety 3–5 a zpomalení commitnuté a pushnuté 1. 10. s Ráďovým souhlasem)
+- nic (propojení pushnuté 1. 10. s Ráďovým souhlasem; další: časová osa objevů, porovnání objektů zatím ne – Ráďa)
 
 ## Další krok
 **Aktuální větev: `claude/jolly-thompson-pyvslt`** (navazuje na `claude/confident-lovelace-1lqe2y`, 1b473f0).
