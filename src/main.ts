@@ -8,6 +8,7 @@ import { ExoplanetLayer, type ExoData } from "./layers/exoplanets";
 import { SolarLayer } from "./layers/solar";
 import type { Layer } from "./layers/layer";
 import { ARMS, armRadius, armXZ } from "./scene/arms";
+import { GaiaArms } from "./scene/gaiaArms";
 import { ARM_GAIN_DEFAULT, buildBackdrop } from "./scene/backdrop";
 import { LY_PER_PC } from "./core/units";
 import { Overlays } from "./scene/overlays";
@@ -52,6 +53,9 @@ async function main() {
     const labels = new Labels(document.getElementById("labels")!, stage);
     const overlays = new Overlays(stage, frame, labels, css);
     const armGain = backdrop.material.uniforms.armGain;
+    const gaiaBtn = document.getElementById("gaiaArms") as HTMLButtonElement | null;
+    if (gaiaBtn && file("gaia-ramena")) new GaiaArms(DATA + file("gaia-ramena"), stage.scene, frame.sun, gaiaBtn);
+    else gaiaBtn?.remove();
     for (const a of ARMS) {
       // popisek doprostřed rozsahu modelu, kousek nad rovinu, ať nesplývá s body ramene
       const beta = (a.betaMin + a.betaMax) / 2;

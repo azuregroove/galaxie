@@ -238,6 +238,11 @@ Aktualizovat na konci každého sezení.
   cíl Slunce, otáčení krouží kolem Slunce; na mobilu se karta zavře; popisky ošetřené proti NaN (bod v kameře);
   ověřeno Playwright desktop + mobil (Plejády: kamera 440 ly od Slunce)
 
+- 2026-10-01 (cloud): **návrh 6 – ramena z dat Gaia**: `pipeline/gaia_ramena.py` → `gaia-ramena.json` (145 kB, načítá se až po zapnutí),
+  `src/scene/gaiaArms.ts` (jantarová průsvitná textura v rovině Galaxie), tlačítko „Gaia: vyp / Poggio 2021 / DR3 (OB)“;
+  vykreslení porovnáno s grafem z Pythonu (matplotlib) – tvary sedí; paprskovité protažení od Slunce je v datech
+  (chyby vzdáleností, prach), kolem Slunce díra (nadhustota vůči místnímu průměru)
+
 ## Rozdělané
 - nic
 

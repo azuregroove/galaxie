@@ -13,6 +13,7 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 | Velikostní třídy planet | Země < 1,25 R⊕ ≤ super-Země < 2 ≤ Neptun < 6 ≤ Jupiter < 15 ≤ větší | Borucki et al. 2011, ApJ 736, 19 (abstrakt, ADS 2011ApJ...736...19B) |
 | Rychlost Voyageru 1 (doba cesty v kartě) | 16,92 km/s vůči Slunci | JPL Horizons, cíl −31, vektory vůči Slunci (500@10) k 1. 10. 2026; auto 100 km/h a letadlo 900 km/h jsou zvolené ilustrační hodnoty |
 | Světelný rok | 9 460 730 472 580,8 km | IAU (juliánský rok × c) |
+| Ramena z dat Gaia (přepínač „Gaia“) | mřížky nadhustoty mladých hvězd ±6 kpc kolem Slunce, krok 0,1 kpc | Poggio et al. 2021, A&A 651, A104 (Gaia EDR3, horní hlavní posloupnost); Gaia Collaboration, Drimmel et al. 2023, A&A 674, A37 (Gaia DR3, OB) – mřížky z balíku SpiralMap 0.27 (MIT), `pipeline/gaia_ramena.py`; **licence samotných map neověřena**. Orientace os ověřena: vzájemná korelace map 0,68 jen bez převrácení (převrácené 0,06–0,22), nadhustota kladná podél ramen Reid 2019 |
 | Příčka | úhel ~27°, blízký konec v 1. kvadrantu (l > 0) | schematické, převzato z prototypu (opravena strana) – k ověření |
 | Průměr disku, tloušťka disku | 87 400 ly; 700–1 500 ly (tenký), ~8 500 ly (tlustý) | převzato z prototypu, **k ověření v etapě 5** |
 

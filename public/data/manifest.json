@@ -33,6 +33,16 @@
       "planet_s_vystrednosti": 5305
     },
     {
+      "id": "gaia-ramena",
+      "soubor": "gaia-ramena.json",
+      "nazev": "Ramena z dat Gaia (nadhustota mladých hvězd)",
+      "zdroj": "Poggio et al. 2021, A&A 651, A104; Gaia Collaboration, Drimmel et al. 2023, A&A 674, A37; mřížky z balíku SpiralMap 0.27",
+      "url": "https://github.com/Abhaypru/SpiralMap",
+      "licence": "SpiralMap MIT; licence samotných map neověřena",
+      "objektu": 2,
+      "stazeno": "2026-10-01T15:55:49Z"
+    },
+    {
       "nazev": "Hvězdokupy",
       "zdroj": "Hunt & Reffert 2023, A&A 673, A114 (CDS J/A+A/673/A114); Baumgardt & Vasiliev 2021, MNRAS 505, 5957",
       "url": "https://cdsarc.cds.unistra.fr/viz-bin/cat/J/A+A/673/A114",
