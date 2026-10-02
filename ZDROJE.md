@@ -221,6 +221,29 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
   (H = 70,4 km/s/Mpc jako v článku, ρcrit = 137,5 M☉/kpc³), „0,7 kg v objemu Země“.
 - Slupky v 8,21 / 19,6 / 50 kpc kolem centra mapy; model má R0 = 8,21 kpc, mapa 8,15 kpc.
 
+### Star Trek – fanouškovská vrstva, FIKCE (`pipeline/startrek_stahni.py`, `pipeline/startrek.py` → `startrek.json`)
+- **Neoficiální extrapolace**, ne kánon ani oficiální mapa. Star Trek je ochranná známka Paramount; vrstva s ním není spojená.
+- Zdroje (2. 10. 2026, MediaWiki API): Memory Alpha (kánon, licence **CC BY-NC**) a Memory Beta (licencovaná fikce vč.
+  *Star Charts*, **CC BY-SA**) – kategorie Stars, Star systems, Planets: 14 686 stránek + stránky mocností. Bere se jen fakta
+  (jméno, příslušnost, vzdálenosti, kvadrant); u každé soustavy odkaz na stránky wiki.
+- *Star Trek: Star Charts* (Mandel 2002) sama použitá není (placená kniha); její údaje se dostávají přes Memory Alpha/Beta.
+- Kvadranty: hranice Alfa/Beta = spojnice Slunce–centrum (Memory Alpha „Quadrant“); Beta je na galaktické délce 180–360°
+  – ověřeno na skutečných hvězdách s uvedeným kvadrantem: **370/377 souhlasí**.
+- Skutečné hvězdy (406): jméno z wiki → jasné hvězdy mapy (hvezdy.json) nebo SIMBAD (Sesame); přijato při shodě vzdálenosti
+  (±30 % / 5 ly) nebo souhvězdí; jasná hvězda podle jména vždy (rozpor vzdáleností se v kartě uvede). Např. Vulkán = 40 (ο²) Eridani,
+  Andorie = Prokyon, Wolf 359, Risa = ε Ceti, Omega Leonis.
+- Fiktivní soustavy (56): poloha vypočtená relaxací z údajů „~N ly od Slunce“ a „N ly od X“ + strana kvadrantu + slabě k těžišti
+  mocnosti a k rovině; medián odchylky od údajů 3 %, některé údaje si na wiki odporují (90 % pod ~98 %).
+- Hlavní svět bez údajů (Romulus): směr těžiště soustav mocnosti, strana kvadrantu z wiki, vzdálenost = medián – **odhad**.
+- Mocnosti bez jediné kotvy (Tholiané, Breenové, Gornové, Tzenkethiové, Talariani, Sheliakové, Son'a, Kzinti, Orioni): podle sousedů
+  z Memory Beta / Memory Alpha (tabulka `NEIGHBORS` v pipeline, u každé citovaná stránka) – **odhad**.
+- Gamma a Delta: schematické oblasti (`FAR`): Kazoni 70 000 ly (VOY Caretaker), Krenim 60–65 tis. ly, ostatní podle pořadí cesty
+  Voyageru (skoky 9 500 / 20 000 ly z Memory Alpha „USS Voyager“) – **odhad**; Dominion 45 000 ly od centra (Memory Alpha:
+  40–50 tis.), kánonických „70 000 ly od Bajoru“ s R0 mapy nejde splnit přesně (vychází ~66 500 ly).
+- Ruční opravy: Tzenketh → Tzenkethi (wiki uvádí jen stav z roku 3196); Qo'noS ~15 ly od Omega Leonis (sektorový blok Omega Leonis,
+  Memory Alpha); příslušnost se volí pro 24. století, stav z 32. století má přednost před 23. stoletím a okupacemi.
+- Soustav jen s příslušností a bez jakéhokoli údaje o vzdálenosti je přes 1 000 – na mapu se nedávají (karta mocnosti je počítá).
+
 ### Písma (přibalená v aplikaci, `src/fonts.ts`)
 - Chakra Petch, IBM Plex Sans, IBM Plex Mono – balíčky Fontsource (`@fontsource/*` 5.3), licence **SIL Open Font License 1.1**
   (pole `license` v package.json balíčků + soubor LICENSE v balíčku). Jen podmnožiny latin a latin-ext.

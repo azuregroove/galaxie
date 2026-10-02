@@ -410,6 +410,17 @@ Aktualizovat na konci každého sezení.
   - Ráďa vybral bod 2 (halo jako model); tlačítko „Temná hmota“, 3 slupky (8,21 / 19,6 / 50 kpc) s popisky hustoty
     a hmotnosti uvnitř; objekt „Halo temné hmoty (model)“ v hledání s kartou (čísla z tab. 3, ověřeno z arXiv PDF)
   - opraveno během práce: citace „MNRAS 465, 76“ a rozsah „0,3–0,6 GeV/cm³“ byly zpaměti → nahrazeno DOI a nejistotou z článku
+- 2026-10-02 (cloud, noc): **Star Trek – fanouškovská vrstva hotová** (pushnuto s Ráďovým souhlasem; build OK, Playwright desktop + mobil, bez JS chyb)
+  - Ráďa povolil domény; Memory Alpha + Memory Beta přes MediaWiki API (ditl.org a en.wikipedia proxy dál odmítá – nevadí)
+  - `pipeline/startrek_stahni.py` (14 686 stránek, raw ~25 MB, není v gitu) + `pipeline/startrek.py` → `startrek.json` 128 kB
+  - 473 soustav: 406 skutečných hvězd (Vulkán = 40 Eri, Andorie = Prokyon…), 56 vypočtených z údajů o vzdálenostech,
+    hlavní světy a mocnosti bez kotev odhadem (Romulus podle těžiště; Tholiané, Breenové, Gornové… podle sousedů z Memory Beta)
+  - kontrola: kvadrant uvedený na wiki souhlasí se skutečnou polohou u 370/377 hvězd
+  - Gamma/Delta: 9 schematických oblastí (Dominion, Borg, Kazoni, Talaxiané, Vidiiané, Krenim, Hirogeni, Malon, Devore)
+  - aplikace `src/scene/startrek.ts`: tlačítko „Star Trek“ (výchozí vyp), legenda s 25 mocnostmi + „Bez příslušnosti“,
+    bubliny 14 ly kolem soustav, karta s varováním „fikce“, způsobem umístění a odkazy na wiki; hledání (Qo'noS, Vulcan…)
+  - známé slabiny: Memory Beta míchá zdroje (např. romulanské kotvy Chara 27 ly, Cor Caroli) – ponecháno, jak wiki uvádí;
+    přes 1 000 soustav bez vzdálenosti na mapě není; Delta oblasti leží schematicky na jedné přímce (pořadí cesty Voyageru)
 - 2026-10-02 (cloud): **Star Trek – zablokované** (Ráďa chce hranice ze Star Charts a fanouškovských map, „na nikoho
   nezapomenout“): z cloudu blokované memory-alpha.fandom.com, memory-beta.fandom.com, ditl.org, en.wikipedia.org
   (curl i WebFetch). Star Charts (Mandel 2002) je placená kniha, online legálně není. Čeká na povolení domén nebo
@@ -436,7 +447,7 @@ Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné
    „Nainstalovat“ a offline (DevTools → Network → Offline); po nasazení zkusit instalaci na telefonu.
    Ráďa na PC: zapnout „Gaia 100 pc“ v pohledu Okolí Slunce – plynulost na GPU a hlavně na telefonu (331 tis. bodů);
    případně snížit FAR_COUNT / NEAR_LY v `src/scene/gaia100.ts`.
-   Další: Star Trek (po povolení domén), hledání hvězd Gaia podle ID, spárování s Jasnými hvězdami, etapa 8 (Capacitor)
+   Další: Ráďa zkontroluje Star Trek (správnost mocností), hledání hvězd Gaia podle ID, spárování s Jasnými hvězdami, etapa 8 (Capacitor)
 5. Cloudové kredity: 2. 10. zbývalo 11 $ ze 100 – šetřit
 
 **Dlouhodobě (z 30. 9.):**

@@ -15,6 +15,7 @@ import { LocalStructures } from "./scene/local";
 import { Gaia100 } from "./scene/gaia100";
 import { PillarsLayer, type PillarsMeta } from "./scene/pillars";
 import { DarkMatterLayer } from "./scene/darkMatter";
+import { StarTrekLayer, type StarTrekData } from "./scene/startrek";
 import { ARM_GAIN_DEFAULT, buildBackdrop } from "./scene/backdrop";
 import { LY_PER_PC } from "./core/units";
 import { Overlays } from "./scene/overlays";
@@ -95,6 +96,15 @@ async function main() {
     const gaiaNearBtn = document.getElementById("gaia100") as HTMLButtonElement | null;
     const gaiaNear = gaiaNearBtn && file("gaia100") ? new Gaia100(DATA + file("gaia100"), frame.sun, stage.glow, gaiaNearBtn) : null;
     if (gaiaNear) layers.push(gaiaNear);
+    const trekBtn = document.getElementById("startrek") as HTMLButtonElement | null;
+    let trek: StarTrekLayer | null = null;
+    if (trekBtn && file("startrek")) {
+      try {
+        trek = new StarTrekLayer(await getJson<StarTrekData>(file("startrek")!), frame.sun, stage.glow);
+        layers.push(trek);
+      } catch (e) { console.error(e); }
+    }
+    if (!trek) trekBtn?.remove();
     const dmBtn = document.getElementById("darkMatter") as HTMLButtonElement | null;
     if (dmBtn) layers.push(new DarkMatterLayer(frame.sun, labels, dmBtn));
     if (file("sloupy")) {
@@ -113,6 +123,21 @@ async function main() {
     });
 
     const hud = new Hud(stage, frame, layers, overlays, labels, manifest);
+    if (trek && trekBtn) {
+      const t = trek;
+      const label = () => {
+        trekBtn.textContent = t.anyOn ? "Star Trek: zap" : "Star Trek: vyp";
+        trekBtn.setAttribute("aria-pressed", String(t.anyOn));
+      };
+      trekBtn.onclick = () => {
+        const on = !t.anyOn;
+        t.setAll(on);
+        hud.syncLayer(t.id);
+        label();
+        if (on) hud.toastPublic("Star Trek: fanouškovská vrstva, fikce – polohy jsou extrapolace z Memory Alpha a Memory Beta");
+      };
+      document.getElementById("legend")!.addEventListener("click", () => queueMicrotask(label));
+    }
     if (gaiaNear) hud.extraPick = (px, py, r, rect) => {
       const i = gaiaNear.pickAt(px, py, r, rect, stage);
       if (i == null) return false;

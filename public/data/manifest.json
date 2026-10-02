@@ -197,6 +197,16 @@
         2050
       ],
       "stazeno": "2026-09-30T19:00:16Z"
+    },
+    {
+      "id": "startrek",
+      "soubor": "startrek.json",
+      "nazev": "Star Trek – fanouškovská vrstva (fikce)",
+      "zdroj": "Memory Alpha (memory-alpha.fandom.com) a Memory Beta (memory-beta.fandom.com); polohy skutečných hvězd SIMBAD",
+      "url": "https://memory-alpha.fandom.com/",
+      "licence": "Fakta z wiki: Memory Alpha CC BY-NC, Memory Beta CC BY-SA (uvedeno, nekomerční). Star Trek © Paramount; neoficiální fanouškovská vrstva",
+      "poznamka": "Polohy fiktivních soustav jsou vypočtené z uvedených vzdáleností a kvadrantů, vzdálené mocnosti schematicky.",
+      "vyrez": false
     }
   ]
 }

@@ -29,6 +29,7 @@ export class Hud {
   private rows = new Map<HTMLElement, MapObject>();
   /** Doplní do každé karty vlastní blok (výlet); volá se po sestavení karty. */
   cardExtra: ((card: HTMLElement) => void) | null = null;
+  private legendSync = new Map<string, () => void>();
   /** Výběr z vrstvy mimo seznam (hvězdy Gaia), když klik netrefil žádný běžný objekt; true = klik převzala. */
   extraPick: ((px: number, py: number, radius: number, rect: DOMRect) => boolean) | null = null;
   /** Karta se zavřela (křížkem, Esc, filtrem) nebo ji převzal jiný panel. */
@@ -122,7 +123,7 @@ export class Hud {
         h.className = "legName";
         h.textContent = L.name;
         h.title = "Zapnout / vypnout celou skupinu";
-        h.setAttribute("aria-pressed", "true");
+        h.setAttribute("aria-pressed", String(L.filters.some((f) => f.on)));
         h.setAttribute("aria-label", `${L.name}: celá skupina`);
         h.onclick = () => {
           const on = !L.filters.some((f) => f.on);
@@ -138,7 +139,7 @@ export class Hud {
       for (const f of L.filters) {
         const b = document.createElement("button");
         b.className = "chip";
-        b.setAttribute("aria-pressed", "true");
+        b.setAttribute("aria-pressed", String(f.on));
         b.innerHTML = `<i style="background:var(${f.color})"></i>${escapeHtml(f.name)}`;
         b.onclick = () => {
           L.setFilter(f.key, !f.on);
@@ -150,12 +151,22 @@ export class Hud {
         chips.push([b, f]);
       }
       legend.appendChild(row);
+      this.legendSync.set(L.id, () => {
+        for (const [b, f] of chips) b.setAttribute("aria-pressed", String(f.on));
+        row.querySelector(".legName")?.setAttribute("aria-pressed", String(L.filters.some((x) => x.on)));
+      });
     }
     // panel seznamu začíná pod hlavičkou, jejíž výška závisí na legendě
     const header = document.querySelector<HTMLElement>("header.hud")!;
     const setH = () => document.documentElement.style.setProperty("--header-h", `${header.getBoundingClientRect().bottom}px`);
     new ResizeObserver(setH).observe(header);
     setH();
+  }
+
+  /** Vrstva změnila své přepínače zvenku (tlačítko v liště) – srovnat legendu, seznam a kartu. */
+  syncLayer(id: string): void {
+    this.legendSync.get(id)?.();
+    this.afterVisibilityChange();
   }
 
   private afterVisibilityChange(): void {
@@ -166,7 +177,8 @@ export class Hud {
   }
 
   private updateSubtitle(): void {
-    const parts = this.layers.filter((L) => L.filters.length).map((L) => {
+    // vrstva s úplně vypnutými přepínači (např. fanouškovská Star Trek) do podtitulku nepatří
+    const parts = this.layers.filter((L) => L.filters.some((f) => f.on)).map((L) => {
       const n = L.objects.filter((o) => !o.hidden).length;
       return this.filters.active ? `${L.name}: ${fmt(n)} z ${fmt(L.objects.length)}` : `${L.name}: ${fmt(n)}`;
     });
@@ -461,6 +473,10 @@ export class Hud {
     } catch {
       prompt("Zkopíruj odkaz:", url);
     }
+  }
+
+  toastPublic(text: string): void {
+    this.toast(text);
   }
 
   private toast(text: string): void {
