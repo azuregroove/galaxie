@@ -360,12 +360,18 @@ Aktualizovat na konci každého sezení.
 - 2026-10-02 (cloud): **e-mail JPL odeslán** z Gmailu (Ráďa schválil), podpis Radek Friš; Ráďa: **nasadit až po odpovědi JPL**;
   licence kódu MIT (LICENSE, package.json, README); u Voyageru v kartě doplněno „podle JPL Horizons“
   - přepnutí Pages na „GitHub Actions“ z cloudu nejde (API Pages přes proxy 403) → Ráďa ručně
+- 2026-10-02 (cloud): **bod 7 – Radcliffeova vlna a Místní bublina** (build OK, Playwright bez JS chyb) – domény povoleny
+  - Harvard Dataverse (vše CC0): vlna Konietzka 2024 (model, 300 bodů, barva = vz), bublina O'Neill 2024 (obálka, mřížka 4°)
+  - `pipeline/okoli.py` → `okoli.json` (24 kB), `src/scene/local.ts`, tlačítko „Okolí: vyp/zap“; popisky na bodech z dat
+  - ověřeno: vlna prochází 22–131 pc od 7 známých mračen, délka 2 963 pc; bublina 75–550 pc, nahoru otevřená („komín“)
+  - **Gouldův pás vynechán** – natočení elipsy v Perrot & Grenier 2003 jen v obrázku (viz ZDROJE.md)
+  - bibliografie: O'Neill = ApJ 973, 136 (ADS), Nature články jen DOI (svazek/strana neověřené)
 
 ## Rozdělané
 - etapa 6: čeká na odpověď JPL (e-mail 2. 10.); Ráďa přepne Settings → Pages → Source „GitHub Actions“;
   po odpovědi sloučit větev do main = první nasazení (viz `nasazeni/CHECKLIST.md`)
-- bod 7 (Radcliffeova vlna, Místní bublina, Gouldův pás): čeká na povolení domén arxiv.org, export.arxiv.org,
-  dataverse.harvard.edu, zenodo.org, www.nature.com (proxy 2. 10. hlásí „policy denial“)
+- Gouldův pás: jen pokud se najde zdroj s číselným natočením elipsy (např. tabulka v novější práci) – jinak nechat
+- možné vylepšení: mapa prachu Edenhofer 2024 (Zenodo už povolené) místo / vedle Vergely 2022
 
 ## Další krok
 **Aktuální větev: `claude/vigilant-clarke-yii046`** (= `claude/jolly-thompson-pyvslt` + oprava popisů; push až po souhlasu).

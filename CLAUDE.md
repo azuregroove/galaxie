@@ -50,7 +50,7 @@ Později: prohlídky s komentářem („výlety“), porovnávání objektů, č
 obrázky a odkazy, sdílení pohledu přes #kotvu.
 
 ## Etapy (každá končí funkčním buildem)
-Stav 1. 10. 2026: etapy 1–3 hotové, 4 hotová (kromě porovnání objektů – odloženo); z 5 hotová ramena (Reid 2019 + Gaia) a jasné hvězdy. Podrobnosti v STAV.md a NAVRHY.md.
+Stav 2. 10. 2026: etapa 6 připravená, čeká na svolení JPL (e-mail odeslán 2. 10.); etapy 1–3 hotové, 4 hotová (kromě porovnání objektů – odloženo); z 5 hotová ramena (Reid 2019 + Gaia) a jasné hvězdy. Podrobnosti v STAV.md a NAVRHY.md.
 1. ~~Kostra aplikace + převod prototypu + datová pipeline pro 1 katalog (exoplanety)~~
 2. ~~Výkon: tisíce objektů, LOD, vyhledávání, filtry, mobilní ovládání~~
 3. ~~Hvězdokupy, mlhoviny, pulsary, černé díry~~
@@ -64,8 +64,8 @@ Stav 1. 10. 2026: etapy 1–3 hotové, 4 hotová (kromě porovnání objektů �
    - ~~časová osa objevů~~ (1. 10.); porovnání objektů – zatím ne (Ráďa)
 5. Stavba Galaxie podle modelů, vzorek hvězd z Gaia, doladění vzhledu – hotovo: ramena Reid 2019, ramena z Gaia,
    jasné hvězdy V ≤ 4,5. Zbývá (data na arXiv, Harvard Dataverse, Zenodo – nejdřív povolit domény):
-   - Radcliffeova vlna, Místní bublina, Gouldův pás (NAVRHY.md bod 7)
-   - 3D prachová mapa Edenhofer et al. 2024 do 1,25 kpc (NAVRHY.md bod 8)
+   - ~~Radcliffeova vlna, Místní bublina~~ (2. 10., Konietzka 2024, O'Neill 2024); Gouldův pás vynechán (chybí číselné natočení)
+   - ~~3D prachová mapa~~ (2. 10., Vergely et al. 2022 z CDS; Edenhofer 2024 možno doplnit)
    - vzorek Gaia do 100 pc v dlaždicích/octree; ověřit rozměry disku a tab. 2 Reid 2019 přímo v článku
    - galaxie Místní skupiny – rozšíření rozsahu, jen pokud Ráďa schválí (NAVRHY.md bod 12)
    - planetky a komety: plný katalog na vyžádání (dlaždice podle skupin), MPC

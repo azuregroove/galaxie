@@ -138,6 +138,19 @@
       "poznamka": "Jasné hvězdy doplněné podle označení HIP (P528, obrazky_hvezdy.py). Popis v kartě = úvod článku české Wikipedie, načtený až při otevření karty; text CC BY-SA 4.0, autoři v historii článku."
     },
     {
+      "id": "okoli",
+      "soubor": "okoli.json",
+      "nazev": "Struktury okolí Slunce (Radcliffeova vlna, Místní bublina)",
+      "zdroj": "Konietzka et al. 2024, Nature (doi:10.7910/DVN/F98QHY); Alves et al. 2020, Nature; O'Neill et al. 2024, ApJ 973, 136 (doi:10.7910/DVN/INB1RB) – Harvard Dataverse",
+      "url": "https://dataverse.harvard.edu/dataverse/radwavemotion",
+      "licence": "CC0 1.0 (Harvard Dataverse)",
+      "citace": "Konietzka R. et al. 2024, Nature, doi:10.1038/s41586-024-07127-3; Alves J. et al. 2020, Nature, doi:10.1038/s41586-019-1874-z; O'Neill T. J. et al. 2024, ApJ 973, 136",
+      "poznamka": "Vlna = nejlepší model (ne jednotlivá mračna); bublina = vrchol hustoty obálky z 3D mapy prachu Edenhofer et al. 2024, medián v buňkách 4° × 4°.",
+      "objektu": 2,
+      "stazeno": "2026-10-02T20:16:20Z",
+      "vyrez": false
+    },
+    {
       "id": "prach",
       "soubor": "prach.json",
       "nazev": "3D mapa mezihvězdného prachu",

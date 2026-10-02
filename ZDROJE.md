@@ -168,3 +168,15 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
   jsou ilustrační, nejde o simulaci skutečného zčervenání.
 - Licence: CDS/VizieR (rights_uri https://cds.unistra.fr/vizier-org/licences_vizier.html – **text neověřen**, z cloudu blokované);
   citovat článek.
+
+### Struktury okolí Slunce (`pipeline/okoli.py` → `okoli.json`, přepínač „Okolí“)
+- Radcliffeova vlna: nejlepší model Konietzka R. et al. 2024, Nature, doi:10.1038/s41586-024-07127-3 – Harvard Dataverse
+  doi:10.7910/DVN/F98QHY (CC0), 1 500 bodů → 300; barva čáry = svislá rychlost vz. Objev: Alves J. et al. 2020, Nature,
+  doi:10.1038/s41586-019-1874-z (model doi:10.7910/DVN/OE51SZ, CC0, jen pro srovnání). Kontrola: model prochází 22–131 pc
+  od North America, Cepheus, Cygnus X, CMa OB1, Orion A, Perseus, Taurus; délka 2 963 pc.
+- Místní bublina: O'Neill T. J. et al. 2024, ApJ 973, 136 („The Local Bubble is a Local Chimney“), doi:10.7910/DVN/INB1RB (CC0),
+  `ONeill2024_LocalBubble_ShellProperties_A0.5.fits` (HEALPix nside 256), sloupec d (vrchol hustoty obálky), medián v buňkách 4° × 4°
+  → 75–550 pc, medián 175 pc. Vykreslená jako síť rovnoběžek po 12° a poledníků po 24°.
+- Svazky a strany článků v Nature z cloudu neověřené (nature.com přesměrovává) → uvedeno DOI.
+- **Gouldův pás vynechán:** Perrot & Grenier 2003 (A&A, astro-ph/0303516) udávají střed 104 pc směrem l = 180,4°, poloosy
+  373 × 233 pc (v textu 354 × 232), sklon 17,2°, uzel l = 296,1°, ale natočení hlavní osy elipsy jen v obr. 5 – bez něj by elipsa byla odhad.
