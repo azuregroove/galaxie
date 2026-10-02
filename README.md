@@ -63,4 +63,5 @@ npm run preview   # náhled buildu
 - **R₀ = 8,15 kpc** (Reid et al. 2019), hodnota je v `manifest.json` a pipeline (`pipeline/common.py`).
 - Data katalogů mají vzdálenosti v **pc**, souřadnice galaktické l, b ve stupních (přepočet z RA/Dec přes astropy).
 - U každého objektu evidujeme zdroj polohy; nejistoty se ukazují v kartě.
-- Zdroje a licence: [ZDROJE.md](ZDROJE.md).
+- Zdroje a licence dat: [ZDROJE.md](ZDROJE.md).
+- Licence kódu: MIT ([LICENSE](LICENSE)); data v `public/data/` mají licence svých zdrojů.

@@ -357,9 +357,13 @@ Aktualizovat na konci každého sezení.
   poděkování NASA archivu ověřeno + citace Christiansen et al. 2025; CDS, DSS, JPL copyright a licence Gaia z cloudu blokované
   → Ráďa ověří v prohlížeči. Repo nemá LICENSE (návrh MIT). **Nenasazeno** – čeká na rozhodnutí (svolení JPL, viz checklist)
 
+- 2026-10-02 (cloud): **e-mail JPL odeslán** z Gmailu (Ráďa schválil), podpis Radek Friš; Ráďa: **nasadit až po odpovědi JPL**;
+  licence kódu MIT (LICENSE, package.json, README); u Voyageru v kartě doplněno „podle JPL Horizons“
+  - přepnutí Pages na „GitHub Actions“ z cloudu nejde (API Pages přes proxy 403) → Ráďa ručně
+
 ## Rozdělané
-- etapa 6: čeká na Ráďu – kontrola e-mailu JPL (`nasazeni/email-jpl.md`), nastavení Pages → Source „GitHub Actions“,
-  rozhodnutí kdy sloučit do main (viz `nasazeni/CHECKLIST.md`), licence kódu
+- etapa 6: čeká na odpověď JPL (e-mail 2. 10.); Ráďa přepne Settings → Pages → Source „GitHub Actions“;
+  po odpovědi sloučit větev do main = první nasazení (viz `nasazeni/CHECKLIST.md`)
 - bod 7 (Radcliffeova vlna, Místní bublina, Gouldův pás): čeká na povolení domén arxiv.org, export.arxiv.org,
   dataverse.harvard.edu, zenodo.org, www.nature.com (proxy 2. 10. hlásí „policy denial“)
 

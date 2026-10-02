@@ -12,14 +12,13 @@ Stav k 2. 10. 2026. ✅ = ověřeno, ⛔ = z cloudu nešlo ověřit (blokovaná 
 - ✅ Velikost webu 6,4 MB (limit Pages 1 GB); největší soubor prach-detail.bin.gz 1,2 MB.
 - 👤 **Settings → Pages → Build and deployment → Source: „GitHub Actions“** (jinak workflow nasadí, ale Pages dál servírují starý zdroj).
 - 👤 Sloučit pracovní větev do `main` = první veřejné nasazení (adresa https://azuregroove.github.io/galaxie/).
-- 👤 Licence vlastního kódu: repozitář zatím nemá soubor LICENSE (bez něj platí „všechna práva vyhrazena“).
-  Návrh: MIT pro kód; data mají licence svých zdrojů (ZDROJE.md).
+- ✅ Licence kódu MIT (`LICENSE`, Ráďa 2. 10.); data mají licence svých zdrojů (ZDROJE.md).
 
 ## Licence a svolení dat
 | Zdroj | Stav | Co zbývá |
 |---|---|---|
 | NASA Exoplanet Archive | ✅ text poděkování ověřen (acknowledge.html), doplněna citace Christiansen et al. 2025 | – |
-| JPL SSD (planety, měsíce, planetky, Horizons) | ✅ FAQ: k převzetí je potřeba svolení; kontakt contact-ssd@jpl.nasa.gov | 👤 odeslat e-mail (`email-jpl.md`) a počkat na odpověď |
+| JPL SSD (planety, měsíce, planetky, Horizons) | ✅ FAQ: k převzetí je potřeba svolení; kontakt contact-ssd@jpl.nasa.gov | e-mail odeslán 2. 10. 2026 → čeká se na odpověď |
 | JPL copyright (jpl.nasa.gov/copyrights.cfm) | ⛔ 403 z cloudu | 👤 přečíst v prohlížeči |
 | CDS/VizieR (kupy, mlhoviny, pulsary 2016, BlackCAT, Hipparcos, prach…) | ⛔ rights_uri https://cds.unistra.fr/vizier-org/licences_vizier.html | 👤 přečíst v prohlížeči; citace článků v aplikaci jsou |
 | DSS přes hips2fits (výřezy oblohy) | ⛔ http://archive.stsci.edu/dss/copyright.html | 👤 přečíst; při problému výřezy vypnout |
@@ -38,6 +37,6 @@ Stav k 2. 10. 2026. ✅ = ověřeno, ⛔ = z cloudu nešlo ověřit (blokovaná 
 
 ## Rozhodnutí před prvním nasazením (👤)
 Svolení JPL zatím není. Možnosti:
-1. **Počkat na odpověď JPL** a nasadit vše najednou (doporučuji, odpověď slibují „za několik dní“).
+1. **Počkat na odpověď JPL** a nasadit vše najednou – **zvoleno 2. 10.**
 2. Nasadit hned bez dat JPL (pohled Sluneční soustava by zmizel do odpovědi; exoplanety, kupy, mlhoviny… zůstanou).
 3. Nasadit hned vše – v rozporu s FAQ JPL, nedoporučuji.

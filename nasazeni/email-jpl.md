@@ -1,4 +1,8 @@
-# E-mail pro JPL Solar System Dynamics – KONCEPT (neodesláno)
+# E-mail pro JPL Solar System Dynamics – ODESLÁNO 2. 10. 2026
+
+Odesláno z Gmailu na contact-ssd@jpl.nasa.gov (Ráďa schválil). Odeslaná verze se od konceptu níž liší:
+odkaz na repozitář, věta o odkazech na SBDB („already links“, odkazy jsou v aplikaci od 2. 10.) a podpis celým jménem.
+Čeká se na odpověď (JPL uvádí několik dní).
 
 Proč: FAQ JPL SSD (https://ssd.jpl.nasa.gov/faq.html, ověřeno 2. 10. 2026) na otázku
 „I'd like to publish information from your site on my site. Do I need permission?“ odpovídá
@@ -10,7 +14,7 @@ Komu: **contact-ssd@jpl.nasa.gov** (na stránce https://ssd.jpl.nasa.gov/contact
 proti spamu: „vog.asan.lpj@dss-tcatnoc“), nebo formulář na téže stránce (předmět 8–80 znaků).
 Stránka upozorňuje, že odpověď může trvat několik dní a že neodpovídají na všechno.
 
-Před odesláním doplň: **[jméno a příjmení]**. Adresu webu jsem napsala tak, jak bude po nasazení
+Adresu webu jsem napsala tak, jak bude po nasazení
 (GitHub Pages, repozitář `galaxie` na účtu `azuregroove`) – po nasazení ověřit, že funguje.
 
 ---
@@ -57,7 +61,7 @@ with links to your site.
 Thank you very much for your work and for the excellent tools.
 
 Kind regards,
-[jméno a příjmení]
+(podpis celým jménem)
 Pilsen, Czech Republic
 
 ---
@@ -99,7 +103,7 @@ Pokud byste si nepřáli, abychom některé hodnoty šířili, odstraníme je ne
 Děkuji za vaši práci a za skvělé nástroje.
 
 S pozdravem
-[jméno a příjmení]
+(podpis celým jménem)
 Plzeň, Česko
 
 ## Co zkontrolovat před odesláním
