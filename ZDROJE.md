@@ -180,3 +180,8 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 - Svazky a strany článků v Nature z cloudu neověřené (nature.com přesměrovává) → uvedeno DOI.
 - **Gouldův pás vynechán:** Perrot & Grenier 2003 (A&A, astro-ph/0303516) udávají střed 104 pc směrem l = 180,4°, poloosy
   373 × 233 pc (v textu 354 × 232), sklon 17,2°, uzel l = 296,1°, ale natočení hlavní osy elipsy jen v obr. 5 – bez něj by elipsa byla odhad.
+
+### Písma (přibalená v aplikaci, `src/fonts.ts`)
+- Chakra Petch, IBM Plex Sans, IBM Plex Mono – balíčky Fontsource (`@fontsource/*` 5.3), licence **SIL Open Font License 1.1**
+  (pole `license` v package.json balíčků + soubor LICENSE v balíčku). Jen podmnožiny latin a latin-ext.
+- Dřív se načítala z Google Fonts; přibalení kvůli offline režimu (etapa 7) a bez požadavků na Google.

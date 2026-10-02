@@ -54,8 +54,12 @@ Syrové CSV se ukládá do `pipeline/raw/` (není v gitu). Test na výřezu: `py
 ```powershell
 npm run dev       # vývojový server, otevři adresu z výpisu (obvykle http://localhost:5173)
 npm run build     # typová kontrola + produkční build do dist/
-npm run preview   # náhled buildu
+npm run preview   # náhled buildu (včetně service workeru a offline režimu)
 ```
+
+PWA: `vite-plugin-pwa` (konfigurace ve `vite.config.ts`, registrace a nabídka nové verze v `src/pwa.ts`).
+Service worker vzniká jen při `npm run build`; v `npm run dev` není. Offline je aplikace + všechny JSON katalogy,
+prach a obrázky/popisy z Wikimedie se ukládají až při použití. Ikony v `public/icons/` (zdroj `icon.svg`).
 
 ## Konvence
 

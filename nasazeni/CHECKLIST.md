@@ -27,7 +27,7 @@ Stav k 2. 10. 2026. ✅ = ověřeno, ⛔ = z cloudu nešlo ověřit (blokovaná 
 | Wikidata | ✅ CC0 | – |
 | ATNF Pulsar Catalogue | ✅ volně s citací | data jsou verze 2016 → 👤 na PC `py pipeline\neutronove_hvezdy.py` |
 | McGill magnetary, Baumgardt kulové kupy | volně s citací (bez výslovné licence) | – |
-| Google Fonts | OFL, načítá se z Google | pro offline (etapa 7) přibalit |
+| Písma (Chakra Petch, IBM Plex) | ✅ OFL 1.1, přibalená přes Fontsource (2. 10.) | – |
 
 ## Aktualizace dat (podle CLAUDE.md před nasazením)
 - ✅ exoplanety 1. 10. 2026 (6 375 planet)

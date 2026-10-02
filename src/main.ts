@@ -1,3 +1,4 @@
+import "./fonts";
 import "./styles.css";
 import { Vector3 } from "three";
 import { Frame } from "./core/coords";
@@ -24,6 +25,7 @@ import { Hud } from "./ui/hud";
 import { Labels } from "./ui/labels";
 import { Tours } from "./ui/tours";
 import { Timeline } from "./ui/timeline";
+import { initPwa } from "./pwa";
 
 const css = (n: string) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const DATA = `${import.meta.env.BASE_URL}data/`;
@@ -35,6 +37,7 @@ async function getJson<T>(file: string): Promise<T> {
 }
 
 async function main() {
+  initPwa();
   const status = document.getElementById("status")!;
   try {
     const manifest = await getJson<Manifest>("manifest.json");

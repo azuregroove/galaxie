@@ -6,9 +6,8 @@
     <meta name="description" content="Interaktivní 3D mapa Mléčné dráhy: exoplanety, černé díry a další objekty s polohou vůči Slunci." />
     <meta name="theme-color" content="#05070d" />
     <title>Mapa Mléčné dráhy</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
   </head>
   <body>
     <button class="skip" id="skip">Přejít na hledání a seznam objektů</button>
@@ -17,6 +16,11 @@
     <div id="announce" class="sr-only" role="status" aria-live="polite"></div>
     <div id="status" role="status">Načítám data…</div>
     <div id="toast" role="status" hidden></div>
+    <div class="hud" id="update" role="status" hidden>
+      <span>Je k dispozici nová verze mapy.</span>
+      <button class="btn small" data-act="reload">Načíst</button>
+      <button class="btn small" data-act="later">Později</button>
+    </div>
     <div class="hud" id="touchHint" hidden>
       <p><b>1 prst</b> otáčení · <b>2 prsty</b> zoom a posun<br><b>klep</b> na objekt = přelet · <b>dvojklep</b> = přiblížit<br>kartu zavřeš tahem dolů</p>
       <button class="btn">Rozumím</button>

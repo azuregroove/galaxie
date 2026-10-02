@@ -139,7 +139,6 @@ Aktualizovat na konci každého sezení.
 - Výkon Etapy 2 v cloudu měřit nejde (WebGL běží softwarově na CPU) – ověřit na PC a na skutečném telefonu
 - Mobilní ovládání testované jen emulací dotyku v Playwrightu, ne na fyzickém telefonu
 - Posuvníky filtrů jsou dva samostatné (od/do), ne jeden se dvěma jezdci
-- Fonty z Google Fonts – pro PWA/offline je bude třeba přibalit
 - JS bundle 585 kB (gzip 148 kB), většina je three.js
 - data-pipeline/ je nahrazená složkou pipeline/, ponechaná kvůli historii
 
@@ -366,6 +365,20 @@ Aktualizovat na konci každého sezení.
   - ověřeno: vlna prochází 22–131 pc od 7 známých mračen, délka 2 963 pc; bublina 75–550 pc, nahoru otevřená („komín“)
   - **Gouldův pás vynechán** – natočení elipsy v Perrot & Grenier 2003 jen v obrázku (viz ZDROJE.md)
   - bibliografie: O'Neill = ApJ 973, 136 (ADS), Nature články jen DOI (svazek/strana neověřené)
+- 2026-10-02 (cloud, večer): **etapa 7 – PWA** (build OK, Playwright desktop 1400×860 + mobil 390×844, bez JS chyb).
+  Od JPL zatím odpověď nepřišla (Gmail: jen odeslaný e-mail). Ráďa zvolil PWA a `vite-plugin-pwa` (1.3.0, Workbox 7.4).
+  - fonty přibalené z Fontsource (OFL 1.1, jen latin + latin-ext a používané řezy) → žádné požadavky na Google
+  - manifest (`manifest.webmanifest`: název, `standalone`, barvy, ikony 192/512/maskable/SVG), ikona `public/icons/icon.svg`
+    (dekorativní spirála, ne model Galaxie) → PNG přes Chromium; apple-touch-icon
+  - precache 38 souborů / 4,9 MB: aplikace, fonty, ikony, **všechny JSON katalogy**; prach (`.bin.gz`) až po zapnutí
+    (CacheFirst), náhledy Commons + hips2fits CacheFirst max 60 / 30 dní, Wikipedie + Commons API NetworkFirst (5 s)
+  - `registerType: "prompt"`: nová verze se nenačte sama uprostřed letu, nahoře lišta „Je k dispozici nová verze mapy“
+    (Načíst / Později); po prvním uložení hláška „Mapa je uložená a funguje i bez internetu“
+  - ověřeno v Playwrightu: první načtení → offline → reload: mapa, 6 vrstev, hledání „trappist“ fungují, 0 požadavků mimo
+    localhost; prach po zapnutí uložen a offline se zapne; nový build → lišta s novou verzí → Načíst
+  - pozn.: při úplně první návštěvě stránku SW ještě neřídí (prompt režim bez clientsClaim) → prach a obrázky
+    se ukládají až od druhého načtení; katalogy jsou offline hned
+  - neověřeno: instalace na plochu na skutečném telefonu (Android/iOS) a chování na GitHub Pages (až po nasazení)
 
 ## Rozdělané
 - etapa 6: čeká na odpověď JPL (e-mail 2. 10.);
@@ -374,9 +387,9 @@ Aktualizovat na konci každého sezení.
 - možné vylepšení: mapa prachu Edenhofer 2024 (Zenodo už povolené) místo / vedle Vergely 2022
 
 ## Další krok
-**Aktuální větev: `claude/vigilant-clarke-yii046`** (vše pushnuté 2. 10., poslední commit = bod 7). `main` je stále na etapě 3.
+**Aktuální větev: `claude/busy-hypatia-fvo0mb`** (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` je stále na etapě 3.
 Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve.
-Na PC: `git fetch origin`, `git switch claude/vigilant-clarke-yii046`, `git pull`, `npm install`, `npm run dev`.
+Na PC: `git fetch origin`, `git switch claude/busy-hypatia-fvo0mb`, `git pull`, `npm install`, `npm run dev`.
 Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné nasazení) až po odpovědi JPL.
 
 1. **Čeká se na odpověď JPL** (e-mail z Gmailu 2. 10., vlákno „Permission request: JPL SSD data…“). Po kladné odpovědi:
@@ -384,7 +397,9 @@ Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné
 2. Pages Source = „GitHub Actions“ už je (Ráďa ověřil 2. 10.); Ráďa: přečíst podmínky CDS, DSS, JPL copyright,
    licence dat Gaia (odkazy v `nasazeni/CHECKLIST.md`)
 3. Ráďa na PC: vyzkoušet Prach (6 kpc / 3 kpc) a Okolí – výkon na GPU a telefonu; ATNF pulsary (`py pipeline\neutronove_hvezdy.py`)
-4. Pak etapa 7 (PWA: přibalit fonty, offline sada) nebo zbytek etapy 5 (vzorek Gaia do 100 pc)
+4. Etapa 7 (PWA) hotová v kódu – Ráďa na PC: `npm install`, `npm run build`, `npm run preview`, v Chrome zkusit
+   „Nainstalovat“ a offline (DevTools → Network → Offline); po nasazení zkusit instalaci na telefonu.
+   Další: zbytek etapy 5 (vzorek Gaia do 100 pc – před stažením ohlásit velikost) nebo etapa 8 (Capacitor)
 5. Cloudové kredity: 2. 10. zbývalo 11 $ ze 100 – šetřit
 
 **Dlouhodobě (z 30. 9.):**

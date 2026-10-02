@@ -88,6 +88,8 @@ h1 { font: 600 18px/1.15 var(--f-display); margin: 0; letter-spacing: 0.03em; }
 .dim { color: var(--dim); }
 #toast { position: fixed; left: 50%; bottom: calc(var(--bar-h, 64px) + 30px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--panel); border: 1px solid var(--accent); border-radius: 8px; padding: 7px 14px; font-size: 12.5px; z-index: 10; }
 #toast[hidden] { display: none; }
+#update { left: 16px; right: 16px; top: calc(12px + env(safe-area-inset-top, 0px)); width: fit-content; margin: 0 auto; display: flex; gap: 8px; align-items: center; padding: 8px 12px; font-size: 12.5px; z-index: 11; background: var(--void); border-color: var(--accent); }
+#update[hidden] { display: none; }
 .subRow { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .subRow .toggles { display: flex; gap: 6px; flex-shrink: 0; }
 .subRow .btn[aria-pressed="true"] { border-color: rgba(143, 180, 255, 0.5); }
