@@ -519,7 +519,8 @@ export class SystemView {
   private renderInfo(bv: BodyView): void {
     const b = bv.b;
     if (b.info) {
-      this.q(".sysFocus").innerHTML = `<b>${escapeHtml(b.name)}</b> · ${escapeHtml(b.info)}`;
+      const link = b.link ? ` · <a href="${escapeHtml(b.link.href)}" target="_blank" rel="noopener">${escapeHtml(b.link.text)}</a>` : "";
+      this.q(".sysFocus").innerHTML = `<b>${escapeHtml(b.name)}</b> · ${escapeHtml(b.info)}${link}`;
       return;
     }
     const parts = [b.name !== (b.label ?? b.name) ? b.name : null,
@@ -849,9 +850,16 @@ export class SystemView {
       box.innerHTML = "";
       return;
     }
-    const hits: number[] = [];
     const names = d.sloupce.jmeno;
-    for (let k = 0; k < names.length && hits.length < 8; k++) if (norm(names[k]).includes(q)) hits.push(k);
+    // shoda na začátku slova dopředu („eros“ → 433 Eros před 947 Monterosa)
+    const word: number[] = [], inner: number[] = [];
+    for (let k = 0; k < names.length; k++) {
+      const n = norm(names[k]);
+      const i = n.indexOf(q);
+      if (i < 0) continue;
+      (i === 0 || !/[a-z0-9]/.test(n[i - 1]) ? word : inner).push(k);
+    }
+    const hits = word.concat(inner).slice(0, 8);
     box.innerHTML = hits.length
       ? hits.map((k) => `<button class="linkish" data-k="${k}"><i class="dot" style="background:${SMALL_COLORS[d.sloupce.skupina[k]]}"></i>${escapeHtml(names[k])}</button>`).join("")
       : `<span class="dim">Ve vzorku není.</span>`;

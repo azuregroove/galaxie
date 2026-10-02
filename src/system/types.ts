@@ -28,6 +28,8 @@ export interface OrbitBody {
   imgKey?: string;
   /** text do řádku vybraného tělesa místo výchozího (planetky a komety) */
   info?: string;
+  /** odkaz na zdroj údajů (např. stránka tělesa v JPL SBDB) */
+  link?: { href: string; text: string };
   children?: OrbitBody[];
   /** poznámka k přesnosti do tabulky */
   note?: string;

@@ -285,12 +285,13 @@ def main():
         rs = query(name, params)
         print(f"  {name}: {len(rs)}")
         for r in rs:
-            rows.setdefault(r["spkid"], (name, r))
+            # Query API vrací spkid jako číslo, SBDB API jako text – bez sjednocení se cíle sond zdvojily
+            rows.setdefault(str(r["spkid"]), (name, r))
     n_extra = 0
     for s in EXTRA:
         r = extra(s)
-        if r["spkid"] not in rows:
-            rows[r["spkid"]] = ("extra", r)
+        if str(r["spkid"]) not in rows:
+            rows[str(r["spkid"])] = ("extra", r)
             n_extra += 1
     print(f"  navíc (cíle sond, slavné komety): {n_extra} z {len(EXTRA)}")
 

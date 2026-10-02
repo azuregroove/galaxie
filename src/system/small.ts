@@ -73,7 +73,18 @@ export function smallBody(d: SmallData, k: number): OrbitBody {
     epoch: c.epocha[k], m0: c.m0[k], n: c.n[k], p: e < 1 ? 360 / c.n[k] : Infinity,
     r: c.d_km[k] != null ? c.d_km[k]! / 2 / 6371 : null,
     color: SMALL_COLORS[c.skupina[k]], info: parts.join(" · "),
+    link: { href: sbdbLink(name), text: "JPL SBDB" },
   };
+}
+
+/**
+ * Stránka tělesa v JPL SBDB (formát „#/?sstr=“ podle sbdb_lookup/js/app.js, ověřeno 2. 10. 2026). Hledá se podle
+ * označení, ne podle jména (česká jména a jména objevitelů SBDB nezná): „433“, „1P“, „C/2023 A3“, „2024 YR4“.
+ */
+function sbdbLink(name: string): string {
+  const m = name.match(/^(\d+) /) ?? name.match(/^(\d+[PDI])\//) ?? name.match(/^([PCDXAI]\/\d{4} [A-Z]{1,2}\d*(?:-[A-Z])?)/);
+  const key = m ? m[1] : shortName(name).replace(/ \(.*\)$/, "");
+  return `https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html#/?sstr=${encodeURIComponent(key)}`;
 }
 
 /** „433 Eros (A898 PA)“ → „433 Eros“, „(2024 YR4)“ → „2024 YR4“. */

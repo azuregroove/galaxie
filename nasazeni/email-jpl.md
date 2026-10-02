@@ -33,7 +33,7 @@ exactly what we use and how:
 2. Planetary satellites: the list of satellites, their physical parameters
    (https://ssd.jpl.nasa.gov/sats/phys_par/) and osculating orbital elements of 459 moons from Horizons
    at three epochs in 2026–2027.
-3. Small-Body Database: osculating elements of the five dwarf planets, and a sample of 3,187
+3. Small-Body Database: osculating elements of the five dwarf planets, and a sample of 3,177
    asteroids and comets selected by orbit class and absolute magnitude (SBDB Query API: elements, H,
    diameter, orbit class); for 539 bodies with old epochs, elements from Horizons at 2026-01-01.
 4. Horizons: a single value, the heliocentric speed of Voyager 1 (used to illustrate travel times).
@@ -78,7 +78,7 @@ a jak používáme:
 
 1. Keplerovské elementy pro přibližné polohy velkých planet (Standish, tab. 1) a střední poloměry planet.
 2. Měsíce planet: seznam, fyzikální parametry a oskulační elementy 459 měsíců z Horizons ke třem epochám 2026–2027.
-3. Small-Body Database: oskulační elementy pěti trpasličích planet a vzorek 3 187 planetek a komet
+3. Small-Body Database: oskulační elementy pěti trpasličích planet a vzorek 3 177 planetek a komet
    vybraný podle třídy dráhy a absolutní magnitudy (SBDB Query API: elementy, H, průměr, třída dráhy);
    u 539 těles se starou epochou elementy z Horizons k 1. 1. 2026.
 4. Horizons: jediná hodnota, heliocentrická rychlost Voyageru 1 (ilustrace doby cesty).
@@ -107,5 +107,5 @@ Plzeň, Česko
 - [ ] adresa webu – nasazení na GitHub Pages proběhne až po tvém souhlasu; e-mail lze poslat i před ním
 - [ ] „source code is public on GitHub“ – platí, jen pokud je repozitář veřejný (GitHub Pages zdarma
       vyžaduje veřejný repozitář, pokud nemáš placený plán)
-- [ ] slib „přímé odkazy na stránku SBDB u každého tělesa“ – zatím v aplikaci **nejsou**, dodělám před nasazením
-- [ ] počty (459 měsíců, 3 187 těles, 539 z Horizons, ~670 kB) = stav dat k 30. 9. 2026
+- [x] slib „přímé odkazy na stránku SBDB u každého tělesa“ – hotovo 2. 10. (odkaz „JPL SBDB“ u vybrané planetky/komety)
+- [ ] počty (459 měsíců, 3 177 těles, 539 z Horizons, ~670 kB) = stav dat k 30. 9. 2026

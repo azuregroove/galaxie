@@ -156,7 +156,7 @@ Aktualizovat na konci každého sezení.
   - předběžná označení měsíců zobrazena jako „S/2020 S 15“
 
 - 2026-09-30 (cloud, nové sezení): **3c – planetky a komety** (build OK, Playwright desktop 1400×860 + mobil 390×844, bez JS chyb)
-  - `pipeline/mala_telesa.py` → `mala-telesa.json` (442 kB, sloupcový): vzorek 3 187 těles z JPL SBDB Query API po skupinách
+  - `pipeline/mala_telesa.py` → `mala-telesa.json` (442 kB, sloupcový): vzorek 3 187 (po opravě 2. 10. 3 177) těles z JPL SBDB Query API po skupinách
     (pas H ≤ 11: 1 185, NEO H ≤ 17,75: 883, trojáni H ≤ 11: 214, kentauři H ≤ 10: 154, TNO H ≤ 5,5: 232, číslované komety: 516,
     mezihvězdná 3 + ruční výběr cílů sond a slavných komet); podle samotného H by vyšla skoro jen TNO
   - 540 těles se starou epochou (komety) → elementy z Horizons k 1. 1. 2026; kontrola 14 těles proti Horizons k dnešku do 0,3′
@@ -346,6 +346,12 @@ Aktualizovat na konci každého sezení.
 - 2026-10-02 (cloud): **bod 7 (Radcliffeova vlna, Místní bublina, Gouldův pás) blokovaný** – data Alves 2020 a Zucker 2022 jsou na arXiv/
   Dataverse/nature.com; proxy je 2. 10. stále odmítá (politika sítě), VizieR ani PyPI je nemají
 - 2026-10-02 (cloud): etapa 6 – koncept e-mailu pro JPL `nasazeni/email-jpl.md` (adresa contact-ssd@jpl.nasa.gov z kontaktní stránky)
+- 2026-10-02 (cloud): **etapa 6 – odkazy na JPL SBDB + oprava duplicit** (build OK, Playwright bez JS chyb)
+  - vybraná planetka/kometa má odkaz „JPL SBDB“ (`#/?sstr=` podle kódu stránky SBDB; hledá se označení: 433, 1P, C/2023 A3, 2024 YR4)
+  - **chyba v datech:** 10 cílů sond (Psyche, Lutetia, Ida, Mathilde, Phaethon, Toutatis, Patroclus, Eurybates, Orus, Leucus) bylo
+    dvakrát – Query API vrací spkid jako číslo, SBDB API jako text; `mala_telesa.py` opraven (str), JSON deduplikován bez nového
+    stahování → 3 177 těles (pás 1 181, NEO 881, trojáni 210), manifest a e-mail opraveny
+  - hledání planetek řadí shodu na začátku slova dopředu („eros“ → 433 Eros, dřív 947 Monterosa)
 
 ## Rozdělané
 - nic (aktualizace exoplanet pushnutá 1. 10. s Ráďovým souhlasem)
@@ -369,7 +375,7 @@ nebo příprava etapy 6 (svolení JPL, podmínky DSS/CDS, aktualizace dat). Na P
   chráněné mapy (např. oficiální Star Charts) doslova, jen fakta a vlastní odvození; ochranné známky Paramount – ověřit
 - Úplně nakonec: e-mail JPL SSD kvůli svolení k datům (před etapou 6 – nasazení)
 
-- Ráďa: změřit výkon na PC/GPU a na telefonu (hlavně Soustava s 3 187 planetkami); na PC už vyzkoušeno 30. 9. („boží“)
+- Ráďa: změřit výkon na PC/GPU a na telefonu (hlavně Soustava s 3 177 planetkami); na PC už vyzkoušeno 30. 9. („boží“)
 - Na PC: `py -m pip install psrqpy` a `py pipeline\neutronove_hvezdy.py` (aktuální ATNF místo verze 2016)
 - Případně HASH (planetární mlhoviny) na PC
 - 2026-09-30: Ráďa odsouhlasil commit + push 3c do claude/sharp-cerf-bzaom6
