@@ -196,6 +196,31 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 - RUWE nad 1,4 – v kartě poznámka; hranice 1,4 je běžně používaná v dokumentaci Gaia, článek zde neověřen.
 - Velikost: grafika 2,35 MB (.bin.gz, načte se po zapnutí vrstvy), údaje karet 11 kousků po ~0,55 MB (načtou se po kliknutí).
 
+### Sloupy stvoření – 3D rekonstrukce (`pipeline/sloupy.py` → `sloupy.json`, `sloupy.bin.gz`)
+- **Rekonstrukce, ne měřený tvar.** 83 192 bodů, 469 kB.
+- Obrys: tmavé pixely výřezu Pan-STARRS DR1 (HiPS `CDS/P/PanSTARRS/DR1/color-z-zg-g`, hips2fits 900 × 900 px, 0,36″/px,
+  střed 274,712° / −13,835°). Podmínky použití Pan-STARRS ověřit (z cloudu nedostupné). Ze snímku se bere jen maska a jas.
+- Označení P1a/P1b/P2/P3 a kdo je před a za hvězdami: McLeod et al. 2015 (MNRAS, doi:10.1093/mnras/stv680, odd. 4.2),
+  Karim et al. 2023 (AJ, doi:10.3847/1538-3881/acff6c, arXiv:2309.14637). Hlava P1 (West I) ze Sofue 2020 tab. 1 leží ~30″
+  od P1a v masce (rozlišení rádia 2,6′).
+- Hloubky hrotů: Sofue 2020 (MNRAS 492, 5966; arXiv:2001.05623): vzdálenosti hrotů od HD 168076 2,6 / 3,2 / 3,6 pc, sklon
+  spojnice k paprsku 47° / 40° / 40° při 2,0 kpc → přepočteno na 1 698 pc. Kontrola: promítnuté vzdálenosti hrotů od hvězdy
+  v našem výřezu 1,87 / 1,80 / 2,0 pc ≈ Sofue × 0,85 ✓.
+- **Předpoklady:** sklon os sloupů 30° (velikost neznámá, Karim 2023 určují jen znaménko); válcová tloušťka; hloubka P1b =
+  hloubka základny P2 („Shared Base“, Karim 2023); barvy ilustrativní.
+- Vzdálenost: NGC 6611 z mapy (Hunt & Reffert 2023, 1 698 pc); Stoop et al. 2023 (A&A 670, A108) dávají 1 706 ± 7 pc.
+- HD 168076: poloha ze SIMBADu (Sesame); O5 V podle Sofue 2020.
+- Obrázek v kartě: Webb NIRCam „Pillars of Creation (NIRCam Image).jpg“ z Commons (autor a licence se načítají z Commons API);
+  Wikidata Q573260. Ručně doplněno v `pipeline/obrazky.py`.
+
+### Halo temné hmoty (`src/scene/darkMatter.ts`, bez datového souboru)
+- McMillan P.J. 2017, MNRAS, doi:10.1093/mnras/stw2759 (arXiv:1608.00971), tab. 3, hlavní model: NFW, ρ0,h = 0,00854 M☉/pc³,
+  rh = 19,6 kpc, ρh,⊙ = 0,0101 M☉/pc³ (0,38 ± 0,04 GeV/cm³), Mv = 1,37 × 10¹² M☉, M∗ = 5,43 × 10¹⁰ M☉, R0 = 8,21 kpc
+  (ověřeno z PDF na arXiv 2. 10. 2026).
+- Přepočty v aplikaci: hmotnost uvnitř poloměru (vzorec NFW), viriální poloměr 228 kpc z Mv a 200 × ρcrit
+  (H = 70,4 km/s/Mpc jako v článku, ρcrit = 137,5 M☉/kpc³), „0,7 kg v objemu Země“.
+- Slupky v 8,21 / 19,6 / 50 kpc kolem centra mapy; model má R0 = 8,21 kpc, mapa 8,15 kpc.
+
 ### Písma (přibalená v aplikaci, `src/fonts.ts`)
 - Chakra Petch, IBM Plex Sans, IBM Plex Mono – balíčky Fontsource (`@fontsource/*` 5.3), licence **SIL Open Font License 1.1**
   (pole `license` v package.json balíčků + soubor LICENSE v balíčku). Jen podmnožiny latin a latin-ext.

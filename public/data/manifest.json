@@ -173,6 +173,17 @@
       "vyrez": false
     },
     {
+      "id": "sloupy",
+      "soubor": "sloupy.json",
+      "nazev": "Sloupy stvoření – 3D rekonstrukce",
+      "zdroj": "Obrys: Pan-STARRS DR1 (CDS HiPS); geometrie: McLeod et al. 2015, Sofue 2020, Karim et al. 2023; vzdálenost: NGC 6611 z Hunt & Reffert 2023",
+      "url": "https://arxiv.org/abs/2309.14637",
+      "licence": "Odvozený model; snímek Pan-STARRS (podmínky použití ověřit), články s citací",
+      "citace": "McLeod A.F. et al. 2015, MNRAS, doi:10.1093/mnras/stv680; Sofue Y. 2020, MNRAS 492, 5966; Karim R.L. et al. 2023, AJ, doi:10.3847/1538-3881/acff6c",
+      "poznamka": "Rekonstrukce: obrys ze snímku, hloubka hrotů z literatury, sklon os (30°) a tloušťka jsou předpoklady.",
+      "vyrez": false
+    },
+    {
       "id": "slunecni-soustava",
       "soubor": "slunecni-soustava.json",
       "nazev": "Sluneční soustava (planety, trpasličí planety, měsíce)",

@@ -13,6 +13,8 @@ import { GaiaArms } from "./scene/gaiaArms";
 import { Dust } from "./scene/dust";
 import { LocalStructures } from "./scene/local";
 import { Gaia100 } from "./scene/gaia100";
+import { PillarsLayer, type PillarsMeta } from "./scene/pillars";
+import { DarkMatterLayer } from "./scene/darkMatter";
 import { ARM_GAIN_DEFAULT, buildBackdrop } from "./scene/backdrop";
 import { LY_PER_PC } from "./core/units";
 import { Overlays } from "./scene/overlays";
@@ -93,6 +95,13 @@ async function main() {
     const gaiaNearBtn = document.getElementById("gaia100") as HTMLButtonElement | null;
     const gaiaNear = gaiaNearBtn && file("gaia100") ? new Gaia100(DATA + file("gaia100"), frame.sun, stage.glow, gaiaNearBtn) : null;
     if (gaiaNear) layers.push(gaiaNear);
+    const dmBtn = document.getElementById("darkMatter") as HTMLButtonElement | null;
+    if (dmBtn) layers.push(new DarkMatterLayer(frame.sun, labels, dmBtn));
+    if (file("sloupy")) {
+      try {
+        layers.push(new PillarsLayer(await getJson<PillarsMeta>(file("sloupy")!), DATA, frame.sun, stage.glow, stage));
+      } catch (e) { console.error(e); }
+    }
     else gaiaNearBtn?.remove();
     cats.forEach((c, i) => layers.push(new CatalogLayer(c as CatalogData, manifest.katalogy.find((k) => k.id === generic[i])!, frame, stage.glow, css)));
     layers.forEach((L) => stage.scene.add(L.group));

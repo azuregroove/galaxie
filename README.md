@@ -44,6 +44,7 @@ py mala_telesa.py         # JPL SBDB: vzorek 3 187 planetek a komet (+ ~540 dota
                           #   --overit = porovnání poloh 14 těles s Horizons
 py neutronove_hvezdy.py   # ATNF přes psrqpy (jinak kopie 2016 v CDS) + magnetary McGill -> neutronove-hvezdy.json
 py gaia100.py             # Gaia Catalogue of Nearby Stars (CDS, 63 MB TSV, ~1–2 min) -> gaia100.json + gaia100-*.bin.gz
+py sloupy.py              # Sloupy stvoření: obrys z Pan-STARRS (hips2fits) + geometrie z literatury -> sloupy.json + .bin.gz
 ```
 
 Katalogy etapy 3 sdílí formát (schema 2, popis v `pipeline/katalog.py`) a v aplikaci je čte jedna obecná vrstva.

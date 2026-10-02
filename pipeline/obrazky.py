@@ -256,6 +256,9 @@ def main():
     ex = json.loads((DATA_DIR / "exoplanety.json").read_text(encoding="utf-8"))["systemy"]
     res["exoplanety"] = match_layer("exoplanety", ex["jmeno"], None, ex["l"], ex["b"], hosts)
     res["slunecni-soustava"] = solar(sol)
+    # Sloupy stvoření nejsou v žádném katalogu (vrstva sloupy.py); P18 na Wikidata je jiný snímek, proto Webb ručně
+    res["sloupy"] = {"Sloupy stvoření": ["Q573260", "Pillars of Creation (NIRCam Image).jpg", "Sloupy stvoření",
+                                         "Sloupy stvoření", "Pillars of Creation"]}
 
     stazeno = now_iso()
     out = {"schema": 1, "katalog": "obrazky", "stazeno": stazeno,

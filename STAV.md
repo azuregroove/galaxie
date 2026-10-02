@@ -397,6 +397,23 @@ Aktualizovat na konci každého sezení.
   - PWA: `.bin.gz` v runtime cache `galaxie-binarni` (max 20 souborů) až po použití; `gaia100.json` v precache
   - omezení: hvězdy Gaia nejsou v seznamu ani hledání (331 tis. řádků); sdílení přes #kotvu vybranou hvězdu Gaia neobnoví;
     v okolí Slunce se hvězda z GCNS a táž jasná hvězda / hostitel exoplanet kreslí dvakrát (bez párování)
+- 2026-10-02 (cloud): commit 6c12481 (Gaia 100 pc) pushnut s Ráďovým souhlasem; Ráďa: „mapa je boží“
+- 2026-10-02 (cloud): **Sloupy stvoření – 3D rekonstrukce** (pushnuto s Ráďovým souhlasem; build OK, Playwright desktop, bez JS chyb)
+  - Ráďa je nemohl najít → nová vrstva `src/scene/pillars.ts`, objekt „Sloupy stvoření“ v hledání (i „pillars“, „M16 sloupy“)
+  - `pipeline/sloupy.py`: obrys z Pan-STARRS (maska prachu), rozdělení P1a/P1b/P2/P3, hloubky hrotů ze Sofue 2020 (přepočet
+    na 1 698 pc), pořadí před/za hvězdami z McLeod 2015 a Karim 2023; sklon os 30° a válcová tloušťka = předpoklady
+  - kontrola geometrie: promítnuté vzdálenosti hrotů od HD 168076 sedí se Sofue × 0,85 (poměr vzdáleností 1,7/2,0 kpc)
+  - karta: popis, co je z dat a co odhad, Webbův snímek z Commons, tlačítko „Pohled ze Země“ (obraz je pootočený –
+    v mapě je nahoře galaktický sever)
+  - body (469 kB) se stahují až při přiblížení pod 600 ly nebo po výběru
+- 2026-10-02 (cloud): **Temná hmota – halo podle McMillan 2017** (build OK, Playwright, bez JS chyb)
+  - Ráďa vybral bod 2 (halo jako model); tlačítko „Temná hmota“, 3 slupky (8,21 / 19,6 / 50 kpc) s popisky hustoty
+    a hmotnosti uvnitř; objekt „Halo temné hmoty (model)“ v hledání s kartou (čísla z tab. 3, ověřeno z arXiv PDF)
+  - opraveno během práce: citace „MNRAS 465, 76“ a rozsah „0,3–0,6 GeV/cm³“ byly zpaměti → nahrazeno DOI a nejistotou z článku
+- 2026-10-02 (cloud): **Star Trek – zablokované** (Ráďa chce hranice ze Star Charts a fanouškovských map, „na nikoho
+  nezapomenout“): z cloudu blokované memory-alpha.fandom.com, memory-beta.fandom.com, ditl.org, en.wikipedia.org
+  (curl i WebFetch). Star Charts (Mandel 2002) je placená kniha, online legálně není. Čeká na povolení domén nebo
+  na Ráďův zdroj; podle STAV: nekopírovat mapy doslova, jen fakta (které hvězdy komu patří) a vlastní odvození
 
 ## Rozdělané
 - etapa 6: čeká na odpověď JPL (e-mail 2. 10.);
@@ -419,7 +436,7 @@ Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné
    „Nainstalovat“ a offline (DevTools → Network → Offline); po nasazení zkusit instalaci na telefonu.
    Ráďa na PC: zapnout „Gaia 100 pc“ v pohledu Okolí Slunce – plynulost na GPU a hlavně na telefonu (331 tis. bodů);
    případně snížit FAR_COUNT / NEAR_LY v `src/scene/gaia100.ts`.
-   Další: hledání hvězd Gaia podle ID, spárování s Jasnými hvězdami a hostiteli exoplanet, nebo etapa 8 (Capacitor)
+   Další: Star Trek (po povolení domén), hledání hvězd Gaia podle ID, spárování s Jasnými hvězdami, etapa 8 (Capacitor)
 5. Cloudové kredity: 2. 10. zbývalo 11 $ ze 100 – šetřit
 
 **Dlouhodobě (z 30. 9.):**
