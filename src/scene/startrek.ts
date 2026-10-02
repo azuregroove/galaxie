@@ -70,6 +70,7 @@ uniform sampler2D pal;
 uniform vec3 sizeLy;
 uniform vec3 voxels;
 uniform float reachLy;
+uniform float edgeGain;
 uniform int maxSteps;
 in vec3 vOrigin;
 in vec3 vDirection;
@@ -106,7 +107,9 @@ void main() {
         // hladký okraj z interpolované vzdálenosti (štítek je po voxelech), slupka těsně pod hranicí
         float e = texture(edge, p + 0.5).r * reachLy;
         float x = (e - 3.5) / 2.0;
-        float s = smoothstep(0.8, 2.2, e) * (0.0012 + 0.035 * exp(-x * x));
+        // bez hranic se zhustí výplň, ať území zůstane vidět
+        float fog = 0.0012 * (1.0 + 3.0 * (1.0 - min(edgeGain, 1.0)));
+        float s = smoothstep(0.8, 2.2, e) * (fog + edgeGain * 0.035 * exp(-x * x));
         float k = 1.0 - exp(-s * dsLy);
         acc += (1.0 - a) * k * c.rgb;
         a += (1.0 - a) * k;
@@ -149,6 +152,8 @@ export class StarTrekLayer implements Layer {
   private readonly palette = new DataTexture(new Uint8Array(256 * 4), 256, 1, RGBAFormat);
   private volume: Mesh<BoxGeometry, ShaderMaterial> | null = null;
   private volLoading = false;
+  /** síla zvýrazněných hranic území (posuvník v legendě), sdílený uniform */
+  private readonly edgeGain = { value: 1 };
   private readonly dataBase: string;
   private readonly sun: Vector3;
 
@@ -275,6 +280,31 @@ export class StarTrekLayer implements Layer {
     return this.filters.some((f) => f.on);
   }
 
+  legendExtra(): HTMLElement | null {
+    if (!this.data.uzemi) return null;
+    const lab = document.createElement("label");
+    lab.className = "armGain trekEdge";
+    lab.title = "Jak výrazně kreslit hranice území (vlevo jen mlha, vpravo ostré okraje)";
+    lab.innerHTML = `Hranice <input type="range" min="0" max="2" step="0.05" aria-label="Síla hranic území Star Treku"><span></span>`;
+    const input = lab.querySelector("input")!, out = lab.querySelector("span")!;
+    const set = (v: number) => {
+      this.edgeGain.value = v;
+      input.value = String(v);
+      out.textContent = v === 0 ? "vyp" : `${Math.round(v * 100)} %`;
+    };
+    let v = 1;
+    try {
+      const saved = parseFloat(localStorage.getItem("galaxie.trekEdge") ?? "");
+      if (saved >= 0 && saved <= 2) v = saved;
+    } catch { /* soukromé okno */ }
+    set(v);
+    input.addEventListener("input", () => {
+      set(parseFloat(input.value));
+      try { localStorage.setItem("galaxie.trekEdge", input.value); } catch { /* nevadí */ }
+    });
+    return lab;
+  }
+
   powerColor(id: string): string | null {
     return this.powers.get(id)?.barva ?? null;
   }
@@ -297,7 +327,8 @@ export class StarTrekLayer implements Layer {
     for (const o of this.objects) {
       const v = !!o.power && on.has(o.power.id);
       o.hidden = !v;
-      const r = v && !(vol && this.inGrid[o.inst]) ? this.radii[o.inst] : 0;
+      // soustavy bez příslušnosti žádné území nemají – jen bod, bublina by v území vypadala jako cizí koule
+      const r = v && o.power!.id !== "_bez" && !(vol && this.inGrid[o.inst]) ? this.radii[o.inst] : 0;
       m.makeScale(r, r, r).setPosition(this.centers[o.inst]);
       this.bubbles.setMatrixAt(o.inst, m);
       arr[o.inst] = v ? 1 : 0;
@@ -339,6 +370,7 @@ export class StarTrekLayer implements Layer {
           sizeLy: { value: sizeLy },
           voxels: { value: new Vector3(T.nx, T.ny, T.nz) },
           reachLy: { value: T.dosah_ly },
+          edgeGain: this.edgeGain,
           maxSteps: { value: matchMedia("(pointer: coarse)").matches ? 160 : 320 },
         },
         side: BackSide,

@@ -150,6 +150,8 @@ export class Hud {
         row.appendChild(b);
         chips.push([b, f]);
       }
+      const extra = L.legendExtra?.();
+      if (extra) row.appendChild(extra);
       legend.appendChild(row);
       this.legendSync.set(L.id, () => {
         for (const [b, f] of chips) b.setAttribute("aria-pressed", String(f.on));

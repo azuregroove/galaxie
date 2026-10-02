@@ -226,13 +226,16 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 - Zdroje (2. 10. 2026, MediaWiki API): Memory Alpha (kánon, licence **CC BY-NC**) a Memory Beta (licencovaná fikce vč.
   *Star Charts*, **CC BY-SA**) – kategorie Stars, Star systems, Planets: 14 686 stránek + stránky mocností. Bere se jen fakta
   (jméno, příslušnost, vzdálenosti, kvadrant); u každé soustavy odkaz na stránky wiki.
+- Infoboxy: obecný parser (klíče s mezerami, prázdné hodnoty, víc řádků) – čte i `planetInfobox` z Memory Beta
+  (~3 400 planet) a jejich soustavy ve tvaru „[[X]] [[star]] [[system]]“; obecné pojmy (G-type star, trinary star…)
+  se jako soustavy neberou. Skutečná hvězda v Alfa/Beta nedostane mocnost z Gama/Delta (Epsilon Draconis „Dominion“ = okupace).
 - *Star Trek: Star Charts* (Mandel 2002) sama použitá není (placená kniha); její údaje se dostávají přes Memory Alpha/Beta.
 - Kvadranty: hranice Alfa/Beta = spojnice Slunce–centrum (Memory Alpha „Quadrant“); Beta je na galaktické délce 180–360°
   – ověřeno na skutečných hvězdách s uvedeným kvadrantem: **370/377 souhlasí**.
-- Skutečné hvězdy (406): jméno z wiki → jasné hvězdy mapy (hvezdy.json) nebo SIMBAD (Sesame); přijato při shodě vzdálenosti
+- Skutečné hvězdy (410; stav po opravě čtení Memory Beta 2. 10.): jméno z wiki → jasné hvězdy mapy (hvezdy.json) nebo SIMBAD (Sesame); přijato při shodě vzdálenosti
   (±30 % / 5 ly) nebo souhvězdí; jasná hvězda podle jména vždy (rozpor vzdáleností se v kartě uvede). Např. Vulkán = 40 (ο²) Eridani,
   Andorie = Prokyon, Wolf 359, Risa = ε Ceti, Omega Leonis.
-- Fiktivní soustavy (56): poloha vypočtená relaxací z údajů „~N ly od Slunce“ a „N ly od X“ + strana kvadrantu + slabě k těžišti
+- Fiktivní soustavy (64): poloha vypočtená relaxací z údajů „~N ly od Slunce“ a „N ly od X“ + strana kvadrantu + slabě k těžišti
   mocnosti a k rovině; medián odchylky od údajů 3 %, některé údaje si na wiki odporují (90 % pod ~98 %).
 - Hlavní svět bez údajů (Romulus): směr těžiště soustav mocnosti, strana kvadrantu z wiki, vzdálenost = medián – **odhad**.
 - Mocnosti bez jediné kotvy (Tholiané, Breenové, Gornové, Tzenkethiové, Talariani, Sheliakové, Son'a, Kzinti, Orioni): podle sousedů
@@ -244,15 +247,15 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
   Memory Alpha); příslušnost se volí pro 24. století, stav z 32. století má přednost před 23. stoletím a okupacemi.
 - Soustav jen s příslušností a bez jakéhokoli údaje o vzdálenosti je přes 1 000 – na mapu se nedávají (karta mocnosti je počítá).
 
-- **Souvislá území** (`pipeline/startrek_uzemi.py` → `startrek-uzemi.bin.gz`, 104 kB): vlastní odvození z umístěných soustav,
+- **Souvislá území** (`pipeline/startrek_uzemi.py` → `startrek-uzemi.bin.gz`, 100 kB): vlastní odvození z umístěných soustav,
   ne převzatá mapa. Mřížka 128 × 128 × 80 buněk po 5 ly kolem Slunce (±320 / ±320 / ±200 ly); buňka patří mocnosti
   s nejmenší „měkkou“ vzdáleností (soft-min přes 8 nejbližších soustav, šířka 6 ly), pokud je pod 30 ly; mezi mocnostmi hranice
-  uprostřed. Soustavy mimo mřížku (Rigel, β Lyr…) a vzdálené oblasti Gama/Delta zůstávají jako koule.
-- **Katalog hvězd a planet** (`pipeline/startrek_katalog.py` → `startrek-katalog.json`, 923 kB, gzip 87 kB): všechny stránky
-  kategorií Stars, Star systems, Planets z obou wiki (14 686 stránek) → 12 739 položek (2 379 hvězd, 5 308 soustav,
+  uprostřed; do 10 ly od soustavy patří buňka vždy její mocnosti (jinak Federace pohltí osamělý Bajor); pole měkké vzdálenosti rozmazané Gaussem σ = 8 ly a dutiny / zálivy do ~30 ly zaplněné (morfologické uzavření), ať okraj není poskládaný z koulí. Soustavy u okraje mřížky se do území nepočítají. Soustavy mimo mřížku (Rigel, β Lyr…) a vzdálené oblasti Gama/Delta zůstávají jako koule.
+- **Katalog hvězd a planet** (`pipeline/startrek_katalog.py` → `startrek-katalog.json`, 950 kB, gzip 97 kB): všechny stránky
+  kategorií Stars, Star systems, Planets z obou wiki (14 686 stránek) → 12 954 položek (2 379 hvězd, 5 523 soustav,
   5 052 planet; stejné jméno na obou wiki = jedna položka, přehledové stránky „Unnamed…“ vynechány, zrcadlový vesmír
   samostatně). Jen údaje z infoboxů a kategorií: druh, třída, soustava, příslušnost, kvadrant, vzdálenost od Slunce, pokud ji
-  wiki uvádí. Žádné texty článků. Polohu na mapě má 768 položek (přes soustavu ve fanouškovské vrstvě).
+  wiki uvádí. Žádné texty článků. Polohu na mapě má 991 položek (přes soustavu ve fanouškovské vrstvě).
 
 ### Písma (přibalená v aplikaci, `src/fonts.ts`)
 - Chakra Petch, IBM Plex Sans, IBM Plex Mono – balíčky Fontsource (`@fontsource/*` 5.3), licence **SIL Open Font License 1.1**

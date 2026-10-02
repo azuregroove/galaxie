@@ -443,9 +443,30 @@ Aktualizovat na konci každého sezení.
   - PWA precache teď 6,0 MB (katalog je JSON → offline hned)
   - pushnuto s Ráďovým souhlasem (2. 10.) do `claude/happy-albattani-vecsdh`
 
+- 2026-10-02 (cloud): **`startrek.py` čte `planetInfobox` z Memory Beta** (build OK, Playwright desktop, bez JS chyb)
+  - obecný parser infoboxů a `system_of` přesunuty z katalogu do `startrek.py` (katalog je importuje); MB vzor
+    „[[X]] [[star]] [[system]]“; odmítnuty obecné pojmy (dřív vznikla „soustava“ `Star` z desítek planet s odchylkou ±55 %)
+  - výsledek (srovnáno se stejnými raw daty bez opravy): soustav s příslušností Federace 883 → 1 280, Klingoni 245 → 320,
+    Romulané 206 → 245; na mapě 473 → 484 soustav, skutečných hvězd 396 → 410, vypočtených 66 → 64;
+    medián odchylky výpočtu 1,7 % → 0,6 %, 90 % pod 4,1 % (dřív 94,5 % – kvůli smetí `Star`)
+  - změny: Gemma Federace → Romulané, Pi Canis Majoris Romulané → Klingoni (podle nově čtených planet MB);
+    Epsilon Draconis bez příslušnosti (MB „Dominion“ zahozeno – skutečná hvězda v Alfa/Beta); P'Jem patří k Luyten's Star
+    (podle MA); „Území: Kzinti“ (odhad podle sousedů) nahrazeno skutečnou hvězdou Zeta Sagittarii; nová drobná mocnost
+    „Miaplacidan Alliance“ (Beta Carinae) v legendě
+  - území: jádro 10 ly (Bajor jinak zmizel úplně), soustavy u okraje mřížky z území vyřazeny (useknuté tvary) → 111 kB
+  - katalog: 12 954 položek (soustav 5 523), na mapě 991; ubylo smetí (G-type star, trinary star, Star Trek Online…)
+
+- 2026-10-02 (cloud): **Star Trek – vyhlazená území** (Ráďa: „takhle sem si to představoval“, jen koule uvnitř Federace;
+  build OK, Playwright desktop, bez JS chyb)
+  - ostré kruhy uvnitř = bubliny 196 soustav „bez příslušnosti“ → teď jen body (území nemají)
+  - měkké oblouky = okraj Federace poskládaný z koulí 30 ly → pole rozmazané Gaussem σ 8 ly + zaplnění dutin a zálivů
+    (`ndimage.binary_closing` 15 ly, `binary_fill_holes`); hluboko uvnitř rozhoduje EDT, takže tam slupka nesvítí → 100 kB
+  - posuvník „Hranice“ v legendě u Star Treku (0–200 %, pamatuje se v localStorage): 0 = jen mlha (výplň zhuštěná),
+    100 % = dosavadní vzhled; nová volitelná metoda vrstvy `legendExtra()`
+  - pushnuto s Ráďovým souhlasem (2. 10.) spolu s opravou `planetInfobox` do `claude/happy-albattani-vecsdh`
+
 ## Rozdělané
-- Star Trek – možná vylepšení: (1) MB planety mají příslušnost v `planetInfobox`, kterou `startrek.py` nečte → po úpravě
-  by na mapě přibyly soustavy a kotvy mocností; (2) výkon raymarchingu území na telefonu neověřen (max. 160 kroků);
+- Star Trek – možná vylepšení: (1) ~~MB `planetInfobox` v `startrek.py`~~ (hotovo 2. 10.); (2) výkon raymarchingu území na telefonu neověřen (max. 160 kroků);
   (3) třídy planet z MB někdy jako text („habitable“, „gas giant“) – sjednotit
 - etapa 6: čeká na odpověď JPL (e-mail 2. 10.);
   po odpovědi sloučit větev do main = první nasazení (viz `nasazeni/CHECKLIST.md`)

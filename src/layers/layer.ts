@@ -48,6 +48,8 @@ export interface Layer {
   applyFilter(f: FilterState): void;
   /** Objekty, které chtějí popisek při daném přiblížení, od nejdůležitějšího. O umístění rozhodnou Labels. */
   labelCandidates(stage: Stage): MapObject[];
+  /** volitelný ovládací prvek na konec řádku legendy (např. síla hranic území) */
+  legendExtra?(): HTMLElement | null;
   cardHtml(o: MapObject): string;
   /** Typ objektu jedním slovním spojením (pro seznam a čtečky obrazovky); bez něj se použije jméno vrstvy. */
   kindName?(o: MapObject): string;

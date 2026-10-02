@@ -148,32 +148,73 @@ def clean(s: str) -> str:
     return re.sub(r"\s+", " ", s).strip()
 
 
-IB_START = re.compile(r"\{\{\s*(sidebar[^|\n}]*|star|planet|system|star system|planetary system|location)\s*[\n|]", re.I)
+IB_START = re.compile(r"\{\{\s*([A-Za-z ]*(?:infobox|sidebar)[^|\n}]*|star|planet|system|star system|planetary system|location)\s*[\n|]", re.I)
+# obecné pojmy v odkazech („[[K-type star]] [[system]]“ u New Xindus, „[[Star desert]]“ u Gothosu) nejsou jména soustav
+GENERIC = re.compile(r"^(star|system|star system|binary star|trinary star|planet|star desert|nebula|"
+                     r"[A-Z]-type star|(red|white|yellow|blue|brown|orange) (dwarf|giant|supergiant)( star)?)$", re.I)
+MB_SYSTEM = re.compile(r"\[\[([^\]|#]+?)(?:\|[^\]]*)?\]\]\s*(?:\[\[star\]\]\s*)?\[\[(?:star )?system(?:\|[^\]]*)?\]\]", re.I)
 
 
 def infobox(text: str) -> dict[str, str]:
-    m = IB_START.search(text[:6000])
+    """Obecný infobox: klíče i s mezerami („Planet Name“), prázdné hodnoty, hodnoty přes víc řádků."""
+    m = IB_START.search(text[:8000])
     if not m:
         return {}
-    i = m.start()
-    depth, j = 0, i
+    i, depth, j = m.start(), 0, m.start()
     while j < len(text) - 1:
         if text.startswith("{{", j):
             depth += 1
             j += 2
-            continue
-        if text.startswith("}}", j):
+        elif text.startswith("}}", j):
             depth -= 1
             j += 2
             if depth == 0:
                 break
-            continue
-        j += 1
-    body = text[i:j]
-    out = {}
-    for m in re.finditer(r"^\s*\|\s*(\w+)\s*=\s*(.*?)(?=^\s*\||\Z)", body, re.M | re.S):
-        out[m.group(1).lower()] = m.group(2).strip().rstrip("}").strip()
-    return out
+        else:
+            j += 1
+    body = text[m.end() - 1:j - 2]
+    out: dict[str, str] = {}
+    cur = None
+    depth = 0
+    for line in body.split("\n"):
+        # nový klíč jen na nejvyšší úrovni vnoření (ne uvnitř vnořené šablony)
+        mm = re.match(r"^\s*\|\s*([^=|{}\[\]]+?)\s*=(.*)$", line) if depth == 0 else None
+        if mm:
+            cur = mm.group(1).strip().lower()
+            out[cur] = mm.group(2).strip()
+        elif cur:
+            out[cur] += "\n" + line
+        depth += line.count("{{") - line.count("}}")
+    return {k: v.strip() for k, v in out.items()}
+
+
+def first(ib: dict, *keys: str) -> str:
+    for k in keys:
+        if ib.get(k):
+            return ib[k]
+    return ""
+
+
+def system_of(ib: dict, cat: str) -> str | None:
+    if cat != "Star_systems":
+        # Memory Beta: „[[1440 Ophiuchi B]] [[star]] [[system]]“, „[[Amon (star)|Amon]] [[system]]“
+        for m in MB_SYSTEM.finditer(ib.get("location", "")):
+            if not GENERIC.search(m.group(1)):
+                return m.group(1).strip()
+    fields = ("system", "location", "star") if cat != "Star_systems" else ("system",)
+    for f in fields:
+        v = ib.get(f, "")
+        for m in re.finditer(r"\[\[([^\]|#]+?)(?:\|[^\]]*)?\]\]", v):
+            t = m.group(1).strip()
+            if GENERIC.search(t):
+                continue
+            if re.search(r"\b(system|star)\b", t, re.I):
+                return t
+            # bez slova „system“ jen u planet (u hvězd Memory Beta pole system vyjmenovává planety)
+            if (cat == "Planets" and f in ("system", "star") and t[:1].isupper()
+                    and not re.search(r"quadrant|sector|space|nebula|expanse", t, re.I)):
+                return t
+    return None
 
 
 def number(s: str) -> float | None:
@@ -342,12 +383,7 @@ def main() -> None:
         title, text = r["title"], r["text"]
         ib = infobox(text)
         if cat == "Planets":
-            sysname = None
-            for f in ("system", "location"):
-                m = re.search(r"\[\[([^\]|]+?(?: system| star system))(?:\|[^\]]*)?\]\]", ib.get(f, ""))
-                if m:
-                    sysname = m.group(1)
-                    break
+            sysname = system_of(ib, cat)
             planet_sys.append((title, sysname, {"wiki": wiki, "ib": ib, "text": text}))
             continue
         e = ent(title)
@@ -436,7 +472,13 @@ def main() -> None:
     extra = {p: n for p, n in counts.items() if p.startswith("x:") and n >= 2}
     for e in ents.values():
         if e["power"] and e["power"].startswith("x:") and e["power"] not in extra:
-            e["power"] = None
+            # drobná příslušnost vypadla → další kandidát (Delta Dorado: „Gideon Council“ 2378, jinak Federace)
+            rest = [a for a in e["aff"] if power_of(a[1]) and not (power_of(a[1]) or "").startswith("x:")]
+            best = min(rest, key=lambda a: (era_score((a[1], a[2])), a[0] != "memory-alpha")) if rest else None
+            e["power"] = power_of(best[1]) if best else None
+            e["era"] = best[2] if best else None
+            e["aff_text"] = best[3] if best else ""
+            e["aff_src"] = best[0] if best else None
     print("mocnosti:", sorted(((n, p) for p, n in counts.items() if not p.startswith("x:") or p in extra), reverse=True))
 
     # ------------------------------------------------ skutečné hvězdy
@@ -493,6 +535,15 @@ def main() -> None:
             real += 1
     (RAW / "sesame.json").write_text(json.dumps(cache), encoding="utf-8")
     print(f"skutečné hvězdy přijaté: {real}")
+    for e in ents.values():
+        if e.get("how") == "hvezda" and POWER_Q.get(e["power"] or "", "AB") in ("G", "D"):
+            rest = [a for a in e["aff"] if power_of(a[1]) and POWER_Q.get(power_of(a[1]) or "", "AB") not in ("G", "D")]
+            best = min(rest, key=lambda a: (era_score((a[1], a[2])), a[0] != "memory-alpha")) if rest else None
+            print(f"  {e['name']}: {e['power']} → {power_of(best[1]) if best else None} (skutečná hvězda v Alfa/Beta)")
+            e["power"] = power_of(best[1]) if best else None
+            e["era"] = best[2] if best else None
+            e["aff_text"] = best[3] if best else ""
+            e["aff_src"] = best[0] if best else None
 
     # kontrola konvence kvadrantů na skutečných hvězdách (Beta = l 180–360° → y < 0)
     agree = [((e["xyz"][1] < 0) == (e["quad"] == "Beta")) for e in ents.values() if e.get("xyz") and e["quad"] in ("Alpha", "Beta")]

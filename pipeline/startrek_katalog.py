@@ -12,7 +12,7 @@ import re
 from collections import Counter
 
 from common import DATA_DIR, RAW_DIR, now_iso, update_manifest, write_json
-from startrek import ALIAS, POWERS, affiliation, clean, key, power_of
+from startrek import ALIAS, POWERS, affiliation, clean, first, infobox, key, power_of, system_of
 
 RAW = RAW_DIR / "startrek"
 TYPES = ["hvězda", "soustava", "planeta"]
@@ -25,47 +25,6 @@ MB_TYPE = {"fed": "federace", "kling": "klingoni", "rom": "romulani", "card": "c
 BODY = {"moon": "měsíc", "planetoid": "planetka", "dwarf planet": "trpasličí planeta", "asteroid": "planetka",
         "rogue planet": "toulavá planeta", "gas giant": "plynný obr", "artificial planet": "umělá planeta",
         "comet": "kometa", "planet": "planeta"}
-IB_START = re.compile(r"\{\{\s*([A-Za-z ]*(?:infobox|sidebar)[^|\n}]*|star|planet|system|star system|planetary system|location)\s*[\n|]", re.I)
-
-
-def infobox(text: str) -> dict[str, str]:
-    """Obecný infobox: klíče i s mezerami („Planet Name“), prázdné hodnoty, hodnoty přes víc řádků."""
-    m = IB_START.search(text[:8000])
-    if not m:
-        return {}
-    i, depth, j = m.start(), 0, m.start()
-    while j < len(text) - 1:
-        if text.startswith("{{", j):
-            depth += 1
-            j += 2
-        elif text.startswith("}}", j):
-            depth -= 1
-            j += 2
-            if depth == 0:
-                break
-        else:
-            j += 1
-    body = text[m.end() - 1:j - 2]
-    out: dict[str, str] = {}
-    cur = None
-    depth = 0
-    for line in body.split("\n"):
-        # nový klíč jen na nejvyšší úrovni vnoření (ne uvnitř vnořené šablony)
-        mm = re.match(r"^\s*\|\s*([^=|{}\[\]]+?)\s*=(.*)$", line) if depth == 0 else None
-        if mm:
-            cur = mm.group(1).strip().lower()
-            out[cur] = mm.group(2).strip()
-        elif cur:
-            out[cur] += "\n" + line
-        depth += line.count("{{") - line.count("}}")
-    return {k: v.strip() for k, v in out.items()}
-
-
-def first(ib: dict, *keys: str) -> str:
-    for k in keys:
-        if ib.get(k):
-            return ib[k]
-    return ""
 
 
 def quadrant(loc: str, cats: list[str]) -> str | None:
@@ -75,21 +34,6 @@ def quadrant(loc: str, cats: list[str]) -> str | None:
     for q, c in QUADS.items():
         if re.search(rf"\b{q}\s*Quadrant|\{{\{{quadrant{c}\}}\}}", t, re.I):
             return c
-    return None
-
-
-def system_of(ib: dict, cat: str) -> str | None:
-    fields = ("system", "location", "star") if cat != "Star_systems" else ("system",)
-    for f in fields:
-        v = ib.get(f, "")
-        for m in re.finditer(r"\[\[([^\]|#]+?)(?:\|[^\]]*)?\]\]", v):
-            t = m.group(1).strip()
-            if re.search(r"\b(system|star)\b", t, re.I) and not re.match(r"(star|system|star system|binary star)$", t, re.I):
-                return t
-            # bez slova „system“ jen u planet (u hvězd Memory Beta pole system vyjmenovává planety)
-            if (cat == "Planets" and f in ("system", "star") and t[:1].isupper()
-                    and not re.search(r"quadrant|sector|space|nebula|expanse", t, re.I)):
-                return t
     return None
 
 
