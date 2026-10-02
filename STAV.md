@@ -336,6 +336,17 @@ Aktualizovat na konci každého sezení.
   Build OK, Playwright desktop + mobil: karta HD 148797 se schématem, hlavička 4 780, bez JS chyb. ZDROJE.md doplněn.
   - pro Python v cloudu: `pip install --ignore-installed packaging astropy pandas numpy psrqpy` (debianí packaging jinak blokuje instalaci)
 
+- 2026-10-02 (cloud): **bod 8 – 3D mapa prachu** (build OK, Playwright desktop 1400×860 + mobil 390×844, bez JS chyb)
+  - Edenhofer 2024 (Zenodo) z cloudu blokovaný → **Vergely et al. 2022 z CDS** (J/A+A/664/A174): `pipeline/prach.py` → `prach.json`
+    + `prach-prehled.bin.gz` (6 × 6 × 0,8 kpc, voxel 20 pc, 639 kB) a `prach-detail.bin.gz` (3 × 3 × 0,8 kpc, voxel 10 pc, 1,24 MB)
+  - orientace os ověřená na 8 mračnech; `src/scene/dust.ts` – raymarching v Data3DTexture (API ověřeno Context7), tlačítko
+    „Prach: vyp / 6 kpc / 3 kpc“ (načítá se až po zapnutí), prach ztmaví kulisu Galaxie, objekty zůstanou nad ním; kulisa má renderOrder −3
+  - viditelné: Místní bublina (prázdná dutina kolem Slunce), mračna k Orionu, Taurus, Cepheus
+  - SW WebGL v cloudu: desktop ~2 s/snímek uvnitř krychle (mobil 0,45 s) → **na skutečné GPU a telefonu změřit** (mobil 96 kroků paprsku, desktop 192)
+- 2026-10-02 (cloud): **bod 7 (Radcliffeova vlna, Místní bublina, Gouldův pás) blokovaný** – data Alves 2020 a Zucker 2022 jsou na arXiv/
+  Dataverse/nature.com; proxy je 2. 10. stále odmítá (politika sítě), VizieR ani PyPI je nemají
+- 2026-10-02 (cloud): etapa 6 – koncept e-mailu pro JPL `nasazeni/email-jpl.md` (adresa contact-ssd@jpl.nasa.gov z kontaktní stránky)
+
 ## Rozdělané
 - nic (aktualizace exoplanet pushnutá 1. 10. s Ráďovým souhlasem)
 

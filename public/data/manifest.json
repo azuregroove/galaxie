@@ -137,6 +137,17 @@
       "poznamka": "Jasné hvězdy doplněné podle označení HIP (P528, obrazky_hvezdy.py). Popis v kartě = úvod článku české Wikipedie, načtený až při otevření karty; text CC BY-SA 4.0, autoři v historii článku."
     },
     {
+      "id": "prach",
+      "soubor": "prach.json",
+      "nazev": "3D mapa mezihvězdného prachu",
+      "zdroj": "Vergely, Lallement & Cox 2022, A&A 664, A174 (Gaia EDR3 + 2MASS + spektroskopie), CDS J/A+A/664/A174",
+      "url": "https://cdsarc.cds.unistra.fr/viz-bin/cat/J/A+A/664/A174",
+      "licence": "Katalog CDS/VizieR – volně s citací (podmínky CDS ověřit, viz ZDROJE.md)",
+      "citace": "Vergely J.-L., Lallement R., Cox N.L.J. 2022, A&A 664, A174",
+      "poznamka": "Hustota extinkce A0; zmenšeno průměrem bloků 2 × 2 × 2 a logaritmicky zakódováno do 6 bitů. Autoři upozorňují na nejistoty ve velkých vzdálenostech a za hustými mračny.",
+      "vyrez": false
+    },
+    {
       "id": "slunecni-soustava",
       "soubor": "slunecni-soustava.json",
       "nazev": "Sluneční soustava (planety, trpasličí planety, měsíce)",

@@ -9,6 +9,7 @@ import { SolarLayer } from "./layers/solar";
 import type { Layer } from "./layers/layer";
 import { ARMS, armRadius, armXZ } from "./scene/arms";
 import { GaiaArms } from "./scene/gaiaArms";
+import { Dust } from "./scene/dust";
 import { ARM_GAIN_DEFAULT, buildBackdrop } from "./scene/backdrop";
 import { LY_PER_PC } from "./core/units";
 import { Overlays } from "./scene/overlays";
@@ -59,6 +60,10 @@ async function main() {
     const gaiaBtn = document.getElementById("gaiaArms") as HTMLButtonElement | null;
     if (gaiaBtn && file("gaia-ramena")) new GaiaArms(DATA + file("gaia-ramena"), stage.scene, frame.sun, gaiaBtn);
     else gaiaBtn?.remove();
+    backdrop.renderOrder = -3;
+    const dustBtn = document.getElementById("dust") as HTMLButtonElement | null;
+    if (dustBtn && file("prach")) new Dust(DATA + file("prach"), stage.scene, frame.sun, dustBtn);
+    else dustBtn?.remove();
     for (const a of ARMS) {
       // popisek doprostřed rozsahu modelu, kousek nad rovinu, ať nesplývá s body ramene
       const beta = (a.betaMin + a.betaMax) / 2;

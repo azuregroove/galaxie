@@ -151,3 +151,19 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 - Úvod článku z REST API cs Wikipedie (`/api/rest_v1/page/summary/`), načtený v prohlížeči až při otevření karty; nic se neukládá.
 - Licence textu CC BY-SA 4.0; karta uvádí článek, odkaz na autory (historie stránky), licenci a že text může být zkrácený.
 - Které objekty mají článek: odkazy na cs Wikipedii z Wikidata v `obrazky.json` (obrazky.py, u jasných hvězd obrazky_hvezdy.py podle HIP).
+
+### 3D mapa prachu – Vergely, Lallement & Cox 2022 (`pipeline/prach.py` → `prach.json`, `prach-*.bin.gz`)
+- Vergely J.-L., Lallement R., Cox N.L.J. 2022, A&A 664, A174 – CDS `J/A+A/664/A174`, adresář `fits/`
+  (staženo 2. 10. 2026): kostky hustoty extinkce A0 (550 nm, mag/pc), X k centru, Y ve směru rotace, Z k severu.
+  - `explore_cube_density_values_025pc_v2.fits` (601 × 601 × 81, krok 10 pc, rozlišení 25 pc, 6 × 6 × 0,8 kpc) → „Prach: 6 kpc“
+  - `explore_cube_density_values_010pc_v2.fits` (601 × 601 × 161, krok 5 pc, rozlišení 10 pc, 3 × 3 × 0,8 kpc) → „Prach: 3 kpc“
+- Zpracování: průměr bloků 2 × 2 × 2, log10 mezi −3,6 a −1,8 (mag/pc) do 6 bitů, gzip; pod −3,6 průhledné.
+- Ověření orientace: 8 známých mračen (Taurus, Ophiuchus, Orion A, Perseus, Cepheus, Chamaeleon, Lupus, Aquila Rift)
+  má bez prohození os 30–140× vyšší hustotu než medián kostky, s prohozením nebo převrácením os jen 1–13×.
+- Poloha Slunce v hlavičce SUN_POS = 300,5 (resp. 40,5) – bráno jako střed pixelu 300 (mřížka souměrná); jiný výklad
+  by znamenal posun o půl kroku (5 / 2,5 pc), pod rozlišením.
+- Plánovaná mapa Edenhofer et al. 2024 (vyšší rozlišení do 1,25 kpc) je na Zenodo – z cloudu blokované; lze doplnit na PC.
+- Vykreslení: raymarching v krychli (`src/scene/dust.ts`), průhlednost 1 − exp(−2,5 · A0 na úseku); barva a zesílení
+  jsou ilustrační, nejde o simulaci skutečného zčervenání.
+- Licence: CDS/VizieR (rights_uri https://cds.unistra.fr/vizier-org/licences_vizier.html – **text neověřen**, z cloudu blokované);
+  citovat článek.
