@@ -374,16 +374,18 @@ Aktualizovat na konci každého sezení.
 - možné vylepšení: mapa prachu Edenhofer 2024 (Zenodo už povolené) místo / vedle Vergely 2022
 
 ## Další krok
-**Aktuální větev: `claude/vigilant-clarke-yii046`** (= `claude/jolly-thompson-pyvslt` + oprava popisů; push až po souhlasu).
-Nový chat: přečíst CLAUDE.md (sekce Etapy – zbývající body jsou rozepsané tam) + tento soubor z téhle větve.
-Na PC: `git fetch origin`, `git switch claude/jolly-thompson-pyvslt`, `git pull`, `npm install`, `npm run dev`.
-Mapa jako soukromý artefakt: https://claude.ai/artifact/C7E2DwT3ir8g85U8s3ThkW (aktualizovat publikací dist/).
-Pravidlo z 1. 10.: po každém dokončeném bodu se zastavit, říct co je hotovo; commit + push předchozího bodu až po Ráďově souhlasu.
+**Aktuální větev: `claude/vigilant-clarke-yii046`** (vše pushnuté 2. 10., poslední commit = bod 7). `main` je stále na etapě 3.
+Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve.
+Na PC: `git fetch origin`, `git switch claude/vigilant-clarke-yii046`, `git pull`, `npm install`, `npm run dev`.
+Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné nasazení) až po odpovědi JPL.
 
-**Etapa 4 hotová** kromě porovnání objektů (Ráďa: zatím ne) a WGSN (Ráďa: vynechat). **Další na řadě:** navrhnout Ráďovi –
-etapa 5 (body 7, 8: Radcliffeova vlna, Místní bublina, prachová mapa – potřeba domény arXiv/Dataverse/Zenodo; vzorek Gaia do 100 pc),
-nebo příprava etapy 6 (svolení JPL, podmínky DSS/CDS, aktualizace dat). Na PC ověřit popisy z Wikipedie v kartě (Betelgeuze, Plejády); body 7 a 8 až po povolení domén
-(arxiv.org, export.arxiv.org, dataverse.harvard.edu, zenodo.org, www.nature.com).
+1. **Čeká se na odpověď JPL** (e-mail z Gmailu 2. 10., vlákno „Permission request: JPL SSD data…“). Po kladné odpovědi:
+   upravit znění poděkování podle JPL, sloučit větev do `main` → workflow nasadí na https://azuregroove.github.io/galaxie/
+2. Ráďa: Settings → Pages → Source „GitHub Actions“ (z cloudu nejde, API 403); přečíst podmínky CDS, DSS, JPL copyright,
+   licence dat Gaia (odkazy v `nasazeni/CHECKLIST.md`)
+3. Ráďa na PC: vyzkoušet Prach (6 kpc / 3 kpc) a Okolí – výkon na GPU a telefonu; ATNF pulsary (`py pipeline\neutronove_hvezdy.py`)
+4. Pak etapa 7 (PWA: přibalit fonty, offline sada) nebo zbytek etapy 5 (vzorek Gaia do 100 pc)
+5. Cloudové kredity: 2. 10. zbývalo 11 $ ze 100 – šetřit
 
 **Dlouhodobě (z 30. 9.):**
 - Než bude projekt „hotový“: aktualizovat všechna data a čísla z ověřených zdrojů
