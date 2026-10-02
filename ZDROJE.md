@@ -13,7 +13,7 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 | Velikostní třídy planet | Země < 1,25 R⊕ ≤ super-Země < 2 ≤ Neptun < 6 ≤ Jupiter < 15 ≤ větší | Borucki et al. 2011, ApJ 736, 19 (abstrakt, ADS 2011ApJ...736...19B) |
 | Rychlost Voyageru 1 (doba cesty v kartě) | 16,92 km/s vůči Slunci | JPL Horizons, cíl −31, vektory vůči Slunci (500@10) k 1. 10. 2026; auto 100 km/h a letadlo 900 km/h jsou zvolené ilustrační hodnoty |
 | Světelný rok | 9 460 730 472 580,8 km | IAU (juliánský rok × c) |
-| Ramena z dat Gaia (přepínač „Gaia“) | mřížky nadhustoty mladých hvězd ±6 kpc kolem Slunce, krok 0,1 kpc | Poggio et al. 2021, A&A 651, A104 (Gaia EDR3, horní hlavní posloupnost); Gaia Collaboration, Drimmel et al. 2023, A&A 674, A37 (Gaia DR3, OB) – mřížky z balíku SpiralMap 0.27 (MIT), `pipeline/gaia_ramena.py`; **licence samotných map neověřena**. Orientace os ověřena: vzájemná korelace map 0,68 jen bez převrácení (převrácené 0,06–0,22), nadhustota kladná podél ramen Reid 2019 |
+| Ramena z dat Gaia (přepínač „Gaia“) | mřížky nadhustoty mladých hvězd ±6 kpc kolem Slunce, krok 0,1 kpc | Poggio et al. 2021, A&A 651, A104 (Gaia EDR3, horní hlavní posloupnost); Gaia Collaboration, Drimmel et al. 2023, A&A 674, A37 (Gaia DR3, OB) – mřížky z balíku SpiralMap 0.27, `pipeline/gaia_ramena.py`. Licence: balík včetně datových souborů pod MIT (LICENSE.md v balíku, copyright Prusty & Khanna 2025, ověřeno 2. 10. 2026); autoři žádají citovat arXiv:2506.11383 a jednotlivé modely. Licence dat Gaia (ESA) z cloudu neověřena. Orientace os ověřena: vzájemná korelace map 0,68 jen bez převrácení (převrácené 0,06–0,22), nadhustota kladná podél ramen Reid 2019 |
 | Příčka | úhel ~27°, blízký konec v 1. kvadrantu (l > 0) | schematické, převzato z prototypu (opravena strana) – k ověření |
 | Průměr disku, tloušťka disku | 87 400 ly; 700–1 500 ly (tenký), ~8 500 ly (tlustý) | převzato z prototypu, **k ověření v etapě 5** |
 
@@ -25,6 +25,7 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 - Stav 1. 10. 2026 (staženo 17:41 UTC z cloudu): 6 375 planet, 6 347 se vzdáleností, 4 780 systémů, nejvzdálenější 8 500 pc.
 - Licence: veřejná data NASA/Caltech-IPAC. Archiv žádá citaci:
   > This research has made use of the NASA Exoplanet Archive, which is operated by the California Institute of Technology, under contract with the National Aeronautics and Space Administration under the Exoplanet Exploration Program.
+- Znění ověřeno 2. 10. 2026 na https://exoplanetarchive.ipac.caltech.edu/docs/acknowledge.html; archiv navíc žádá citovat Christiansen et al. (2025), PSJ (nahrazuje Akeson et al. 2013).
 - Pozor: PSCompPars skládá parametry z více publikací, nemusí být vzájemně konzistentní. Hvězdné parametry
   bereme z první vyplněné planety systému (abecedně).
 - Poloha: RA/Dec → l, b přes astropy (kontrola proti `glon/glat` archivu, tolerance 0,01°), vzdálenost `sy_dist`.

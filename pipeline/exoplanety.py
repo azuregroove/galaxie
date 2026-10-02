@@ -187,7 +187,8 @@ def main(argv=None):
             "licence": "Veřejná data NASA/Caltech-IPAC; archiv žádá uvedení citace",
             "citace": "This research has made use of the NASA Exoplanet Archive, which is operated by the "
                       "California Institute of Technology, under contract with the National Aeronautics and "
-                      "Space Administration under the Exoplanet Exploration Program.",
+                      "Space Administration under the Exoplanet Exploration Program. "
+                      "Publikace archivu: Christiansen et al. 2025, Planetary Science Journal.",
             "poznamka": "PSCompPars skládá parametry z více publikací, nemusí být vzájemně konzistentní.",
             "vyrez": bool(a.vstup),
             **st,

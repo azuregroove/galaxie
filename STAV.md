@@ -352,9 +352,16 @@ Aktualizovat na konci každého sezení.
     dvakrát – Query API vrací spkid jako číslo, SBDB API jako text; `mala_telesa.py` opraven (str), JSON deduplikován bez nového
     stahování → 3 177 těles (pás 1 181, NEO 881, trojáni 210), manifest a e-mail opraveny
   - hledání planetek řadí shodu na začátku slova dopředu („eros“ → 433 Eros, dřív 947 Monterosa)
+- 2026-10-02 (cloud): **etapa 6 – příprava nasazení** (`nasazeni/CHECKLIST.md`): workflow `.github/workflows/pages.yml`
+  (verze akcí ověřené z tagů, build z čistého klonu OK), licence SpiralMap ověřena (MIT vč. dat, citace arXiv:2506.11383),
+  poděkování NASA archivu ověřeno + citace Christiansen et al. 2025; CDS, DSS, JPL copyright a licence Gaia z cloudu blokované
+  → Ráďa ověří v prohlížeči. Repo nemá LICENSE (návrh MIT). **Nenasazeno** – čeká na rozhodnutí (svolení JPL, viz checklist)
 
 ## Rozdělané
-- nic (aktualizace exoplanet pushnutá 1. 10. s Ráďovým souhlasem)
+- etapa 6: čeká na Ráďu – kontrola e-mailu JPL (`nasazeni/email-jpl.md`), nastavení Pages → Source „GitHub Actions“,
+  rozhodnutí kdy sloučit do main (viz `nasazeni/CHECKLIST.md`), licence kódu
+- bod 7 (Radcliffeova vlna, Místní bublina, Gouldův pás): čeká na povolení domén arxiv.org, export.arxiv.org,
+  dataverse.harvard.edu, zenodo.org, www.nature.com (proxy 2. 10. hlásí „policy denial“)
 
 ## Další krok
 **Aktuální větev: `claude/vigilant-clarke-yii046`** (= `claude/jolly-thompson-pyvslt` + oprava popisů; push až po souhlasu).
