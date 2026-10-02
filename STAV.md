@@ -368,7 +368,7 @@ Aktualizovat na konci každého sezení.
   - bibliografie: O'Neill = ApJ 973, 136 (ADS), Nature články jen DOI (svazek/strana neověřené)
 
 ## Rozdělané
-- etapa 6: čeká na odpověď JPL (e-mail 2. 10.); Ráďa přepne Settings → Pages → Source „GitHub Actions“;
+- etapa 6: čeká na odpověď JPL (e-mail 2. 10.);
   po odpovědi sloučit větev do main = první nasazení (viz `nasazeni/CHECKLIST.md`)
 - Gouldův pás: jen pokud se najde zdroj s číselným natočením elipsy (např. tabulka v novější práci) – jinak nechat
 - možné vylepšení: mapa prachu Edenhofer 2024 (Zenodo už povolené) místo / vedle Vergely 2022
@@ -381,7 +381,7 @@ Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné
 
 1. **Čeká se na odpověď JPL** (e-mail z Gmailu 2. 10., vlákno „Permission request: JPL SSD data…“). Po kladné odpovědi:
    upravit znění poděkování podle JPL, sloučit větev do `main` → workflow nasadí na https://azuregroove.github.io/galaxie/
-2. Ráďa: Settings → Pages → Source „GitHub Actions“ (z cloudu nejde, API 403); přečíst podmínky CDS, DSS, JPL copyright,
+2. Pages Source = „GitHub Actions“ už je (Ráďa ověřil 2. 10.); Ráďa: přečíst podmínky CDS, DSS, JPL copyright,
    licence dat Gaia (odkazy v `nasazeni/CHECKLIST.md`)
 3. Ráďa na PC: vyzkoušet Prach (6 kpc / 3 kpc) a Okolí – výkon na GPU a telefonu; ATNF pulsary (`py pipeline\neutronove_hvezdy.py`)
 4. Pak etapa 7 (PWA: přibalit fonty, offline sada) nebo zbytek etapy 5 (vzorek Gaia do 100 pc)

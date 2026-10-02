@@ -10,7 +10,7 @@ Stav k 2. 10. 2026. ✅ = ověřeno, ⛔ = z cloudu nešlo ověřit (blokovaná 
   nebo ručně. Build z čistého klonu (`npm ci && npm run build`) prošel.
 - ✅ `vite.config.ts` má `base: "./"` → funguje i v podsložce `/galaxie/`.
 - ✅ Velikost webu 6,4 MB (limit Pages 1 GB); největší soubor prach-detail.bin.gz 1,2 MB.
-- 👤 **Settings → Pages → Build and deployment → Source: „GitHub Actions“** (jinak workflow nasadí, ale Pages dál servírují starý zdroj).
+- ✅ Settings → Pages → Source je „GitHub Actions“ (Ráďa ověřil 2. 10.).
 - 👤 Sloučit pracovní větev do `main` = první veřejné nasazení (adresa https://azuregroove.github.io/galaxie/).
 - ✅ Licence kódu MIT (`LICENSE`, Ráďa 2. 10.); data mají licence svých zdrojů (ZDROJE.md).
 
