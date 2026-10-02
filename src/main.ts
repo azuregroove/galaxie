@@ -12,6 +12,7 @@ import { ARMS, armRadius, armXZ } from "./scene/arms";
 import { GaiaArms } from "./scene/gaiaArms";
 import { Dust } from "./scene/dust";
 import { LocalStructures } from "./scene/local";
+import { Gaia100 } from "./scene/gaia100";
 import { ARM_GAIN_DEFAULT, buildBackdrop } from "./scene/backdrop";
 import { LY_PER_PC } from "./core/units";
 import { Overlays } from "./scene/overlays";
@@ -89,6 +90,10 @@ async function main() {
       layers.push(L);
     }
     if (bh) layers.push(new BlackHoleLayer(bh, frame, stage, css));
+    const gaiaNearBtn = document.getElementById("gaia100") as HTMLButtonElement | null;
+    const gaiaNear = gaiaNearBtn && file("gaia100") ? new Gaia100(DATA + file("gaia100"), frame.sun, stage.glow, gaiaNearBtn) : null;
+    if (gaiaNear) layers.push(gaiaNear);
+    else gaiaNearBtn?.remove();
     cats.forEach((c, i) => layers.push(new CatalogLayer(c as CatalogData, manifest.katalogy.find((k) => k.id === generic[i])!, frame, stage.glow, css)));
     layers.forEach((L) => stage.scene.add(L.group));
     if (names) applyNames(layers.flatMap((L) => L.objects), names);
@@ -99,6 +104,12 @@ async function main() {
     });
 
     const hud = new Hud(stage, frame, layers, overlays, labels, manifest);
+    if (gaiaNear) hud.extraPick = (px, py, r, rect) => {
+      const i = gaiaNear.pickAt(px, py, r, rect, stage);
+      if (i == null) return false;
+      void gaiaNear.star(i).then((o) => hud.select(o, true)).catch((e) => console.error(e));
+      return true;
+    };
     stage.jumpTo(frame.sun.clone().add(new Vector3(9000, 0, 0)), new Vector3(-23000, 52000, 42000));
     const tours = new Tours(DATA + "vylety.json", hud, stage, layers);
     document.getElementById("tours")!.onclick = () => void tours.menu();

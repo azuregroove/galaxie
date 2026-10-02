@@ -29,6 +29,8 @@ export class Hud {
   private rows = new Map<HTMLElement, MapObject>();
   /** Doplní do každé karty vlastní blok (výlet); volá se po sestavení karty. */
   cardExtra: ((card: HTMLElement) => void) | null = null;
+  /** Výběr z vrstvy mimo seznam (hvězdy Gaia), když klik netrefil žádný běžný objekt; true = klik převzala. */
+  extraPick: ((px: number, py: number, radius: number, rect: DOMRect) => boolean) | null = null;
   /** Karta se zavřela (křížkem, Esc, filtrem) nebo ji převzal jiný panel. */
   readonly cardCloseHandlers: (() => void)[] = [];
   readonly views: Record<string, () => void>;
@@ -596,11 +598,12 @@ export class Hud {
         pending = window.setTimeout(() => {
           const best = hit ?? pick(px, py, 32, rect);
           if (best) this.select(best, true);
+          else this.extraPick?.(px, py, 24, rect);
         }, 300);
       } else {
         const best = byLabel(e) ?? pick(px, py, 20, rect);
-        if (best) {
-          this.select(best, true);
+        if (best || this.extraPick?.(px, py, 12, rect)) {
+          if (best) this.select(best, true);
           lastTap = null;
         }
       }

@@ -379,6 +379,24 @@ Aktualizovat na konci každého sezení.
   - pozn.: při úplně první návštěvě stránku SW ještě neřídí (prompt režim bez clientsClaim) → prach a obrázky
     se ukládají až od druhého načtení; katalogy jsou offline hned
   - neověřeno: instalace na plochu na skutečném telefonu (Android/iOS) a chování na GitHub Pages (až po nasazení)
+- 2026-10-02 (cloud, noc): commit bad936c (PWA) pushnut s Ráďovým souhlasem do `claude/busy-hypatia-fvo0mb`
+- 2026-10-02 (cloud, noc): **etapa 5 – hvězdy do 100 pc z Gaia** (build OK, Playwright desktop 1400×860 + mobil 390×844, bez JS chyb)
+  - Ráďa zvolil: všech 331 312 hvězd GCNS (Gaia Collaboration 2021, CDS J/A+A/649/A6) + karty s údaji v extra souborech
+  - `pipeline/gaia100.py`: stažení 63 MB TSV (víc než ohlášený odhad 35–45 MB), 1 min 18 s; kontrola polohy proti GCNS
+    medián 0,0025 pc; 30 745 hvězd má medián vzdálenosti 100–119 pc (výběr podle paralaxy) – ponecháno, karta to říká
+  - výstup: `gaia100-body.bin.gz` 2,35 MB (int16 polohy, G, BP−RP, WD_prob; řazeno podle G), `gaia100-info-00…10.bin.gz`
+    celkem 5,7 MB (Gaia ID, paralaxa, Dist16/50/84, RUWE, GCNS_prob, RV) – původně jeden soubor 6,45 MB, rozdělen,
+    aby klik stáhl jen ~0,55 MB
+  - `src/scene/gaia100.ts`: tlačítko „Gaia 100 pc: vyp/zap“, body v lokálních souřadnicích kolem Slunce, velikost a jas
+    podle hvězdné velikosti z místa kamery (při průletu blízké hvězdy zjasní), barva podle BP−RP (orientační);
+    do 900 ly od Slunce všechny body, dál 40 000 nejjasnějších, nad 9 000 ly skryto
+  - výběr: když klik netrefí běžný objekt, hledá se nejbližší hvězda Gaia (`Hud.extraPick`); karta: Gaia DR3 ID,
+    vzdálenost s 16.–84. percentilem, paralaxa, G, absolutní G, BP−RP, bílý trpaslík, RV, RUWE, GCNS_prob, odkaz SIMBAD,
+    výřez oblohy; „Pohled odtud ke Slunci“ funguje
+  - ověřeno: hodnoty v kartě proti TSV (Gaia DR3 2626879586818300416: plx 10,914, Dist50 91,67 pc, G 15,50, z −67 pc) ✓
+  - PWA: `.bin.gz` v runtime cache `galaxie-binarni` (max 20 souborů) až po použití; `gaia100.json` v precache
+  - omezení: hvězdy Gaia nejsou v seznamu ani hledání (331 tis. řádků); sdílení přes #kotvu vybranou hvězdu Gaia neobnoví;
+    v okolí Slunce se hvězda z GCNS a táž jasná hvězda / hostitel exoplanet kreslí dvakrát (bez párování)
 
 ## Rozdělané
 - etapa 6: čeká na odpověď JPL (e-mail 2. 10.);
@@ -399,7 +417,9 @@ Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné
 3. Ráďa na PC: vyzkoušet Prach (6 kpc / 3 kpc) a Okolí – výkon na GPU a telefonu; ATNF pulsary (`py pipeline\neutronove_hvezdy.py`)
 4. Etapa 7 (PWA) hotová v kódu – Ráďa na PC: `npm install`, `npm run build`, `npm run preview`, v Chrome zkusit
    „Nainstalovat“ a offline (DevTools → Network → Offline); po nasazení zkusit instalaci na telefonu.
-   Další: zbytek etapy 5 (vzorek Gaia do 100 pc – před stažením ohlásit velikost) nebo etapa 8 (Capacitor)
+   Ráďa na PC: zapnout „Gaia 100 pc“ v pohledu Okolí Slunce – plynulost na GPU a hlavně na telefonu (331 tis. bodů);
+   případně snížit FAR_COUNT / NEAR_LY v `src/scene/gaia100.ts`.
+   Další: hledání hvězd Gaia podle ID, spárování s Jasnými hvězdami a hostiteli exoplanet, nebo etapa 8 (Capacitor)
 5. Cloudové kredity: 2. 10. zbývalo 11 $ ze 100 – šetřit
 
 **Dlouhodobě (z 30. 9.):**

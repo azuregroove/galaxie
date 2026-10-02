@@ -34,7 +34,8 @@ export default defineConfig({
       },
       workbox: {
         // Aplikace + všechny JSON katalogy (~4 MB) jsou offline hned po první návštěvě.
-        // Prach (.bin.gz, 1,9 MB) se ukládá až po prvním zapnutí vrstvy, ať telefon zbytečně nestahuje.
+        // Binární vrstvy (.bin.gz: prach 1,9 MB, hvězdy Gaia 2,3 MB + kousky karet) se ukládají až při použití,
+        // ať telefon zbytečně nestahuje.
         globPatterns: ["**/*.{js,css,html,woff2,svg,png,json}"],
         maximumFileSizeToCacheInBytes: 2 * 1024 * 1024,
         navigateFallback: "index.html",
@@ -43,7 +44,7 @@ export default defineConfig({
           {
             urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.endsWith(".bin.gz"),
             handler: "CacheFirst",
-            options: { cacheName: "galaxie-prach", expiration: { maxEntries: 4 } },
+            options: { cacheName: "galaxie-binarni", expiration: { maxEntries: 20 } },
           },
           {
             // náhledy z Commons a výřezy oblohy (hips2fits) – jen posledních pár desítek, kvůli kvótě úložiště

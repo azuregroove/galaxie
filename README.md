@@ -43,6 +43,7 @@ py slunecni_soustava.py   # JPL: planety, trpasličí planety, 459 měsíců (Ho
 py mala_telesa.py         # JPL SBDB: vzorek 3 187 planetek a komet (+ ~540 dotazů Horizons, ~5 min) -> mala-telesa.json
                           #   --overit = porovnání poloh 14 těles s Horizons
 py neutronove_hvezdy.py   # ATNF přes psrqpy (jinak kopie 2016 v CDS) + magnetary McGill -> neutronove-hvezdy.json
+py gaia100.py             # Gaia Catalogue of Nearby Stars (CDS, 63 MB TSV, ~1–2 min) -> gaia100.json + gaia100-*.bin.gz
 ```
 
 Katalogy etapy 3 sdílí formát (schema 2, popis v `pipeline/katalog.py`) a v aplikaci je čte jedna obecná vrstva.
@@ -59,7 +60,7 @@ npm run preview   # náhled buildu (včetně service workeru a offline režimu)
 
 PWA: `vite-plugin-pwa` (konfigurace ve `vite.config.ts`, registrace a nabídka nové verze v `src/pwa.ts`).
 Service worker vzniká jen při `npm run build`; v `npm run dev` není. Offline je aplikace + všechny JSON katalogy,
-prach a obrázky/popisy z Wikimedie se ukládají až při použití. Ikony v `public/icons/` (zdroj `icon.svg`).
+prach, hvězdy Gaia do 100 pc a obrázky/popisy z Wikimedie se ukládají až při použití. Ikony v `public/icons/` (zdroj `icon.svg`).
 
 ## Konvence
 

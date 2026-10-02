@@ -181,6 +181,21 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 - **Gouldův pás vynechán:** Perrot & Grenier 2003 (A&A, astro-ph/0303516) udávají střed 104 pc směrem l = 180,4°, poloosy
   373 × 233 pc (v textu 354 × 232), sklon 17,2°, uzel l = 296,1°, ale natočení hlavní osy elipsy jen v obr. 5 – bez něj by elipsa byla odhad.
 
+### Hvězdy do 100 pc – Gaia Catalogue of Nearby Stars (`pipeline/gaia100.py` → `gaia100.json`, `gaia100-*.bin.gz`)
+- Gaia Collaboration, Smart R.L. et al. 2021, A&A 649, A6; CDS J/A+A/649/A6, tabulka `table1c` (331 312 objektů, ověřeno
+  z metadat VizieR 2. 10. 2026). Astrometrie Gaia EDR3; čísla source_id jsou v DR3 stejná, proto v aplikaci „Gaia DR3 …“.
+- Licence: katalog CDS/VizieR (podmínky CDS ověřit, viz checklist); data Gaia ESA/Gaia/DPAC – licenci dat Gaia ověřit
+  (cosmos.esa.int z cloudu nedostupné).
+- Vzdálenost = `Dist50` (medián posteriorního rozdělení z GCNS), nejistota `Dist16`–`Dist84`. Poloha x, y, z
+  přepočtená z RA/Dec a Dist50 přes astropy; proti `xcoord50…` z katalogu medián odchylky 0,0025 pc, max 0,01 pc.
+- **30 745 objektů má Dist50 nad 100 pc** (max 119,3 pc): katalog vybíral podle paralaxy, okraj je neostrý. Ponecháno
+  celé, karta to u takových hvězd říká.
+- Barva bodu podle BP−RP je orientační přechod; na spektrální třídy se nepřevádí (tabulka Pecaut & Mamajek ve VizieR
+  sloupec BP−RP nemá, novější verze na webu autora je z cloudu nedostupná).
+- „Pravděpodobně bílý trpaslík“ = WD_prob > 0,5 (hranice zvolená pro aplikaci, ne z článku): 21 848 objektů.
+- RUWE nad 1,4 – v kartě poznámka; hranice 1,4 je běžně používaná v dokumentaci Gaia, článek zde neověřen.
+- Velikost: grafika 2,35 MB (.bin.gz, načte se po zapnutí vrstvy), údaje karet 11 kousků po ~0,55 MB (načtou se po kliknutí).
+
 ### Písma (přibalená v aplikaci, `src/fonts.ts`)
 - Chakra Petch, IBM Plex Sans, IBM Plex Mono – balíčky Fontsource (`@fontsource/*` 5.3), licence **SIL Open Font License 1.1**
   (pole `license` v package.json balíčků + soubor LICENSE v balíčku). Jen podmnožiny latin a latin-ext.

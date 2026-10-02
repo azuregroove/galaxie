@@ -211,7 +211,7 @@ export class Dust {
 }
 
 /** Soubor .bin.gz – rozbalí ho prohlížeč (DecompressionStream); když ho už rozbalil server, vezme se, jak je. */
-async function loadBytes(url: string): Promise<Uint8Array> {
+export async function loadBytes(url: string): Promise<Uint8Array> {
   const r = await fetch(url);
   if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`);
   const buf = new Uint8Array(await r.arrayBuffer());

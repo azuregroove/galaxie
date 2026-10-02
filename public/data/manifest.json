@@ -44,6 +44,17 @@
       "citace": "Prusty & Khanna 2025, arXiv:2506.11383 (SpiralMap); Poggio E. et al. 2021, A&A 651, A104; Gaia Collaboration, Drimmel R. et al. 2023, A&A 674, A37"
     },
     {
+      "id": "gaia100",
+      "soubor": "gaia100.json",
+      "nazev": "Hvězdy do 100 pc (Gaia)",
+      "zdroj": "Gaia Catalogue of Nearby Stars (GCNS) – Gaia EDR3, CDS J/A+A/649/A6",
+      "url": "https://cdsarc.cds.unistra.fr/viz-bin/cat/J/A+A/649/A6",
+      "licence": "Katalog CDS/VizieR – volně s citací (podmínky CDS ověřit, viz ZDROJE.md); data Gaia: ESA/Gaia/DPAC",
+      "citace": "Gaia Collaboration, Smart R.L. et al. 2021, A&A 649, A6",
+      "poznamka": "Vzdálenost = medián posteriorního rozdělení (Dist50) z GCNS, nejistota 16.–84. percentil. Barva bodu podle BP−RP je orientační, spektrální třída se z ní neodvozuje.",
+      "vyrez": false
+    },
+    {
       "nazev": "Hvězdokupy",
       "zdroj": "Hunt & Reffert 2023, A&A 673, A114 (CDS J/A+A/673/A114); Baumgardt & Vasiliev 2021, MNRAS 505, 5957",
       "url": "https://cdsarc.cds.unistra.fr/viz-bin/cat/J/A+A/673/A114",

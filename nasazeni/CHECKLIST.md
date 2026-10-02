@@ -9,7 +9,7 @@ Stav k 2. 10. 2026. ✅ = ověřeno, ⛔ = z cloudu nešlo ověřit (blokovaná 
   configure-pages@v6, upload-pages-artifact@v5, deploy-pages@v5 – tagy ověřené na GitHubu. Spouští se pushem do `main`
   nebo ručně. Build z čistého klonu (`npm ci && npm run build`) prošel.
 - ✅ `vite.config.ts` má `base: "./"` → funguje i v podsložce `/galaxie/`.
-- ✅ Velikost webu 6,4 MB (limit Pages 1 GB); největší soubor prach-detail.bin.gz 1,2 MB.
+- ✅ Velikost webu 15 MB (limit Pages 1 GB); největší soubor gaia100-body.bin.gz 2,3 MB (od 2. 10. vrstva Gaia 100 pc).
 - ✅ Settings → Pages → Source je „GitHub Actions“ (Ráďa ověřil 2. 10.).
 - 👤 Sloučit pracovní větev do `main` = první veřejné nasazení (adresa https://azuregroove.github.io/galaxie/).
 - ✅ Licence kódu MIT (`LICENSE`, Ráďa 2. 10.); data mají licence svých zdrojů (ZDROJE.md).
