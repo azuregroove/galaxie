@@ -427,13 +427,23 @@ Aktualizovat na konci každého sezení.
   na Ráďův zdroj; podle STAV: nekopírovat mapy doslova, jen fakta (které hvězdy komu patří) a vlastní odvození
 
 ## Rozdělané
+- **Star Trek – spojit bubliny do souvislých území (Ráďa 2. 10.)**: místo koule 14 ly kolem každé soustavy jedna „mlhovina“
+  na mocnost, aby byla ve 3D vidět teoretická hranice. Navržený postup (ještě neimplementováno):
+  1. `pipeline/startrek.py`: 3D mřížka kolem Slunce (např. ±300 ly, krok 5 ly → 120³), scipy cKDTree nad umístěnými soustavami;
+     buňka patří mocnosti nejbližší soustavy, pokud je do ~35 ly (sjednocení koulí; kde se dvě mocnosti potkají, hranice
+     uprostřed = Voronoi). Uložit `startrek-uzemi.bin.gz`: kanál štítek (index mocnosti) + hustota (vzdálenost k okraji území)
+     + vzdálenost k hranici s jinou mocností. Odlehlé soustavy (Rigel 860 ly, β Lyr 960 ly) mimo mřížku nechat jako bubliny.
+  2. `src/scene/startrek.ts`: vykreslit raymarchingem jako `src/scene/dust.ts` (Data3DTexture: štítek NearestFilter, pole
+     LinearFilter), barva z palety mocností, průsvitná mlhovina + zvýrazněné hranice; viditelnost podle přepínačů v legendě
+     (uniform s maskou zapnutých mocností). Vzdálené oblasti Gamma/Delta nechat jako koule.
+  3. Ověřit build + Playwright (desktop, mobil, výkon raymarchingu na mobilu – méně kroků jako u prachu).
 - etapa 6: čeká na odpověď JPL (e-mail 2. 10.);
   po odpovědi sloučit větev do main = první nasazení (viz `nasazeni/CHECKLIST.md`)
 - Gouldův pás: jen pokud se najde zdroj s číselným natočením elipsy (např. tabulka v novější práci) – jinak nechat
 - možné vylepšení: mapa prachu Edenhofer 2024 (Zenodo už povolené) místo / vedle Vergely 2022
 
 ## Další krok
-**Aktuální větev: `claude/busy-hypatia-fvo0mb`** (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` je stále na etapě 3.
+**Aktuální větev: `claude/busy-hypatia-fvo0mb`** (poslední commit 900dfde = Star Trek; další krok: spojení bublin – viz Rozdělané) (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` je stále na etapě 3.
 Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve.
 Na PC: `git fetch origin`, `git switch claude/busy-hypatia-fvo0mb`, `git pull`, `npm install`, `npm run dev`.
 Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné nasazení) až po odpovědi JPL.
