@@ -16,6 +16,7 @@ import { Gaia100 } from "./scene/gaia100";
 import { PillarsLayer, type PillarsMeta } from "./scene/pillars";
 import { DarkMatterLayer } from "./scene/darkMatter";
 import { StarTrekLayer, type StarTrekData } from "./scene/startrek";
+import { TrekCatalog } from "./ui/trekCatalog";
 import { ARM_GAIN_DEFAULT, buildBackdrop } from "./scene/backdrop";
 import { LY_PER_PC } from "./core/units";
 import { Overlays } from "./scene/overlays";
@@ -100,7 +101,7 @@ async function main() {
     let trek: StarTrekLayer | null = null;
     if (trekBtn && file("startrek")) {
       try {
-        trek = new StarTrekLayer(await getJson<StarTrekData>(file("startrek")!), frame.sun, stage.glow);
+        trek = new StarTrekLayer(await getJson<StarTrekData>(file("startrek")!), frame.sun, stage.glow, DATA);
         layers.push(trek);
       } catch (e) { console.error(e); }
     }
@@ -137,7 +138,22 @@ async function main() {
         if (on) hud.toastPublic("Star Trek: fanouškovská vrstva, fikce – polohy jsou extrapolace z Memory Alpha a Memory Beta");
       };
       document.getElementById("legend")!.addEventListener("click", () => queueMicrotask(label));
-    }
+      const catBtn = document.getElementById("trekCat");
+      if (catBtn && file("startrek-katalog")) {
+        const cat = new TrekCatalog(DATA + file("startrek-katalog"), hud, (k) => {
+          const o = t.reveal(k);
+          if (!o) return;
+          hud.syncLayer(t.id);
+          label();
+          hud.select(o, true);
+        }, (id) => t.powerColor(id));
+        catBtn.onclick = () => void cat.show();
+        document.getElementById("card")!.addEventListener("click", (e) => {
+          const b = (e.target as HTMLElement).closest<HTMLElement>("[data-trekcat]");
+          if (b) void cat.show(b.dataset.trekcat);
+        });
+      } else catBtn?.remove();
+    } else document.getElementById("trekCat")?.remove();
     if (gaiaNear) hud.extraPick = (px, py, r, rect) => {
       const i = gaiaNear.pickAt(px, py, r, rect, stage);
       if (i == null) return false;

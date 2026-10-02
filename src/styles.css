@@ -326,3 +326,19 @@ table.planets .dim { font-size: 10px; }
 .timeline .tablewrap { max-height: 220px; overflow-y: auto; }
 #card .desc p { margin: 0 0 6px; }
 #card .desc .src { margin-bottom: 4px; }
+
+/* katalog Star Treku */
+.trekCat .tcQ { width: 100%; box-sizing: border-box; margin: 8px 0 6px; }
+.trekCat .tcF { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 4px; }
+.trekCat .tcF select { flex: 1 1 30%; min-width: 0; }
+.trekCat .tcList { list-style: none; margin: 4px 0 8px; padding: 0; max-height: 46vh; overflow-y: auto; border-top: 1px solid var(--line); }
+.trekCat .tcList li { display: flex; gap: 8px; align-items: baseline; padding: 6px 2px; border-bottom: 1px solid var(--line); cursor: pointer; font-size: 13px; }
+.trekCat .tcList li:hover, .trekCat .tcList li:focus-visible { background: rgba(143, 180, 255, 0.08); outline: none; }
+.trekCat .tcI { flex: none; width: 12px; text-align: center; }
+.trekCat .tcN { flex: 1; min-width: 0; }
+.trekCat .tcN small { display: block; color: var(--dim); font: 400 11px var(--f-mono); }
+.trekCat .tcMap { flex: none; font: 500 10px var(--f-mono); color: var(--accent); border: 1px solid currentColor; border-radius: 4px; padding: 0 4px; }
+.trekCat .tcBtns { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
+.trekCat .tcMembers { font-size: 12.5px; line-height: 1.7; }
+.trekCat .linkish { background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; cursor: pointer; font: inherit; }
+.trekCat .warn { margin-left: 0; display: inline-block; }

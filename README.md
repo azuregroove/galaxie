@@ -47,6 +47,8 @@ py gaia100.py             # Gaia Catalogue of Nearby Stars (CDS, 63 MB TSV, ~1�
 py sloupy.py              # Sloupy stvoření: obrys z Pan-STARRS (hips2fits) + geometrie z literatury -> sloupy.json + .bin.gz
 py startrek_stahni.py     # Star Trek: wikitext z Memory Alpha a Memory Beta (~15 tis. stránek, ~25 MB, 5–10 min)
 py startrek.py            # Star Trek (fikce): příslušnost, skutečné hvězdy (SIMBAD), výpočet poloh -> startrek.json
+py startrek_uzemi.py      # Star Trek: souvislá území mocností (3D mřížka) -> startrek-uzemi.bin.gz
+py startrek_katalog.py    # Star Trek: katalog všech hvězd, soustav a planet -> startrek-katalog.json
 ```
 
 Katalogy etapy 3 sdílí formát (schema 2, popis v `pipeline/katalog.py`) a v aplikaci je čte jedna obecná vrstva.

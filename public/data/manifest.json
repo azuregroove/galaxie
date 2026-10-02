@@ -207,6 +207,16 @@
       "licence": "Fakta z wiki: Memory Alpha CC BY-NC, Memory Beta CC BY-SA (uvedeno, nekomerční). Star Trek © Paramount; neoficiální fanouškovská vrstva",
       "poznamka": "Polohy fiktivních soustav jsou vypočtené z uvedených vzdáleností a kvadrantů, vzdálené mocnosti schematicky.",
       "vyrez": false
+    },
+    {
+      "id": "startrek-katalog",
+      "soubor": "startrek-katalog.json",
+      "nazev": "Star Trek – katalog hvězd a planet (fikce)",
+      "zdroj": "Memory Alpha (memory-alpha.fandom.com) a Memory Beta (memory-beta.fandom.com), kategorie Stars, Star systems, Planets",
+      "url": "https://memory-alpha.fandom.com/wiki/Category:Planets",
+      "licence": "Fakta z wiki: Memory Alpha CC BY-NC, Memory Beta CC BY-SA (uvedeno, nekomerční). Star Trek © Paramount; neoficiální fanouškovská vrstva",
+      "poznamka": "Jen jména a údaje z infoboxů, žádné texty článků. Poloha jen u soustav, které má fanouškovská vrstva na mapě.",
+      "vyrez": false
     }
   ]
 }

@@ -426,26 +426,36 @@ Aktualizovat na konci každého sezení.
   (curl i WebFetch). Star Charts (Mandel 2002) je placená kniha, online legálně není. Čeká na povolení domén nebo
   na Ráďův zdroj; podle STAV: nekopírovat mapy doslova, jen fakta (které hvězdy komu patří) a vlastní odvození
 
+- 2026-10-02 (cloud, pozdě v noci, větev `claude/happy-albattani-vecsdh` = busy-hypatia + tohle): **Star Trek – souvislá území
+  a katalog** (build OK, Playwright desktop 1400×860 + mobil 390×844 s dotykem, bez JS chyb)
+  - raw data znovu stažena (`startrek_stahni.py`, 14 686 stránek, 24 MB, ~5 min; v gitu nejsou)
+  - `pipeline/startrek_uzemi.py` → `startrek-uzemi.bin.gz` 104 kB: mřížka 128×128×80 po 5 ly, měkké sjednocení (soft-min
+    8 nejbližších, 6 ly) do 30 ly, hranice mezi mocnostmi uprostřed; `src/scene/startrek.ts` raymarching (štítek bez
+    interpolace + interpolovaná vzdálenost k hranici → hladký okraj a jasná slupka), stahuje se až při zapnutí, přepínače
+    v legendě přes paletu; bubliny jen u soustav mimo mřížku, bez příslušnosti a u oblastí Gama/Delta
+  - Bajor má jen 12 buněk (jediná soustava, obklopená Federací a Cardassií) – tak dopadne pravidlo „nejbližší mocnost“
+  - `pipeline/startrek_katalog.py` → `startrek-katalog.json` 923 kB (gzip 87 kB): 12 739 položek (2 379 hvězd, 5 308 soustav,
+    5 052 planet), na mapě 768; obecný parser infoboxů (Memory Beta `planetInfobox` původní skript vůbec nečetl),
+    zrcadlový vesmír jako samostatné položky, příslušnost i z kategorií („Klingon worlds“) a zkratek MB (`type = fed`)
+  - `src/ui/trekCatalog.ts`: tlačítko „Katalog ST“, hledání bez diakritiky, filtry druh / mocnost / kvadrant / jen na mapě,
+    detail s planetami soustavy, odkazy na obě wiki, „Ukázat na mapě“ (zapne mocnost a přeletí); v kartě soustavy na mapě
+    tlačítko „Hvězdy a planety v katalogu“
+  - PWA precache teď 6,0 MB (katalog je JSON → offline hned)
+  - pushnuto s Ráďovým souhlasem (2. 10.) do `claude/happy-albattani-vecsdh`
+
 ## Rozdělané
-- **Star Trek – spojit bubliny do souvislých území (Ráďa 2. 10.)**: místo koule 14 ly kolem každé soustavy jedna „mlhovina“
-  na mocnost, aby byla ve 3D vidět teoretická hranice. Navržený postup (ještě neimplementováno):
-  1. `pipeline/startrek.py`: 3D mřížka kolem Slunce (např. ±300 ly, krok 5 ly → 120³), scipy cKDTree nad umístěnými soustavami;
-     buňka patří mocnosti nejbližší soustavy, pokud je do ~35 ly (sjednocení koulí; kde se dvě mocnosti potkají, hranice
-     uprostřed = Voronoi). Uložit `startrek-uzemi.bin.gz`: kanál štítek (index mocnosti) + hustota (vzdálenost k okraji území)
-     + vzdálenost k hranici s jinou mocností. Odlehlé soustavy (Rigel 860 ly, β Lyr 960 ly) mimo mřížku nechat jako bubliny.
-  2. `src/scene/startrek.ts`: vykreslit raymarchingem jako `src/scene/dust.ts` (Data3DTexture: štítek NearestFilter, pole
-     LinearFilter), barva z palety mocností, průsvitná mlhovina + zvýrazněné hranice; viditelnost podle přepínačů v legendě
-     (uniform s maskou zapnutých mocností). Vzdálené oblasti Gamma/Delta nechat jako koule.
-  3. Ověřit build + Playwright (desktop, mobil, výkon raymarchingu na mobilu – méně kroků jako u prachu).
+- Star Trek – možná vylepšení: (1) MB planety mají příslušnost v `planetInfobox`, kterou `startrek.py` nečte → po úpravě
+  by na mapě přibyly soustavy a kotvy mocností; (2) výkon raymarchingu území na telefonu neověřen (max. 160 kroků);
+  (3) třídy planet z MB někdy jako text („habitable“, „gas giant“) – sjednotit
 - etapa 6: čeká na odpověď JPL (e-mail 2. 10.);
   po odpovědi sloučit větev do main = první nasazení (viz `nasazeni/CHECKLIST.md`)
 - Gouldův pás: jen pokud se najde zdroj s číselným natočením elipsy (např. tabulka v novější práci) – jinak nechat
 - možné vylepšení: mapa prachu Edenhofer 2024 (Zenodo už povolené) místo / vedle Vergely 2022
 
 ## Další krok
-**Aktuální větev: `claude/busy-hypatia-fvo0mb`** (poslední commit 900dfde = Star Trek; další krok: spojení bublin – viz Rozdělané) (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` je stále na etapě 3.
+**Aktuální větev: `claude/happy-albattani-vecsdh`** (= busy-hypatia + Star Trek území a katalog, 2. 10.); předtím `claude/busy-hypatia-fvo0mb` (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` je stále na etapě 3.
 Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve.
-Na PC: `git fetch origin`, `git switch claude/busy-hypatia-fvo0mb`, `git pull`, `npm install`, `npm run dev`.
+Na PC: `git fetch origin`, `git switch claude/happy-albattani-vecsdh`, `git pull`, `npm install`, `npm run dev`.
 Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné nasazení) až po odpovědi JPL.
 
 1. **Čeká se na odpověď JPL** (e-mail z Gmailu 2. 10., vlákno „Permission request: JPL SSD data…“). Po kladné odpovědi:

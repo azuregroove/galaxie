@@ -244,6 +244,16 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
   Memory Alpha); příslušnost se volí pro 24. století, stav z 32. století má přednost před 23. stoletím a okupacemi.
 - Soustav jen s příslušností a bez jakéhokoli údaje o vzdálenosti je přes 1 000 – na mapu se nedávají (karta mocnosti je počítá).
 
+- **Souvislá území** (`pipeline/startrek_uzemi.py` → `startrek-uzemi.bin.gz`, 104 kB): vlastní odvození z umístěných soustav,
+  ne převzatá mapa. Mřížka 128 × 128 × 80 buněk po 5 ly kolem Slunce (±320 / ±320 / ±200 ly); buňka patří mocnosti
+  s nejmenší „měkkou“ vzdáleností (soft-min přes 8 nejbližších soustav, šířka 6 ly), pokud je pod 30 ly; mezi mocnostmi hranice
+  uprostřed. Soustavy mimo mřížku (Rigel, β Lyr…) a vzdálené oblasti Gama/Delta zůstávají jako koule.
+- **Katalog hvězd a planet** (`pipeline/startrek_katalog.py` → `startrek-katalog.json`, 923 kB, gzip 87 kB): všechny stránky
+  kategorií Stars, Star systems, Planets z obou wiki (14 686 stránek) → 12 739 položek (2 379 hvězd, 5 308 soustav,
+  5 052 planet; stejné jméno na obou wiki = jedna položka, přehledové stránky „Unnamed…“ vynechány, zrcadlový vesmír
+  samostatně). Jen údaje z infoboxů a kategorií: druh, třída, soustava, příslušnost, kvadrant, vzdálenost od Slunce, pokud ji
+  wiki uvádí. Žádné texty článků. Polohu na mapě má 768 položek (přes soustavu ve fanouškovské vrstvě).
+
 ### Písma (přibalená v aplikaci, `src/fonts.ts`)
 - Chakra Petch, IBM Plex Sans, IBM Plex Mono – balíčky Fontsource (`@fontsource/*` 5.3), licence **SIL Open Font License 1.1**
   (pole `license` v package.json balíčků + soubor LICENSE v balíčku). Jen podmnožiny latin a latin-ext.

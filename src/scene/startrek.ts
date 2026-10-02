@@ -1,13 +1,23 @@
 import {
   AdditiveBlending,
+  BackSide,
+  BoxGeometry,
   BufferAttribute,
   BufferGeometry,
   Color,
+  Data3DTexture,
+  DataTexture,
+  GLSL3,
   Group,
   InstancedBufferAttribute,
   InstancedMesh,
+  LinearFilter,
   Matrix4,
+  Mesh,
+  NearestFilter,
   Points,
+  RedFormat,
+  RGBAFormat,
   ShaderMaterial,
   SphereGeometry,
   type Texture,
@@ -16,6 +26,7 @@ import {
 import type { MapObject } from "../core/types";
 import { escapeHtml, fmtLy, fmtPcFromLy, LY_PER_PC } from "../core/units";
 import type { Layer, LayerFilter } from "../layers/layer";
+import { loadBytes } from "./dust";
 import type { Stage } from "./stage";
 
 interface Power { id: string; nazev: string; en: string; barva: string; kvadrant: string; bez_polohy?: number }
@@ -24,8 +35,9 @@ interface System {
   kvadrant: string | null; era: string | null; xyz: [number, number, number]; zdroje: string[];
 }
 interface Far { mocnost: string; xyz: [number, number, number]; polomer_ly: number; zdroj: string }
+interface Territory { soubor: string; nx: number; ny: number; nz: number; krok_ly: number; polo_ly: [number, number, number]; dosah_ly: number; postup: string }
 export interface StarTrekData {
-  stazeno: string; upozorneni: string; mocnosti: Power[]; soustavy: System[]; vzdalene: Far[];
+  stazeno: string; upozorneni: string; mocnosti: Power[]; soustavy: System[]; vzdalene: Far[]; uzemi?: Territory;
   statistika: { stranek: number; soustav: number; skutecne_hvezdy: number; vypocet: number };
 }
 
@@ -36,6 +48,76 @@ const BUBBLE_LY = 14;
 // hlavní světy – popisky i z dálky
 const CAPITALS = new Set(["Sol", "Vulcan", "Qo'noS", "Romulus", "Cardassian", "Ferenginar", "Bajoran", "Breen", "Tholia",
   "Andorian", "Tellar", "Gorn", "Talar", "Risa", "Betazed", "Trill", "Wolf 359", "Khitomer", "Deep Space 9"]);
+
+const volVertex = /* glsl */ `
+uniform vec3 camLocal;
+out vec3 vOrigin;
+out vec3 vDirection;
+void main() {
+  vOrigin = camLocal;
+  vDirection = position - camLocal;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}`;
+
+// Paprsek v krychli −0,5…0,5 jako u prachu. Štítek (nejbližší soustava) se čte bez interpolace, vzdálenost k hranici
+// lineárně: uvnitř území slabá mlha, u hranice (okraj dosahu i dělicí plocha mezi mocnostmi) jasná slupka.
+const volFragment = /* glsl */ `
+precision highp float;
+precision highp sampler3D;
+uniform sampler3D lab;
+uniform sampler3D edge;
+uniform sampler2D pal;
+uniform vec3 sizeLy;
+uniform vec3 voxels;
+uniform float reachLy;
+uniform int maxSteps;
+in vec3 vOrigin;
+in vec3 vDirection;
+out vec4 color;
+
+vec2 hitBox(vec3 o, vec3 d) {
+  vec3 inv = 1.0 / d;
+  vec3 t0 = (vec3(-0.5) - o) * inv;
+  vec3 t1 = (vec3(0.5) - o) * inv;
+  vec3 tmin = min(t0, t1), tmax = max(t0, t1);
+  return vec2(max(max(tmin.x, tmin.y), tmin.z), min(min(tmax.x, tmax.y), tmax.z));
+}
+
+float hash(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+
+void main() {
+  vec3 dir = normalize(vDirection);
+  vec2 b = hitBox(vOrigin, dir);
+  if (b.x >= b.y) discard;
+  b.x = max(b.x, 0.0);
+  float len = b.y - b.x;
+  int n = int(clamp(length(dir * len * voxels) * 1.5, 4.0, float(maxSteps)));
+  float dt = len / float(n);
+  float dsLy = length(dir * dt * sizeLy);
+  vec3 p = vOrigin + dir * (b.x + dt * hash(gl_FragCoord.xy));
+  vec3 acc = vec3(0.0);
+  float a = 0.0;
+  for (int i = 0; i < 768; i++) {
+    if (i >= n) break;
+    int l = int(texture(lab, p + 0.5).r * 255.0 + 0.5);
+    if (l > 0) {
+      vec4 c = texelFetch(pal, ivec2(l, 0), 0);
+      if (c.a > 0.5) {
+        // hladký okraj z interpolované vzdálenosti (štítek je po voxelech), slupka těsně pod hranicí
+        float e = texture(edge, p + 0.5).r * reachLy;
+        float x = (e - 3.5) / 2.0;
+        float s = smoothstep(0.8, 2.2, e) * (0.0012 + 0.035 * exp(-x * x));
+        float k = 1.0 - exp(-s * dsLy);
+        acc += (1.0 - a) * k * c.rgb;
+        a += (1.0 - a) * k;
+        if (a > 0.9) break;
+      }
+    }
+    p += dir * dt;
+  }
+  if (a < 0.002) discard;
+  color = vec4(acc, a);
+}`;
 
 const wikiUrl = (src: string) => {
   const [wiki, ...t] = src.split(":");
@@ -62,9 +144,18 @@ export class StarTrekLayer implements Layer {
   private readonly centers: Vector3[] = [];
   private readonly vis: BufferAttribute;
   private readonly points: Points;
+  /** soustavy, jejichž koule leží celá v mřížce území – po načtení objemu se jejich bubliny schovají */
+  private readonly inGrid: boolean[] = [];
+  private readonly palette = new DataTexture(new Uint8Array(256 * 4), 256, 1, RGBAFormat);
+  private volume: Mesh<BoxGeometry, ShaderMaterial> | null = null;
+  private volLoading = false;
+  private readonly dataBase: string;
+  private readonly sun: Vector3;
 
-  constructor(data: StarTrekData, sun: Vector3, glow: Texture) {
+  constructor(data: StarTrekData, sun: Vector3, glow: Texture, dataBase = "") {
     this.data = data;
+    this.dataBase = dataBase;
+    this.sun = sun;
     const root = document.documentElement.style;
     data.mocnosti.forEach((p, i) => {
       this.powers.set(p.id, p);
@@ -94,6 +185,9 @@ export class StarTrekLayer implements Layer {
       };
       this.objects.push(obj);
       items.push({ pos, r: BUBBLE_LY, color: new Color(power?.barva ?? "#888"), obj });
+      const T = data.uzemi;
+      this.inGrid.push(!!T && !!power && power.id !== "_bez"
+        && s.xyz.every((v, k) => Math.abs(v * LY_PER_PC) + T.dosah_ly <= T.polo_ly[k]));
     }
     for (const f of data.vzdalene) {
       const pos = toScene(f.xyz);
@@ -105,7 +199,14 @@ export class StarTrekLayer implements Layer {
       };
       this.objects.push(obj);
       items.push({ pos, r: f.polomer_ly, color: new Color(power?.barva ?? "#888"), obj });
+      this.inGrid.push(false);
     }
+    const pal = this.palette.image.data as Uint8Array;
+    data.mocnosti.forEach((p, i) => {
+      const c = new Color(p.barva);
+      pal.set([c.r * 255, c.g * 255, c.b * 255, 0], (i + 1) * 4);
+    });
+    this.palette.minFilter = this.palette.magFilter = NearestFilter;
 
     // bubliny: instancované koule s průsvitným okrajem; skrytá mocnost = nulová velikost instance
     const geo = new SphereGeometry(1, 24, 16);
@@ -174,16 +275,29 @@ export class StarTrekLayer implements Layer {
     return this.filters.some((f) => f.on);
   }
 
+  powerColor(id: string): string | null {
+    return this.powers.get(id)?.barva ?? null;
+  }
+
+  /** Zapne mocnost soustavy (index v startrek.json) a vrátí její objekt. */
+  reveal(k: number): MapObject | null {
+    const o = this.objects[k];
+    if (!o) return null;
+    if (o.power) this.setFilter(o.power.id, true);
+    return o;
+  }
+
   applyFilter(): void { /* vzdálenostní filtr seznamu se na fikci nevztahuje */ }
 
   private refresh(): void {
     const on = new Set(this.filters.filter((f) => f.on).map((f) => f.key));
     const m = new Matrix4();
     const arr = this.vis.array as Float32Array;
+    const vol = !!this.volume;
     for (const o of this.objects) {
       const v = !!o.power && on.has(o.power.id);
       o.hidden = !v;
-      const r = v ? this.radii[o.inst] : 0;
+      const r = v && !(vol && this.inGrid[o.inst]) ? this.radii[o.inst] : 0;
       m.makeScale(r, r, r).setPosition(this.centers[o.inst]);
       this.bubbles.setMatrixAt(o.inst, m);
       arr[o.inst] = v ? 1 : 0;
@@ -191,6 +305,69 @@ export class StarTrekLayer implements Layer {
     this.bubbles.instanceMatrix.needsUpdate = true;
     this.vis.needsUpdate = true;
     this.group.visible = on.size > 0;
+    const pal = this.palette.image.data as Uint8Array;
+    this.data.mocnosti.forEach((p, i) => { pal[(i + 1) * 4 + 3] = on.has(p.id) ? 255 : 0; });
+    this.palette.needsUpdate = true;
+    if (on.size && !this.volume && !this.volLoading && this.data.uzemi) void this.loadVolume(this.data.uzemi);
+  }
+
+  /** Souvislá území (pipeline/startrek_uzemi.py) – raymarching v krychli kolem Slunce, stahuje se až při zapnutí. */
+  private async loadVolume(T: Territory): Promise<void> {
+    this.volLoading = true;
+    try {
+      const bytes = await loadBytes(this.dataBase + T.soubor);
+      const N = T.nx * T.ny * T.nz;
+      if (bytes.length !== 2 * N) throw new Error(`startrek-uzemi: ${bytes.length} B místo ${2 * N}`);
+      const tex = (data: Uint8Array, filter: typeof LinearFilter | typeof NearestFilter) => {
+        const t = new Data3DTexture(data, T.nx, T.ny, T.nz);
+        t.format = RedFormat;
+        t.minFilter = t.magFilter = filter;
+        t.unpackAlignment = 1;
+        t.needsUpdate = true;
+        return t;
+      };
+      const sizeLy = new Vector3(T.nx, T.ny, T.nz).multiplyScalar(T.krok_ly);
+      const mat = new ShaderMaterial({
+        glslVersion: GLSL3,
+        vertexShader: volVertex,
+        fragmentShader: volFragment,
+        uniforms: {
+          lab: { value: tex(bytes.subarray(0, N), NearestFilter) },
+          edge: { value: tex(bytes.subarray(N), LinearFilter) },
+          pal: { value: this.palette },
+          camLocal: { value: new Vector3() },
+          sizeLy: { value: sizeLy },
+          voxels: { value: new Vector3(T.nx, T.ny, T.nz) },
+          reachLy: { value: T.dosah_ly },
+          maxSteps: { value: matchMedia("(pointer: coarse)").matches ? 160 : 320 },
+        },
+        side: BackSide,
+        transparent: true,
+        premultipliedAlpha: true,
+        depthWrite: false,
+        depthTest: false,
+      });
+      const mesh = new Mesh(new BoxGeometry(1, 1, 1), mat);
+      // lokální x → X, y (l = 90°) → −Z, z (galaktický sever) → +Y; mřížka je středěná na Slunci
+      mesh.rotation.x = -Math.PI / 2;
+      mesh.scale.copy(sizeLy);
+      mesh.position.copy(this.sun);
+      mesh.frustumCulled = false;
+      mesh.renderOrder = -1;
+      const inv = new Matrix4();
+      mesh.onBeforeRender = (_r, _s, camera) => {
+        mesh.updateMatrixWorld();
+        inv.copy(mesh.matrixWorld).invert();
+        mat.uniforms.camLocal.value.copy(camera.position).applyMatrix4(inv);
+      };
+      this.volume = mesh;
+      this.group.add(mesh);
+      this.refresh();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      this.volLoading = false;
+    }
   }
 
   labelCandidates(stage: Stage): MapObject[] {
@@ -230,6 +407,7 @@ export class StarTrekLayer implements Layer {
         ${p?.bez_polohy ? `<dt>Bez polohy</dt><dd>dalších ${p.bez_polohy} soustav této mocnosti na wiki nemá žádný údaj o vzdálenosti</dd>` : ""}
       </dl>
       ${src ? `<p>${src}</p>` : ""}
+      ${o.sys ? `<p><button class="btn small" data-trekcat="${escapeHtml(o.name)}">Hvězdy a planety v katalogu</button></p>` : ""}
       <div class="src">${escapeHtml(this.data.upozorneni)} Zdroje: Memory Alpha (CC BY-NC) a Memory Beta (CC BY-SA), staženo
         ${escapeHtml(this.data.stazeno.slice(0, 10))}; ${this.data.statistika.stranek} stránek, ${this.data.statistika.skutecne_hvezdy}
         skutečných hvězd, ${this.data.statistika.vypocet} vypočtených poloh. Star Trek je ochranná známka Paramount; tahle vrstva s ním není spojená.</div>`;
