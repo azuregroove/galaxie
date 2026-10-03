@@ -117,6 +117,8 @@ Aktualizovat na konci každého sezení.
     CHECKLIST a licence v manifestu upravené
 
 ## Rozhodnutí
+- 2026-10-03: **mapy temné hmoty z Euclidu: počkat na kompletní DR1 (plán ESA: polovina 2027)** – jde o kosmologickou
+  strukturu za Galaxií (rozšíření rozsahu jako NAVRHY bod 12), ne o halo Mléčné dráhy; termíny jen z vyhledávání, neověřené u ESA
 - 2026-10-03: **svolení JPL SSD přišlo** (e-mail 2. 10.) → nasazení do `main` už neblokuje JPL, rozhodne Ráďa
 - 2026-10-03: **Gaia 500 pc: varianta B** (v kartě jen Gaia ID, zbytek odkazem), **samostatné datové repo `galaxie-data`**
   (přepisované orphan commitem, stejná doména), **GCNS 100 pc zůstává** (z dlaždic vyřazena), **uzel 16 tis. hvězd** (Ráďa)
@@ -559,6 +561,7 @@ Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné
 5. Cloudové kredity: 2. 10. zbývalo 11 $ ze 100 – šetřit
 
 **Dlouhodobě (z 30. 9.):**
+- 2027: Euclid DR1 (mapy slabého čočkování) – zvážit vrstvu temné hmoty mimo Galaxii (Ráďa 3. 10.)
 - Než bude projekt „hotový“: aktualizovat všechna data a čísla z ověřených zdrojů
 - Přepínač „Star Trek“: 3D bubliny teritorií (Federace, Klingoni, Romulané, Cardassiané…) z dostupných zdrojů.
   Pozor: fikce – jasně označit jako fanouškovskou vrstvu, u každé polohy zdroj a míru nejistoty; nepřebírat
