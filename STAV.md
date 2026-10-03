@@ -501,7 +501,7 @@ Aktualizovat na konci každého sezení.
 - možné vylepšení: mapa prachu Edenhofer 2024 (Zenodo už povolené) místo / vedle Vergely 2022
 
 ## Další krok
-**Aktuální větev: `claude/happy-albattani-vecsdh`** (poslední commit bf87f1f = Star Trek: planetInfobox z MB, vyhlazená území, posuvník Hranice; = busy-hypatia + Star Trek území a katalog, 2. 10.); předtím `claude/busy-hypatia-fvo0mb` (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` je stále na etapě 3.
+**Aktuální větev: `claude/happy-albattani-vecsdh`** (3. 10.: Star Trek území a katalog, oprava MB, vyhlazení, hlavička exoplanet, Radcliffeova vlna s kartou, příprava Gaia 500 pc; další krok = bod 0 níže); předtím `claude/busy-hypatia-fvo0mb` (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` je stále na etapě 3.
 Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve.
 Na PC: `git fetch origin`, `git switch claude/happy-albattani-vecsdh`, `git pull`, `npm install`, `npm run dev`.
 Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné nasazení) až po odpovědi JPL.
