@@ -8,6 +8,7 @@ Dotaz je rozdělený na 48 dílů podle HEALPix úrovně 1 (source_id // 2^35 = 
 samostatná asynchronní úloha a samostatný soubor; už stažené díly se přeskočí, takže jde skript přerušit a pustit znovu.
 Výstup: CSV (gzip) se sloupci COLS.
 Přihlášení účtem ESA Cosmos (volnější limity): py gaia500_stahni.py --login
+(jméno a heslo se čtou z pipeline/raw/gaia_login.txt – dva řádky, raw/ je v .gitignore – jinak se skript zeptá)
 """
 from __future__ import annotations
 
@@ -42,7 +43,12 @@ def main() -> None:
 
     Gaia.ROW_LIMIT = -1
     if "--login" in sys.argv:
-        Gaia.login()  # zeptá se na jméno a heslo účtu ESA Cosmos; přihlášené úlohy mají volnější limity
+        # přihlášené úlohy mají volnější limity; soubor (1. řádek jméno, 2. heslo) obejde psaní hesla do konzole
+        cred = RAW_DIR / "gaia_login.txt"
+        if cred.exists():
+            Gaia.login(credentials_file=str(cred))
+        else:
+            Gaia.login()
     OUT.mkdir(parents=True, exist_ok=True)
     t0 = time.time()
     for p in range(N_PIX):
