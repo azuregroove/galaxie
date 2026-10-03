@@ -15,6 +15,8 @@ Stav k 3. 10. 2026. ✅ = ověřeno, ⛔ = z cloudu nešlo ověřit (blokovaná 
 - ✅ Licence kódu MIT (`LICENSE`, Ráďa 2. 10.); data mají licence svých zdrojů (ZDROJE.md).
 
 ## Licence a svolení dat
+**3. 10. 2026: Ráďa prošel licence (body 👤 ⛔ níže) a schválil nasazení do `main`.**
+
 | Zdroj | Stav | Co zbývá |
 |---|---|---|
 | NASA Exoplanet Archive | ✅ text poděkování ověřen (acknowledge.html), doplněna citace Christiansen et al. 2025 | – |

@@ -133,6 +133,7 @@ Aktualizovat na konci každého sezení.
   CHECKLIST řádek Gaia 500 / ARI. Build OK. Větev `claude/happy-mccarthy-tjpz6v` (= tender-cori + tato oprava).
 
 ## Rozhodnutí
+- 2026-10-03: **Ráďa prošel licence a schválil sloučení do `main`** (= první veřejné nasazení)
 - 2026-10-03: **mapy temné hmoty z Euclidu: počkat na kompletní DR1 (plán ESA: polovina 2027)** – jde o kosmologickou
   strukturu za Galaxií (rozšíření rozsahu jako NAVRHY bod 12), ne o halo Mléčné dráhy; termíny jen z vyhledávání, neověřené u ESA
 - 2026-10-03: **svolení JPL SSD přišlo** (e-mail 2. 10.) → nasazení do `main` už neblokuje JPL, rozhodne Ráďa
