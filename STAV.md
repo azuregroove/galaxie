@@ -137,6 +137,9 @@ Aktualizovat na konci každého sezení.
 - 2026-10-03 18:42 UTC: **NASAZENO** – `main` posunut na 6e8e2c8 (fast-forward, 62 commitů), workflow „Nasazení na GitHub
   Pages“ run 37145201433: build i deploy úspěšné. Web https://azuregroove.github.io/galaxie/ z cloudu neověřen (github.io 403)
   → Ráďa ověří v prohlížeči.
+- 2026-10-03: **README v `galaxie-data`** (commit 9422eac přes GitHub API, s Ráďovým souhlasem): popis a formát dlaždic,
+  licence © ESA/Gaia/DPAC CC BY-SA 3.0 IGO, citace Prusti 2016 + Vallenari 2023, poděkování ESA (text zpaměti – Ráďa
+  porovná s cosmos.esa.int/web/gaia-users/credits). Zdroj v `nasazeni/galaxie-data/README.md`, kopíruje se při publikování.
 - 2026-10-03: **mapy temné hmoty z Euclidu: počkat na kompletní DR1 (plán ESA: polovina 2027)** – jde o kosmologickou
   strukturu za Galaxií (rozšíření rozsahu jako NAVRHY bod 12), ne o halo Mléčné dráhy; termíny jen z vyhledávání, neověřené u ESA
 - 2026-10-03: **svolení JPL SSD přišlo** (e-mail 2. 10.) → nasazení do `main` už neblokuje JPL, rozhodne Ráďa
