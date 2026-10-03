@@ -123,7 +123,9 @@ Aktualizovat na konci každého sezení.
     vyřazeno z GCNS 324 834 (98 % z 331 312 GCNS spárováno), dalších 71 412 s paralaxou nad 10 mas →
     **15 196 236 hvězd, 2 480 uzlů, hloubka 5**, body 111,8 MB (7,36 B/hvězdu), karty 93,4 MB, celkem **205 MB**,
     největší uzel 124 kB; zpracování 41 s
-  - lokálně změněný `public/data/manifest.json` (záznam gaia500) je zatím jen na PC – commitnout s datovým repem
+  - **zveřejněno 3. 10.**: repo `azuregroove/galaxie-data` (Ráďa založil na webu – integrace Claude nové repo založit nesmí, 403),
+    dlaždice nahrané z PC (4 967 objektů, 196 MB), Pages z `main` / root; https://azuregroove.github.io/galaxie-data/gaia500/index.json
+    funguje (ověřil Ráďa); manifest se záznamem gaia500 commitnutý z PC (cf97d8f, sloučeno 62ceb63)
 
 ## Rozhodnutí
 - 2026-10-03: **mapy temné hmoty z Euclidu: počkat na kompletní DR1 (plán ESA: polovina 2027)** – jde o kosmologickou
@@ -544,16 +546,15 @@ Aktualizovat na konci každého sezení.
 - možné vylepšení: mapa prachu Edenhofer 2024 (Zenodo už povolené) místo / vedle Vergely 2022
 
 ## Další krok
-**Aktuální větev: `claude/tender-cori-vkgixr`** (3. 10.: navazuje na happy-albattani + Gaia 500 pc dlaždice; dál bod 0 b–d); předtím `claude/happy-albattani-vecsdh` (3. 10.: Star Trek území a katalog, oprava MB, vyhlazení, hlavička exoplanet, Radcliffeova vlna s kartou, příprava Gaia 500 pc; další krok = bod 0 níže); předtím `claude/busy-hypatia-fvo0mb` (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` je stále na etapě 3.
+**Aktuální větev: `claude/tender-cori-vkgixr`** (3. 10.: Gaia 500 pc – 15,2 mil. hvězd v datovém repu, Sondy, svolení JPL; dál bod 0 = nasazení); předtím `claude/happy-albattani-vecsdh` (3. 10.: Star Trek území a katalog, oprava MB, vyhlazení, hlavička exoplanet, Radcliffeova vlna s kartou, příprava Gaia 500 pc; další krok = bod 0 níže); předtím `claude/busy-hypatia-fvo0mb` (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` je stále na etapě 3.
 Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve.
 Na PC: `git fetch origin`, `git switch claude/tender-cori-vkgixr`, `git pull`, `npm install`, `npm run dev`.
 Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné nasazení) jen s jeho výslovným souhlasem (JPL už schválil).
 
-0. **Gaia 500 pc – zbývá zveřejnění** (data i aplikace na PC fungují 3. 10.):
-   a) Ráďa: založit veřejné repo `azuregroove/galaxie-data`, nahrát dlaždice podle `nasazeni/DATA-REPO.md`, zapnout Pages
-   b) commit `public/data/manifest.json` (záznam gaia500) z PC do pracovní větve
-   c) po nasazení test na telefonu (rozpočet 600 tis. bodů; případně upravit MIN_PX / BUDGET v `src/scene/gaia500.ts`)
-   d) do CHECKLISTu licence dat Gaia (ESA) a citace zrcadla ARI
+0. **NOVÝ CHAT – nasazení na Pages:** Ráďa prochází licence (CDS, DSS, data Gaia/ESA – odkazy v `nasazeni/CHECKLIST.md`;
+   doplnit i citaci zrcadla ARI Heidelberg u Gaia 500 pc). Pak **jen s jeho výslovným souhlasem** sloučit
+   `claude/tender-cori-vkgixr` do `main` → workflow nasadí https://azuregroove.github.io/galaxie/. Po nasazení:
+   Gaia 500 pc a Sondy na telefonu (rozpočet 600 tis. bodů – případně MIN_PX / BUDGET v `src/scene/gaia500.ts`), PWA instalace.
 1. **JPL schválil (2. 10.)** – nasazení: s Ráďovým souhlasem sloučit pracovní větev do `main` → workflow nasadí na
    https://azuregroove.github.io/galaxie/ (předtím zbývající body CHECKLISTu: CDS, DSS, licence dat Gaia)
 2. Pages Source = „GitHub Actions“ už je (Ráďa ověřil 2. 10.); Ráďa: přečíst podmínky CDS, DSS, JPL copyright,
