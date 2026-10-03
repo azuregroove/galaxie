@@ -95,6 +95,7 @@ async function main() {
     const gaiaNearBtn = document.getElementById("gaia100") as HTMLButtonElement | null;
     const gaiaNear = gaiaNearBtn && file("gaia100") ? new Gaia100(DATA + file("gaia100"), frame.sun, stage.glow, gaiaNearBtn) : null;
     if (gaiaNear) layers.push(gaiaNear);
+    else gaiaNearBtn?.remove();
     // Dlaždice 500 pc jsou kvůli velikosti v samostatném repu galaxie-data (stejná doména → bez CORS);
     // při vývoji z public/data/gaia500/ (pipeline/gaia500.py, v .gitignore).
     const gaiaFarBtn = document.getElementById("gaia500") as HTMLButtonElement | null;
@@ -130,7 +131,6 @@ async function main() {
         layers.push(new PillarsLayer(await getJson<PillarsMeta>(file("sloupy")!), DATA, frame.sun, stage.glow, stage));
       } catch (e) { console.error(e); }
     }
-    else gaiaNearBtn?.remove();
     cats.forEach((c, i) => layers.push(new CatalogLayer(c as CatalogData, manifest.katalogy.find((k) => k.id === generic[i])!, frame, stage.glow, css)));
     layers.forEach((L) => stage.scene.add(L.group));
     if (names) applyNames(layers.flatMap((L) => L.objects), names);
