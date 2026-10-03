@@ -7,6 +7,7 @@ Archiv Gaia (gea.esac.esa.int) je z cloudu blokovaný, proto PC.
 Dotaz je rozdělený na 48 dílů podle HEALPix úrovně 1 (source_id // 2^35 = HEALPix úrovně 12), každý díl je
 samostatná asynchronní úloha a samostatný soubor; už stažené díly se přeskočí, takže jde skript přerušit a pustit znovu.
 Výstup: CSV (gzip) se sloupci COLS.
+Přihlášení účtem ESA Cosmos (volnější limity): py gaia500_stahni.py --login
 """
 from __future__ import annotations
 
@@ -40,6 +41,8 @@ def main() -> None:
     from astroquery.gaia import Gaia  # import až tady – --dry jde spustit i bez astroquery
 
     Gaia.ROW_LIMIT = -1
+    if "--login" in sys.argv:
+        Gaia.login()  # zeptá se na jméno a heslo účtu ESA Cosmos; přihlášené úlohy mají volnější limity
     OUT.mkdir(parents=True, exist_ok=True)
     t0 = time.time()
     for p in range(N_PIX):
@@ -47,13 +50,21 @@ def main() -> None:
         if path.exists() and path.stat().st_size:
             continue
         tmp = OUT / f"hp1-{p:02d}.csv"
+        err = OUT / f"hp1-{p:02d}.csv.error"
         for attempt in range(5):
             try:
+                tmp.unlink(missing_ok=True)
+                err.unlink(missing_ok=True)
                 job = Gaia.launch_job_async(query(p), dump_to_file=True, output_format="csv", output_file=str(tmp))
                 job.get_results()  # počká na dokončení a soubor zapíše
+                # archiv při chybě serveru (např. „deadlock detected“) někdy nevyhodí výjimku, jen uloží .error
+                if not tmp.exists() or not tmp.stat().st_size:
+                    raise RuntimeError(err.read_text(encoding="utf-8", errors="replace")[-400:] if err.exists()
+                                       else "archiv nevrátil data")
                 break
             except Exception as e:  # noqa: BLE001 – síť / archiv, zkusit znovu
-                print(f"  díl {p}: chyba {e}, znovu za {30 * 2 ** attempt} s", flush=True)
+                msg = " ".join(str(e).split())[:300]
+                print(f"  díl {p}: chyba {msg}, znovu za {30 * 2 ** attempt} s", flush=True)
                 time.sleep(30 * 2 ** attempt)
         else:
             raise RuntimeError(f"díl {p} se nepodařilo stáhnout")
