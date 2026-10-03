@@ -11,7 +11,7 @@ import type { Layer } from "./layers/layer";
 import { ARMS, armRadius, armXZ } from "./scene/arms";
 import { GaiaArms } from "./scene/gaiaArms";
 import { Dust } from "./scene/dust";
-import { LocalStructures } from "./scene/local";
+import { type LocalData, LocalStructures } from "./scene/local";
 import { Gaia100 } from "./scene/gaia100";
 import { PillarsLayer, type PillarsMeta } from "./scene/pillars";
 import { DarkMatterLayer } from "./scene/darkMatter";
@@ -73,9 +73,6 @@ async function main() {
     const dustBtn = document.getElementById("dust") as HTMLButtonElement | null;
     if (dustBtn && file("prach")) new Dust(DATA + file("prach"), stage.scene, frame.sun, dustBtn);
     else dustBtn?.remove();
-    const localBtn = document.getElementById("local") as HTMLButtonElement | null;
-    if (localBtn && file("okoli")) new LocalStructures(DATA + file("okoli"), stage.scene, frame.sun, labels, localBtn);
-    else localBtn?.remove();
     for (const a of ARMS) {
       // popisek doprostřed rozsahu modelu, kousek nad rovinu, ať nesplývá s body ramene
       const beta = (a.betaMin + a.betaMax) / 2;
@@ -106,6 +103,15 @@ async function main() {
       } catch (e) { console.error(e); }
     }
     if (!trek) trekBtn?.remove();
+    const localBtn = document.getElementById("local") as HTMLButtonElement | null;
+    let local: LocalStructures | null = null;
+    if (localBtn && file("okoli")) {
+      try {
+        local = new LocalStructures(await getJson<LocalData>(file("okoli")!), frame.sun, labels, localBtn);
+        layers.push(local);
+      } catch (e) { console.error(e); }
+    }
+    if (!local) localBtn?.remove();
     const dmBtn = document.getElementById("darkMatter") as HTMLButtonElement | null;
     if (dmBtn) layers.push(new DarkMatterLayer(frame.sun, labels, dmBtn));
     if (file("sloupy")) {

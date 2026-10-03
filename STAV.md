@@ -472,6 +472,26 @@ Aktualizovat na konci každého sezení.
   - hlavička teď píše „Exoplanety: 6 375 planet ve 4 780 soustavách“ (s filtrem „… ve N z 4 780 soustavách“);
     volitelná metoda vrstvy `countText()`; build OK, ověřeno v prohlížeči; pushnuto s Ráďovým souhlasem (3. 10.)
 
+- 2026-10-03 (cloud): **Radcliffeova vlna a Místní bublina s kartou** (Ráďa: „není popsaná Radcliffeova vlna“; build OK,
+  Playwright, bez JS chyb) – `src/scene/local.ts` je teď vrstva (Layer) se dvěma objekty v hledání („radcliffe“, „bublina“,
+  „Local Chimney“); výběr zapne „Okolí“. Text a čísla jen z abstraktů Alves 2020 (arXiv:2001.08748: 2,7 kpc, 3 mil. M☉,
+  perioda ~2 kpc, výchylka ~160 pc), Konietzka 2024 (arXiv:2402.12596: kmitá, drift od centra) a O'Neill 2024
+  (arXiv:2403.04961: průměr 170 pc, 70–600+ pc, tloušťka 35 pc, (6,0 ± 0,7) × 10⁵ M☉); výšky, rychlosti a nejbližší bod
+  spočítané z modelu v okoli.json. `okoli.json` (25 kB) se teď načítá při startu.
+- 2026-10-03: **doba cesty v kartě jen světlo a Voyager 1** (Ráďa: auto a letadlo pryč, „ještě to budem ladit“)
+- 2026-10-03: **Gaia do 500 pc – odhad před stažením** (Ráďa zvolil bod 1 = 500 pc, čeká na rozhodnutí o variantě):
+  archiv Gaia (gea.esac.esa.int) i TAP VizieR z cloudu blokované (403), funguje jen VizieR ASU. Vzorek 160 kuželů 1°
+  (I/355/gaiadr3, Plx > 2, e_Plx < 0,2, pak Plx/e_Plx > 10): **≈ 13,7 mil. hvězd do 500 pc** (90% interval 13,2–14,2);
+  do 200 pc 1,7 mil., 250 pc 3,0 mil., 300 pc 4,6 mil., 400 pc 8,7 mil.; do 500 pc s G < 15: 4,3 mil., G < 17: 8,0 mil.
+  Bez řezu kvality (jen Plx > 2) ≈ 72 mil., ale z velké části šum. Stažení přes ASU ≈ 500 řádků/s → 13,7 mil. ≈ 7–8 h
+  a ~0,4–1 GB TSV; na PC přes archiv Gaia jedním dotazem rychleji. V aplikaci 13,7 mil. × 9 B ≈ 120 MB jen body → bez
+  dlaždic (LOD/octree, bod 3) na telefon nepoužitelné.
+- 2026-10-03: **Ráďa zvolil variantu b – 500 pc úplně (≈ 13,7 mil.) s dlaždicemi**; stahuje se na PC.
+  Připraven `pipeline/gaia500_stahni.py` (astroquery, archiv Gaia, 48 asynchronních úloh po HEALPix úrovni 1 přes
+  rozsahy source_id, CSV.gz do `pipeline/raw/gaia500/`, přerušitelné). **Neotestováno proti archivu** (z cloudu 403) –
+  ověřeno jen sestavení dotazů (`--dry`) a pokrytí rozsahů source_id. Odhad stažení: ~0,6–1 GB CSV.gz, čas neznámý
+  (záleží na frontě archivu; anonymní úlohy mohou mít limity – případně `Gaia.login()`).
+
 ## Rozdělané
 - Star Trek – možná vylepšení: (1) ~~MB `planetInfobox` v `startrek.py`~~ (hotovo 2. 10.); (2) výkon raymarchingu území na telefonu neověřen (max. 160 kroků);
   (3) třídy planet z MB někdy jako text („habitable“, „gas giant“) – sjednotit
@@ -486,6 +506,17 @@ Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve.
 Na PC: `git fetch origin`, `git switch claude/happy-albattani-vecsdh`, `git pull`, `npm install`, `npm run dev`.
 Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné nasazení) až po odpovědi JPL.
 
+0. **NOVÝ CHAT – Gaia 500 pc, varianta b (dlaždice):**
+   a) Ráďa na PC: `py -m pip install astroquery`, `cd pipeline`, `py gaia500_stahni.py` (nejdřív zkusit `py gaia500_stahni.py --dry`
+      a jeden díl; když archiv odmítne velkou anonymní úlohu → `Gaia.login()` s účtem ESA Cosmos). Výsledek nahrát
+      (do gitu NE – raw), dál zpracovat na PC nebo poslat do cloudu jinou cestou.
+   b) navrhnout a nechat schválit formát dlaždic: octree kolem Slunce (krychle ±500 pc), v každém uzlu nejjasnější
+      hvězdy (LOD podle absolutní/zdánlivé jasnosti z místa kamery), list ~32–64 tis. hvězd, binární int16/uint8 jako
+      gaia100, karty po kouscích; index uzlů v JSON. Odhad velikosti na Pages (limit 1 GB, repo ≤ 1 GB) spočítat
+      předem – 13,7 mil. × ~9 B ≈ 120 MB bodů + karty; zvážit karty jen s ID a dotahovat zbytek z VizieR/SIMBAD.
+   c) `src/scene/gaia100.ts` → načítání dlaždic podle kamery (frustum + vzdálenost), rozpočet bodů pro mobil,
+      výběr hvězdy přes dlaždici; GCNS 100 pc nechat (má Dist16/50/84) nebo sloučit – rozhodne Ráďa.
+   d) test výkonu: desktop + mobil (Playwright s dotykem), Ráďa na telefonu.
 1. **Čeká se na odpověď JPL** (e-mail z Gmailu 2. 10., vlákno „Permission request: JPL SSD data…“). Po kladné odpovědi:
    upravit znění poděkování podle JPL, sloučit větev do `main` → workflow nasadí na https://azuregroove.github.io/galaxie/
 2. Pages Source = „GitHub Actions“ už je (Ráďa ověřil 2. 10.); Ráďa: přečíst podmínky CDS, DSS, JPL copyright,

@@ -1,0 +1,69 @@
+"""Hvězdy do 500 pc z Gaia DR3 (dobře změřené) → pipeline/raw/gaia500/hp1-NN.csv.gz. Spouštět na PC.
+
+Výběr: parallax > 2 mas (do 500 pc) a parallax_over_error > 10 (chyba paralaxy pod 10 %, vzdálenost 1/paralaxa
+je pak dost přesná). Odhad ze vzorku VizieR (3. 10. 2026): ≈ 13,7 mil. hvězd.
+Archiv Gaia (gea.esac.esa.int) je z cloudu blokovaný, proto PC.
+
+Dotaz je rozdělený na 48 dílů podle HEALPix úrovně 1 (source_id // 2^35 = HEALPix úrovně 12), každý díl je
+samostatná asynchronní úloha a samostatný soubor; už stažené díly se přeskočí, takže jde skript přerušit a pustit znovu.
+Výstup: CSV (gzip) se sloupci COLS.
+"""
+from __future__ import annotations
+
+import gzip
+import shutil
+import sys
+import time
+
+from common import RAW_DIR
+
+OUT = RAW_DIR / "gaia500"
+COLS = ["source_id", "ra", "dec", "parallax", "parallax_error", "phot_g_mean_mag", "bp_rp", "ruwe", "radial_velocity"]
+PLX_MIN = 2.0          # mas → 500 pc
+PLX_OVER_ERR = 10.0
+N_PIX = 48             # HEALPix úrovně 1 (12 · 4¹)
+SID_PER_PIX = (2 ** 35) * 4 ** 11  # source_id na jeden pixel úrovně 1 (4¹¹ pixelů úrovně 12)
+
+
+def query(p: int) -> str:
+    lo, hi = p * SID_PER_PIX, (p + 1) * SID_PER_PIX
+    return (f"SELECT {', '.join(COLS)} FROM gaiadr3.gaia_source "
+            f"WHERE source_id >= {lo} AND source_id < {hi} "
+            f"AND parallax > {PLX_MIN} AND parallax_over_error > {PLX_OVER_ERR}")
+
+
+def main() -> None:
+    if "--dry" in sys.argv:
+        for p in range(N_PIX):
+            print(query(p))
+        return
+    from astroquery.gaia import Gaia  # import až tady – --dry jde spustit i bez astroquery
+
+    Gaia.ROW_LIMIT = -1
+    OUT.mkdir(parents=True, exist_ok=True)
+    t0 = time.time()
+    for p in range(N_PIX):
+        path = OUT / f"hp1-{p:02d}.csv.gz"
+        if path.exists() and path.stat().st_size:
+            continue
+        tmp = OUT / f"hp1-{p:02d}.csv"
+        for attempt in range(5):
+            try:
+                job = Gaia.launch_job_async(query(p), dump_to_file=True, output_format="csv", output_file=str(tmp))
+                job.get_results()  # počká na dokončení a soubor zapíše
+                break
+            except Exception as e:  # noqa: BLE001 – síť / archiv, zkusit znovu
+                print(f"  díl {p}: chyba {e}, znovu za {30 * 2 ** attempt} s", flush=True)
+                time.sleep(30 * 2 ** attempt)
+        else:
+            raise RuntimeError(f"díl {p} se nepodařilo stáhnout")
+        with open(tmp, "rb") as src, gzip.open(path, "wb", compresslevel=6) as dst:
+            shutil.copyfileobj(src, dst)
+        tmp.unlink()
+        rows = sum(1 for _ in gzip.open(path, "rt")) - 1
+        print(f"díl {p + 1}/{N_PIX}: {rows} hvězd, {path.stat().st_size / 1e6:.1f} MB, "
+              f"celkem {(time.time() - t0) / 60:.0f} min", flush=True)
+
+
+if __name__ == "__main__":
+    main()

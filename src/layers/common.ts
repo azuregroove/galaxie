@@ -6,7 +6,7 @@ const KM_PER_LY = 9460730472580.8;
 const SEC_PER_YEAR = 365.25 * 86400;
 // Voyager 1 vůči Slunci 16,92 km/s – JPL Horizons, vektory k 1. 10. 2026 (pipeline: ruční dotaz, viz ZDROJE.md).
 export const VOYAGER1_KMS = 16.92;
-const TRIP: [string, number][] = [["světlo", 0], ["sonda Voyager 1 (16,9 km/s podle JPL Horizons)", VOYAGER1_KMS], ["letadlo (900 km/h)", 900 / 3600], ["auto (100 km/h)", 100 / 3600]];
+const TRIP: [string, number][] = [["světlo", 0], ["sonda Voyager 1 (16,9 km/s podle JPL Horizons)", VOYAGER1_KMS]];
 
 /** Doba cesty v letech; kms = 0 znamená rychlost světla. */
 export function travelYears(distLy: number, kms: number): number {
@@ -26,7 +26,7 @@ export function fmtYears(y: number): string {
   return `${fmtNum(n, 1)} ${word}`;
 }
 
-/** Řádek karty: jak dlouho by trvala cesta od Slunce světlem, sondou, letadlem a autem. */
+/** Řádek karty: jak dlouho by trvala cesta od Slunce světlem a sondou Voyager 1. */
 function tripRow(distLy: number): string {
   const rows = TRIP.map(([what, kms]) => {
     const y = travelYears(distLy, kms);
