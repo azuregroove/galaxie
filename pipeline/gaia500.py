@@ -229,7 +229,7 @@ def main() -> None:
             "zdroj": "Gaia DR3 (gaiadr3.gaia_source), staženo ze zrcadla ARI Heidelberg (gaia.ari.uni-heidelberg.de, TAP); "
                      "dlaždice v repu galaxie-data",
             "url": "https://gaia.ari.uni-heidelberg.de/",
-            "licence": "Data Gaia: ESA/Gaia/DPAC (podmínky ověřit, viz nasazeni/CHECKLIST.md)",
+            "licence": "Data Gaia: © ESA/Gaia/DPAC, CC BY-SA 3.0 IGO",
             "citace": "Gaia Collaboration, Vallenari A. et al. 2023, A&A 674, A1",
             "poznamka": "Výběr paralaxa nad 2 mas a s relativní chybou pod 10 %; vzdálenost = 1 / paralaxa. "
                         "Hvězdy z GCNS a bližší než 100 pc kreslí vrstva Gaia 100 pc.",

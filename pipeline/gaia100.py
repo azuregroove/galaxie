@@ -138,7 +138,7 @@ def main() -> None:
         "id": "gaia100", "soubor": "gaia100.json", "nazev": "Hvězdy do 100 pc (Gaia)",
         "zdroj": "Gaia Catalogue of Nearby Stars (GCNS) – Gaia EDR3, CDS J/A+A/649/A6",
         "url": "https://cdsarc.cds.unistra.fr/viz-bin/cat/J/A+A/649/A6",
-        "licence": "Katalog CDS/VizieR – volně s citací (podmínky CDS ověřit, viz ZDROJE.md); data Gaia: ESA/Gaia/DPAC",
+        "licence": "Katalog CDS/VizieR – volně s citací; data Gaia: © ESA/Gaia/DPAC, CC BY-SA 3.0 IGO",
         "citace": "Gaia Collaboration, Smart R.L. et al. 2021, A&A 649, A6",
         "poznamka": "Vzdálenost = medián posteriorního rozdělení (Dist50) z GCNS, nejistota 16.–84. percentil. "
                     "Barva bodu podle BP−RP je orientační, spektrální třída se z ní neodvozuje.",

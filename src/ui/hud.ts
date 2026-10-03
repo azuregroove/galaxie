@@ -378,6 +378,8 @@ export class Hud {
       this.stage.setCenterShift(0);
       return;
     }
+    // karta by legendu překryla stejně jako seznam
+    if (!$("legend").classList.contains("closed")) $("legendToggle").click();
     const top = document.querySelector("header.hud")!.getBoundingClientRect().bottom;
     const free = (top + card.getBoundingClientRect().top) / 2;
     this.stage.setCenterShift(Math.max(0, this.stage.height / 2 - free));
@@ -432,7 +434,7 @@ export class Hud {
     const m = this.manifest;
     const cats = m.katalogy.map((k) => `<h4>${escapeHtml(k.nazev)}</h4>
       <p>${escapeHtml(k.zdroj)}${k.url ? ` · <a href="${escapeHtml(k.url)}" target="_blank" rel="noopener">web</a>` : ""}<br>
-      <span class="dim">Licence: ${escapeHtml(k.licence)} · staženo ${escapeHtml(k.stazeno.slice(0, 10))}${k.vyrez ? " · <b>jen testovací výřez</b>" : ""}</span></p>
+      <span class="dim">Licence: ${escapeHtml(k.licence)}${k.stazeno ? ` · staženo ${escapeHtml(k.stazeno.slice(0, 10))}` : ""}${k.vyrez ? " · <b>jen testovací výřez</b>" : ""}</span></p>
       ${k.poznamka ? `<p class="dim">${escapeHtml(k.poznamka)}</p>` : ""}
       ${k.citace ? `<p class="cite">${escapeHtml(k.citace)}</p>` : ""}`).join("");
     card.innerHTML = `<button class="close" aria-label="Zavřít kartu">×</button>
@@ -529,6 +531,19 @@ export class Hud {
     addEventListener("resize", () => this.fitCenter());
 
     togglable($("legendToggle"), $("legend"), "vrstvy");
+    // na úzkém displeji se legenda (nahoře) a seznam (dole, 42vh) nad sebe nevejdou – otevřený je vždy jen jeden
+    const narrow = () => matchMedia("(max-width:760px)").matches;
+    const isOpen = (id: string) => !$(id).classList.contains("closed");
+    const exclusive = (opened: string, other: string, otherToggle: string) => {
+      if (narrow() && isOpen(opened) && isOpen(other)) $(otherToggle).click();
+    };
+    $("legendToggle").addEventListener("click", () => {
+      exclusive("legend", "listPanel", "listToggle");
+      if (narrow() && isOpen("legend") && !$("card").hidden) this.closeCard();
+    });
+    $("listToggle").addEventListener("click", () => exclusive("listPanel", "legend", "legendToggle"));
+    exclusive("listPanel", "legend", "legendToggle");
+    matchMedia("(max-width:760px)").addEventListener("change", () => exclusive("listPanel", "legend", "legendToggle"));
     togglable($("barToggle"), $("bar"), "lista", "min", false);
     trackHeight($("bar"), "--bar-h");
 

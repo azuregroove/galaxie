@@ -162,7 +162,7 @@ def main() -> None:
         "nazev": f"Jasné hvězdy (V ≤ {V_MAX} mag)",
         "zdroj": "Hipparcos (ESA 1997, I/239), nová redukce paralax (van Leeuwen 2007, I/311), Yale BSC5 (V/50), jména Wikidata",
         "url": "https://cdsarc.cds.unistra.fr/viz-bin/cat/I/311",
-        "licence": "data CDS/VizieR s citací (podmínky CDS neověřené, viz ZDROJE.md); Wikidata CC0",
+        "licence": "data CDS/VizieR s citací; Wikidata CC0",
         "citace": "ESA 1997, ESA SP-1200; van Leeuwen F. 2007, A&A 474, 653; Hoffleit D., Warren W.H. 1991, Yale BSC5",
     })
 

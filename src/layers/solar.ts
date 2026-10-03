@@ -84,6 +84,6 @@ export class SolarLayer implements Layer {
       <p>Slunce (hvězda třídy G2 V), 8 planet, 5 trpasličích planet a jejich měsíce – celkem ${escapeHtml(String(this.meta.objektu ?? "?"))} těles
       s drahami a polohou k libovolnému datu ${escapeHtml(((this.meta.platnost as number[] | undefined) ?? [1800, 2050]).join("–"))}${this.smallMeta ? `,
       k tomu vzorek ${escapeHtml(String(this.smallMeta.objektu ?? "?"))} planetek a komet` : ""}.</p>
-      <div class="src">Data: ${escapeHtml(this.meta.zdroj)} (stav ${escapeHtml(this.meta.stazeno.slice(0, 10))}).</div>`;
+      <div class="src">Data: ${escapeHtml(this.meta.zdroj)} (stav ${escapeHtml((this.meta.stazeno ?? "").slice(0, 10))}).</div>`;
   }
 }

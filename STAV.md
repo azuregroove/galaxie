@@ -141,6 +141,11 @@ Aktualizovat na konci každého sezení.
   licence © ESA/Gaia/DPAC CC BY-SA 3.0 IGO, citace Prusti 2016 + Vallenari 2023, poděkování ESA (text zpaměti – Ráďa
   porovná s cosmos.esa.int/web/gaia-users/credits). Zdroj v `nasazeni/galaxie-data/README.md`, kopíruje se při publikování.
 - 2026-10-03: **Ráďa potvrdil: licence Gaia (CC BY-SA 3.0 IGO) sedí, nasazený web na PC funguje.** Zbývá telefon.
+- 2026-10-03: **oprava po nasazení** (Ráďa: překryv Vrstvy × Seznam na úzkém okně): do 760 px je otevřený jen jeden
+  z panelů Vrstvy / Seznam / karta (otevření jednoho zavře ostatní). Opravena chyba: tlačítko **Zdroje** padalo
+  (`stazeno` chybí u 6 katalogů v manifestu – gaia100, gaia500, prach, sloupy, startrek…), teď se datum vynechá.
+  Licence v manifestu a pipeline: Gaia „© ESA/Gaia/DPAC, CC BY-SA 3.0 IGO“, CDS bez „ověřit“ (Ráďa prošel licence).
+  Build OK, Playwright 390×844, 700×830, 1400×860 bez JS chyb.
 - 2026-10-03: **mapy temné hmoty z Euclidu: počkat na kompletní DR1 (plán ESA: polovina 2027)** – jde o kosmologickou
   strukturu za Galaxií (rozšíření rozsahu jako NAVRHY bod 12), ne o halo Mléčné dráhy; termíny jen z vyhledávání, neověřené u ESA
 - 2026-10-03: **svolení JPL SSD přišlo** (e-mail 2. 10.) → nasazení do `main` už neblokuje JPL, rozhodne Ráďa

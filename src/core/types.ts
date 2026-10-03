@@ -10,7 +10,7 @@ export interface CatalogEntry {
   citace?: string;
   poznamka?: string;
   vyrez?: boolean;
-  stazeno: string;
+  stazeno?: string;
   [k: string]: unknown;
 }
 

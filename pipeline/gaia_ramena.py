@@ -49,7 +49,7 @@ def main() -> None:
     size = write_json(DATA_DIR / "gaia-ramena.json", out)
     update_manifest({"id": "gaia-ramena", "soubor": "gaia-ramena.json", "nazev": "Ramena z dat Gaia (nadhustota mladých hvězd)",
                      "zdroj": "Poggio et al. 2021, A&A 651, A104; Gaia Collaboration, Drimmel et al. 2023, A&A 674, A37; mřížky z balíku SpiralMap 0.27",
-                     "url": "https://github.com/Abhaypru/SpiralMap", "licence": "SpiralMap MIT (vč. datových souborů map); data Gaia: licence ESA neověřena",
+                     "url": "https://github.com/Abhaypru/SpiralMap", "licence": "SpiralMap MIT (vč. datových souborů map); data Gaia: © ESA/Gaia/DPAC, CC BY-SA 3.0 IGO",
                      "citace": "Prusty & Khanna 2025, arXiv:2506.11383 (SpiralMap); Poggio E. et al. 2021, A&A 651, A104; Gaia Collaboration, Drimmel R. et al. 2023, A&A 674, A37",
                      "objektu": len(MAPS), "stazeno": out["stazeno"]})
     print(f"gaia-ramena.json {size / 1024:.0f} kB")

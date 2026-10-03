@@ -260,7 +260,7 @@ def main():
         "nazev": "Mlhoviny a mezihvězdná mračna",
         "zdroj": "Anderson+ 2014 (WISE H II), Sharpless 1959, Lynds 1962 a 1965, Zucker+ 2020, González-Santamaría+ 2021, Green 2025 – vše přes CDS/VizieR",
         "url": "https://vizier.cds.unistra.fr/",
-        "licence": "Katalogy CDS/VizieR – volně s citací (podmínky CDS ověřit)",
+        "licence": "Katalogy CDS/VizieR – volně s citací",
         "citace": "Anderson L.D. et al. 2014, ApJS 212, 1; Sharpless S. 1959, ApJS 4, 257; Lynds B.T. 1962, ApJS 7, 1; Lynds B.T. 1965, ApJS 12, 163; Zucker C. et al. 2020, A&A 633, A51; González-Santamaría I. et al. 2021, A&A 656, A51; Green D.A. 2025 (CDS VII/297)",
         "poznamka": "Vzdálenosti oblastí H II jsou většinou kinematické (nejisté). Světlé, temné mlhoviny, pozůstatky supernov a většina Sharplessových oblastí vzdálenost nemají – jen v seznamu.",
     })

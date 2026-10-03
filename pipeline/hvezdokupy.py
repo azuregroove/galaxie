@@ -88,7 +88,7 @@ def main():
         "nazev": "Hvězdokupy",
         "zdroj": "Hunt & Reffert 2023, A&A 673, A114 (CDS J/A+A/673/A114); Baumgardt & Vasiliev 2021, MNRAS 505, 5957",
         "url": "https://cdsarc.cds.unistra.fr/viz-bin/cat/J/A+A/673/A114",
-        "licence": "Katalog CDS/VizieR – volně s citací (podmínky CDS ověřit); Baumgardt: veřejně zveřejněná data bez výslovné licence, citovat publikace",
+        "licence": "Katalog CDS/VizieR – volně s citací; Baumgardt: veřejně zveřejněná data bez výslovné licence, citovat publikace",
         "citace": "Hunt E.L., Reffert S. 2023, A&A 673, A114; Baumgardt H., Vasiliev E. 2021, MNRAS 505, 5957",
         "poznamka": "Kulové kupy z Hunt & Reffert vynechány (pokrývá je Baumgardt). Hunt & Reffert obsahuje i nespolehlivé kandidáty – viz filtr kvality.",
     })
