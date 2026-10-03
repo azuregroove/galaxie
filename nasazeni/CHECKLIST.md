@@ -24,8 +24,8 @@ Stav k 3. 10. 2026. ✅ = ověřeno, ⛔ = z cloudu nešlo ověřit (blokovaná 
 | JPL copyright (jpl.nasa.gov/copyrights.cfm) | ⛔ 403 z cloudu | 👤 přečíst v prohlížeči |
 | CDS/VizieR (kupy, mlhoviny, pulsary 2016, BlackCAT, Hipparcos, prach…) | ⛔ rights_uri https://cds.unistra.fr/vizier-org/licences_vizier.html | 👤 přečíst v prohlížeči; citace článků v aplikaci jsou |
 | DSS přes hips2fits (výřezy oblohy) | ⛔ http://archive.stsci.edu/dss/copyright.html | 👤 přečíst; při problému výřezy vypnout |
-| Ramena z Gaia (SpiralMap) | ✅ balík vč. dat pod MIT, citace doplněna | ⛔ licence dat Gaia (ESA, cosmos.esa.int) |
-| Gaia DR3 – hvězdy 100–500 pc (repo `galaxie-data`) | staženo ze zrcadla ARI Heidelberg 3. 10.; citace Vallenari et al. 2023 a odkaz na ARI v manifestu | ⛔ 👤 licence dat Gaia (https://www.cosmos.esa.int/web/gaia-users/license) – vyhledávání uvádí CC BY-SA 3.0 IGO, neověřeno; 👤 zda ARI žádá vlastní poděkování (https://gaia.ari.uni-heidelberg.de/) |
+| Ramena z Gaia (SpiralMap) | ✅ balík vč. dat pod MIT, citace doplněna | ✅ licence dat Gaia CC BY-SA 3.0 IGO (Ráďa 3. 10.) |
+| Gaia DR3 – hvězdy 100–500 pc (repo `galaxie-data`) | staženo ze zrcadla ARI Heidelberg 3. 10.; citace Vallenari et al. 2023 a odkaz na ARI v manifestu | ✅ licence dat Gaia CC BY-SA 3.0 IGO (potvrdil Ráďa 3. 10.), README v `galaxie-data`; 👤 zda ARI žádá vlastní poděkování (https://gaia.ari.uni-heidelberg.de/) |
 | Wikimedia Commons / Wikipedie | ✅ autor a licence každého obrázku z Commons API, text CC BY-SA 4.0 s odkazem na autory | – |
 | Wikidata | ✅ CC0 | – |
 | ATNF Pulsar Catalogue | ✅ volně s citací | data jsou verze 2016 → 👤 na PC `py pipeline\neutronove_hvezdy.py` |

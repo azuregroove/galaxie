@@ -203,8 +203,8 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
   blokovaná; podle výsledků vyhledávání odkazuje web ARI na návod ESA k citaci jednotlivých vydání Gaia.
 - Výběr: parallax > 2 mas a parallax_over_error > 10; vzdálenost = 1 / paralaxa; bez hvězd GCNS a paralaxy nad 10 mas
   (ty kreslí vrstva Gaia 100 pc). 15 196 236 hvězd, 2 480 uzlů octree, celkem 205 MB.
-- Licence dat Gaia: podle výsledků vyhledávání ESA uvádí „ESA/Gaia/DPAC, CC BY-SA 3.0 IGO“ – **primární stránka
-  (cosmos.esa.int) z cloudu nedostupná, ověřit** (viz `nasazeni/CHECKLIST.md`).
+- Licence dat Gaia: © ESA/Gaia/DPAC, CC BY-SA 3.0 IGO (ověřil Ráďa na cosmos.esa.int 3. 10. 2026); odvozené dlaždice
+  v repu `galaxie-data` pod stejnou licencí s README.
 
 ### Sloupy stvoření – 3D rekonstrukce (`pipeline/sloupy.py` → `sloupy.json`, `sloupy.bin.gz`)
 - **Rekonstrukce, ne měřený tvar.** 83 192 bodů, 469 kB.

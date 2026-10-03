@@ -140,6 +140,7 @@ Aktualizovat na konci každého sezení.
 - 2026-10-03: **README v `galaxie-data`** (commit 9422eac přes GitHub API, s Ráďovým souhlasem): popis a formát dlaždic,
   licence © ESA/Gaia/DPAC CC BY-SA 3.0 IGO, citace Prusti 2016 + Vallenari 2023, poděkování ESA (text zpaměti – Ráďa
   porovná s cosmos.esa.int/web/gaia-users/credits). Zdroj v `nasazeni/galaxie-data/README.md`, kopíruje se při publikování.
+- 2026-10-03: **Ráďa potvrdil: licence Gaia (CC BY-SA 3.0 IGO) sedí, nasazený web na PC funguje.** Zbývá telefon.
 - 2026-10-03: **mapy temné hmoty z Euclidu: počkat na kompletní DR1 (plán ESA: polovina 2027)** – jde o kosmologickou
   strukturu za Galaxií (rozšíření rozsahu jako NAVRHY bod 12), ne o halo Mléčné dráhy; termíny jen z vyhledávání, neověřené u ESA
 - 2026-10-03: **svolení JPL SSD přišlo** (e-mail 2. 10.) → nasazení do `main` už neblokuje JPL, rozhodne Ráďa
@@ -563,7 +564,7 @@ Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve.
 Na PC: `git fetch origin`, `git switch claude/happy-mccarthy-tjpz6v`, `git pull`, `npm install`, `npm run dev`.
 Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné nasazení) jen s jeho výslovným souhlasem (JPL už schválil).
 
-0. **NASAZENO 3. 10.** – zbývá ověřit web a telefon (níže). Původní znění: Ráďa prochází licence (CDS, DSS, data Gaia/ESA – odkazy v `nasazeni/CHECKLIST.md`;
+0. **NASAZENO 3. 10.**, web na PC ověřen (Ráďa), licence Gaia potvrzena – zbývá telefon (níže). Původní znění: Ráďa prochází licence (CDS, DSS, data Gaia/ESA – odkazy v `nasazeni/CHECKLIST.md`;
    zdroj ARI u Gaia 500 pc doplněn 3. 10.; Ráďa ještě ověří, zda ARI žádá vlastní poděkování, a licenci Gaia –
    je-li CC BY-SA 3.0 IGO, přidat do repa `galaxie-data` README s uvedením autora a licence dlaždic). Pak **jen s jeho výslovným souhlasem** sloučit
    `claude/happy-mccarthy-tjpz6v` do `main` → workflow nasadí https://azuregroove.github.io/galaxie/. Po nasazení:
