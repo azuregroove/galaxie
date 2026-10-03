@@ -42,6 +42,12 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         runtimeCaching: [
           {
+            // dlaždice Gaia 500 pc (repo galaxie-data, stejný původ): vlastní cache, ať nevytlačí prach a Gaia 100 pc
+            urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.includes("/gaia500/"),
+            handler: "CacheFirst",
+            options: { cacheName: "galaxie-gaia500", expiration: { maxEntries: 300, purgeOnQuotaError: true } },
+          },
+          {
             urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.endsWith(".bin.gz"),
             handler: "CacheFirst",
             options: { cacheName: "galaxie-binarni", expiration: { maxEntries: 20 } },

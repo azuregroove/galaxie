@@ -87,7 +87,25 @@ Aktualizovat na konci každého sezení.
   - pipeline/exoplanety.py stahuje navíc `pl_orbeccen`, `pl_orblper`, `pl_orbincl` → e, w, inc (nepovinné pro starší CSV)
   - elipsy ověřeny jen testovací hodnotou vloženou do stránky (e = 0,9); **skutečná data e zatím nejsou**
 
+- 2026-10-03 (cloud): **Gaia 500 pc – dlaždice octree, kód hotový, otestováno jen na syntetických datech**
+  (build OK, Playwright desktop + mobil iPhone 13, bez JS chyb; chyby v konzoli jen blokované externí obrázky v sandboxu)
+  - `pipeline/gaia500.py`: CSV z `gaia500_stahni.py` → vyřadí hvězdy z GCNS (ID z gaia100-info) a paralaxu nad 10 mas →
+    octree ±512 pc, uzel max 16 384 hvězd seřazených podle absolutní G (nejsvítivější v rodiči, slabší v potomcích),
+    `b/<klíč>.bin.gz` (int16 xyz od středu uzlu, uint8 G, BP−RP = 8 B/hvězdu) + `i/<klíč>.bin.gz` (jen Gaia DR3 ID)
+    + `index.json`; výstup `public/data/gaia500/` (v .gitignore). `--test` = syntetická data (aplikace pak píše „(TEST)“)
+  - syntetický test 594 tis. hvězd: 73 uzlů, body 6,8 B/hvězdu (odhad pro 13,7 mil. ≈ 92 MB), zpětné dekódování
+    ověřeno (všechny hvězdy, chyba polohy ≤ 0,008 pc, ID a G sedí, karta v aplikaci = vstupní data)
+  - `src/scene/gaia500.ts`: načítání uzlů podle kamery (frustum + velikost na obrazovce ≥ 150 px, rozpočet 2 mil. bodů
+    desktop / 600 tis. dotyk, 4 souběžná stažení, uvolňování nad 2× rozpočet), klik → karta s ID, vzdáleností, G, BP−RP,
+    odkazy SIMBAD a VizieR; zapnutí zapne i Gaia 100 pc; shader sdílený s gaia100 (`starMaterial`)
+  - URL dlaždic: vývoj `public/data/gaia500/`, produkce `https://azuregroove.github.io/galaxie-data/gaia500/`
+    (přepsatelné `VITE_GAIA500_URL`); tlačítko v produkci jen se záznamem `gaia500` v manifestu
+  - PWA: vlastní runtime cache `galaxie-gaia500` (300 souborů, purgeOnQuotaError)
+  - návod k datovému repu: `nasazeni/DATA-REPO.md`
+
 ## Rozhodnutí
+- 2026-10-03: **Gaia 500 pc: varianta B** (v kartě jen Gaia ID, zbytek odkazem), **samostatné datové repo `galaxie-data`**
+  (přepisované orphan commitem, stejná doména), **GCNS 100 pc zůstává** (z dlaždic vyřazena), **uzel 16 tis. hvězd** (Ráďa)
 - 2026-09-30: Ráďa chce třídu hvězdy s barvou i pohled Soustava s elipsami (ne jen kruhy)
 - 2026-09-30: **Sluneční soustava schválena v krocích 3a → 3b → 3c**: (a) planety, trpasličí planety, velké měsíce se
   skutečnými sklony a polohou k datu + časový posuvník; (b) všechny známé měsíce; (c) planetky a komety – vzorek
@@ -501,22 +519,19 @@ Aktualizovat na konci každého sezení.
 - možné vylepšení: mapa prachu Edenhofer 2024 (Zenodo už povolené) místo / vedle Vergely 2022
 
 ## Další krok
-**Aktuální větev: `claude/happy-albattani-vecsdh`** (3. 10.: Star Trek území a katalog, oprava MB, vyhlazení, hlavička exoplanet, Radcliffeova vlna s kartou, příprava Gaia 500 pc; další krok = bod 0 níže); předtím `claude/busy-hypatia-fvo0mb` (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` je stále na etapě 3.
+**Aktuální větev: `claude/tender-cori-vkgixr`** (3. 10.: navazuje na happy-albattani + Gaia 500 pc dlaždice; dál bod 0 b–d); předtím `claude/happy-albattani-vecsdh` (3. 10.: Star Trek území a katalog, oprava MB, vyhlazení, hlavička exoplanet, Radcliffeova vlna s kartou, příprava Gaia 500 pc; další krok = bod 0 níže); předtím `claude/busy-hypatia-fvo0mb` (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` je stále na etapě 3.
 Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve.
-Na PC: `git fetch origin`, `git switch claude/happy-albattani-vecsdh`, `git pull`, `npm install`, `npm run dev`.
+Na PC: `git fetch origin`, `git switch claude/tender-cori-vkgixr`, `git pull`, `npm install`, `npm run dev`.
 Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné nasazení) až po odpovědi JPL.
 
-0. **NOVÝ CHAT – Gaia 500 pc, varianta b (dlaždice):**
-   a) Ráďa na PC: `py -m pip install astroquery`, `cd pipeline`, `py gaia500_stahni.py` (nejdřív zkusit `py gaia500_stahni.py --dry`
-      a jeden díl; když archiv odmítne velkou anonymní úlohu → `Gaia.login()` s účtem ESA Cosmos). Výsledek nahrát
-      (do gitu NE – raw), dál zpracovat na PC nebo poslat do cloudu jinou cestou.
-   b) navrhnout a nechat schválit formát dlaždic: octree kolem Slunce (krychle ±500 pc), v každém uzlu nejjasnější
-      hvězdy (LOD podle absolutní/zdánlivé jasnosti z místa kamery), list ~32–64 tis. hvězd, binární int16/uint8 jako
-      gaia100, karty po kouscích; index uzlů v JSON. Odhad velikosti na Pages (limit 1 GB, repo ≤ 1 GB) spočítat
-      předem – 13,7 mil. × ~9 B ≈ 120 MB bodů + karty; zvážit karty jen s ID a dotahovat zbytek z VizieR/SIMBAD.
-   c) `src/scene/gaia100.ts` → načítání dlaždic podle kamery (frustum + vzdálenost), rozpočet bodů pro mobil,
-      výběr hvězdy přes dlaždici; GCNS 100 pc nechat (má Dist16/50/84) nebo sloučit – rozhodne Ráďa.
-   d) test výkonu: desktop + mobil (Playwright s dotykem), Ráďa na telefonu.
+0. **Gaia 500 pc – zbývá skutečná data (kód hotový 3. 10., viz Hotovo):**
+   a) Ráďa na PC: `py -m pip install astroquery`, `cd pipeline`, `py gaia500_stahni.py --dry`, pak `py gaia500_stahni.py`
+      (když archiv odmítne velkou anonymní úlohu → `Gaia.login()` s účtem ESA Cosmos); `gaia500_stahni.py` zatím
+      neotestovaný proti archivu
+   b) `py gaia500.py` → zkontrolovat výpis (počet hvězd ≈ 13,7 mil.?, uzly, MB, hloubka, žádné „pozor: uzel …“),
+      `npm run dev`, zapnout Gaia 500 pc, plynulost na GPU; případně upravit MIN_PX / BUDGET v `src/scene/gaia500.ts`
+   c) s Ráďovým souhlasem: datové repo podle `nasazeni/DATA-REPO.md`, commit manifest.json do pracovní větve
+   d) test na telefonu (po nasazení nebo `npm run dev -- --host` v lokální síti); přidat licenci dat Gaia do CHECKLISTu
 1. **Čeká se na odpověď JPL** (e-mail z Gmailu 2. 10., vlákno „Permission request: JPL SSD data…“). Po kladné odpovědi:
    upravit znění poděkování podle JPL, sloučit větev do `main` → workflow nasadí na https://azuregroove.github.io/galaxie/
 2. Pages Source = „GitHub Actions“ už je (Ráďa ověřil 2. 10.); Ráďa: přečíst podmínky CDS, DSS, JPL copyright,

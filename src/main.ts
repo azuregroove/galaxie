@@ -13,6 +13,7 @@ import { GaiaArms } from "./scene/gaiaArms";
 import { Dust } from "./scene/dust";
 import { type LocalData, LocalStructures } from "./scene/local";
 import { Gaia100 } from "./scene/gaia100";
+import { Gaia500 } from "./scene/gaia500";
 import { PillarsLayer, type PillarsMeta } from "./scene/pillars";
 import { DarkMatterLayer } from "./scene/darkMatter";
 import { StarTrekLayer, type StarTrekData } from "./scene/startrek";
@@ -94,6 +95,16 @@ async function main() {
     const gaiaNearBtn = document.getElementById("gaia100") as HTMLButtonElement | null;
     const gaiaNear = gaiaNearBtn && file("gaia100") ? new Gaia100(DATA + file("gaia100"), frame.sun, stage.glow, gaiaNearBtn) : null;
     if (gaiaNear) layers.push(gaiaNear);
+    // Dlaždice 500 pc jsou kvůli velikosti v samostatném repu galaxie-data (stejná doména → bez CORS);
+    // při vývoji z public/data/gaia500/ (pipeline/gaia500.py, v .gitignore).
+    const gaiaFarBtn = document.getElementById("gaia500") as HTMLButtonElement | null;
+    const gaiaFarUrl = import.meta.env.VITE_GAIA500_URL
+      ?? (import.meta.env.DEV ? DATA + "gaia500/" : "https://azuregroove.github.io/galaxie-data/gaia500/");
+    const gaiaFar = gaiaFarBtn && (file("gaia500") || import.meta.env.DEV)
+      ? new Gaia500(gaiaFarUrl, frame.sun, stage.glow, gaiaFarBtn, () => { if (gaiaNear && !gaiaNear.active) void gaiaNear.toggle(); })
+      : null;
+    if (gaiaFar) layers.push(gaiaFar);
+    else gaiaFarBtn?.remove();
     const trekBtn = document.getElementById("startrek") as HTMLButtonElement | null;
     let trek: StarTrekLayer | null = null;
     if (trekBtn && file("startrek")) {
@@ -160,10 +171,15 @@ async function main() {
         });
       } else catBtn?.remove();
     } else document.getElementById("trekCat")?.remove();
-    if (gaiaNear) hud.extraPick = (px, py, r, rect) => {
-      const i = gaiaNear.pickAt(px, py, r, rect, stage);
-      if (i == null) return false;
-      void gaiaNear.star(i).then((o) => hud.select(o, true)).catch((e) => console.error(e));
+    if (gaiaNear || gaiaFar) hud.extraPick = (px, py, r, rect) => {
+      const i = gaiaNear?.pickAt(px, py, r, rect, stage) ?? null;
+      if (i != null) {
+        void gaiaNear!.star(i).then((o) => hud.select(o, true)).catch((e) => console.error(e));
+        return true;
+      }
+      const hit = gaiaFar?.pickAt(px, py, r, rect, stage) ?? null;
+      if (hit == null) return false;
+      void gaiaFar!.star(hit).then((o) => hud.select(o, true)).catch((e) => console.error(e));
       return true;
     };
     stage.jumpTo(frame.sun.clone().add(new Vector3(9000, 0, 0)), new Vector3(-23000, 52000, 42000));

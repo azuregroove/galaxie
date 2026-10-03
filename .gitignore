@@ -2,3 +2,4 @@ node_modules/
 dist/
 *.log
 pipeline/raw/
+public/data/gaia500/

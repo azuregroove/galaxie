@@ -49,7 +49,7 @@ const STOPS: [number, number, number, number][] = [
   [-0.4, 0.62, 0.71, 1.0], [0.3, 0.92, 0.94, 1.0], [0.8, 1.0, 0.95, 0.8], [1.3, 1.0, 0.8, 0.55],
   [2.2, 1.0, 0.6, 0.4], [3.5, 1.0, 0.42, 0.32],
 ];
-function bprpColor(c: number | null, out: number[]): void {
+export function bprpColor(c: number | null, out: number[]): void {
   if (c == null) { out.push(0.75, 0.75, 0.78); return; }
   if (c <= STOPS[0][0]) { out.push(STOPS[0][1], STOPS[0][2], STOPS[0][3]); return; }
   for (let i = 1; i < STOPS.length; i++) {
@@ -61,6 +61,33 @@ function bprpColor(c: number | null, out: number[]): void {
   }
   const z = STOPS[STOPS.length - 1];
   out.push(z[1], z[2], z[3]);
+}
+
+/** Body hvězd Gaia: atribut absMag (absolutní G) a color; sdílí je vrstvy gaia100 a gaia500. */
+export function starMaterial(glow: Texture): ShaderMaterial {
+  return new ShaderMaterial({
+    uniforms: { map: { value: glow }, pr: { value: Math.min(devicePixelRatio, 2) }, fade: { value: 1 } },
+    // Velikost a jas podle hvězdné velikosti, jakou by hvězda měla z místa kamery (absolutní G + modul
+    // vzdálenosti), takže při průletu blízké hvězdy zjasní. Konstanty jsou vzhledové, ne fotometrické.
+    vertexShader: /* glsl */ `
+      uniform float pr; uniform float fade; attribute float absMag; attribute vec3 color; varying vec3 vCol; varying float vA;
+      void main(){ vCol = color; vec4 mv = modelViewMatrix * vec4(position, 1.);
+        float rPc = max(-mv.z, 0.02) / ${LY_PER_PC.toFixed(6)};
+        float m = absMag + 5. * log(rPc / 10.) / log(10.);
+        gl_PointSize = clamp(7.2 - 0.5 * m, 1.6, 12.) * pr;
+        vA = clamp(1.25 - 0.075 * m, 0.12, 1.) * fade;
+        gl_Position = projectionMatrix * mv; }`,
+    fragmentShader: /* glsl */ `
+      uniform sampler2D map; varying vec3 vCol; varying float vA;
+      void main(){
+        float r = length(gl_PointCoord - .5);
+        float core = 1. - smoothstep(.1, .22, r);
+        float a = max(texture2D(map, gl_PointCoord).a * .6, core) * vA;
+        gl_FragColor = vec4(mix(vCol, vec3(1.), core * .3), a); }`,
+    transparent: true,
+    depthWrite: false,
+    blending: AdditiveBlending,
+  });
 }
 
 /**
@@ -156,29 +183,7 @@ export class Gaia100 implements Layer {
     geo.setAttribute("position", new BufferAttribute(pos, 3));
     geo.setAttribute("absMag", new BufferAttribute(absMag, 1));
     geo.setAttribute("color", new BufferAttribute(new Float32Array(col), 3));
-    const mat = new ShaderMaterial({
-      uniforms: { map: { value: this.glow }, pr: { value: Math.min(devicePixelRatio, 2) }, fade: { value: 1 } },
-      // Velikost a jas podle hvězdné velikosti, jakou by hvězda měla z místa kamery (absolutní G + modul
-      // vzdálenosti), takže při průletu blízké hvězdy zjasní. Konstanty jsou vzhledové, ne fotometrické.
-      vertexShader: /* glsl */ `
-        uniform float pr; uniform float fade; attribute float absMag; attribute vec3 color; varying vec3 vCol; varying float vA;
-        void main(){ vCol = color; vec4 mv = modelViewMatrix * vec4(position, 1.);
-          float rPc = max(-mv.z, 0.02) / ${LY_PER_PC.toFixed(6)};
-          float m = absMag + 5. * log(rPc / 10.) / log(10.);
-          gl_PointSize = clamp(7.2 - 0.5 * m, 1.6, 12.) * pr;
-          vA = clamp(1.25 - 0.075 * m, 0.12, 1.) * fade;
-          gl_Position = projectionMatrix * mv; }`,
-      fragmentShader: /* glsl */ `
-        uniform sampler2D map; varying vec3 vCol; varying float vA;
-        void main(){
-          float r = length(gl_PointCoord - .5);
-          float core = 1. - smoothstep(.1, .22, r);
-          float a = max(texture2D(map, gl_PointCoord).a * .6, core) * vA;
-          gl_FragColor = vec4(mix(vCol, vec3(1.), core * .3), a); }`,
-      transparent: true,
-      depthWrite: false,
-      blending: AdditiveBlending,
-    });
+    const mat = starMaterial(this.glow);
     this.points = new Points(geo, mat);
     this.points.frustumCulled = false;
     this.group.add(this.points);
