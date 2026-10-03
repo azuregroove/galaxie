@@ -2,6 +2,7 @@ import { Group } from "three";
 import type { Frame } from "../core/coords";
 import type { CatalogEntry, MapObject } from "../core/types";
 import { escapeHtml } from "../core/units";
+import type { ProbeData } from "../system/probes";
 import type { SmallData } from "../system/small";
 import { solarSpec, type SolarData } from "../system/solar";
 import type { SystemView } from "../system/view";
@@ -11,7 +12,7 @@ import { NO_FILTER, type Facet, type FilterState, type Layer, type LayerFilter }
 const ALIASES = ["Slunce", "Merkur", "Venuše", "Země", "Mars", "Jupiter", "Saturn", "Uran", "Neptun",
   "Pluto", "Ceres", "Eris", "Haumea", "Makemake", "Měsíc", "Io", "Europa", "Ganymed", "Kallisto", "Titan",
   "Enceladus", "Triton", "Charon", "Phobos", "Deimos", "Titania", "Oberon", "Miranda",
-  "planetky", "komety", "Halleyova kometa", "Vesta", "Pallas", "Apophis", "Bennu", "Ryugu", "Eros", "Arrokoth", "Hale-Bopp", "3I/ATLAS"];
+  "planetky", "komety", "sondy", "Halleyova kometa", "Vesta", "Pallas", "Apophis", "Bennu", "Ryugu", "Eros", "Arrokoth", "Hale-Bopp", "3I/ATLAS"];
 
 /** Jediný objekt: Slunce s tlačítkem do pohledu Sluneční soustava. Bez legendy a filtrů. */
 export class SolarLayer implements Layer {
@@ -21,7 +22,9 @@ export class SolarLayer implements Layer {
   readonly objects: MapObject[];
   readonly filters: LayerFilter[] = [];
   readonly facets: Facet[] = [];
-  private data: Promise<[SolarData, SmallData | null]> | null = null;
+  private data: Promise<[SolarData, SmallData | null, ProbeData | null]> | null = null;
+  /** sondy.json; nepovinné jako planetky */
+  probesUrl: string | null = null;
   private smallUrl: string | null;
   private smallMeta: CatalogEntry | null;
   private meta: CatalogEntry;
@@ -53,15 +56,19 @@ export class SolarLayer implements Layer {
     return "Otevřít Sluneční soustavu ▸";
   }
 
-  openDetail(): void {
+  openDetail(_o?: MapObject, probe?: string): void {
     const get = <T>(url: string) => fetch(url).then((r) => {
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       return r.json() as Promise<T>;
     });
     // planetky jsou nepovinné: bez nich se soustava otevře taky
     this.data ??= Promise.all([get<SolarData>(this.url),
-      this.smallUrl ? get<SmallData>(this.smallUrl).catch((e) => (console.warn("planetky a komety:", e), null)) : Promise.resolve(null)]);
-    this.data.then(([d, s]) => this.view.open(solarSpec(d, s))).catch((e) => {
+      this.smallUrl ? get<SmallData>(this.smallUrl).catch((e) => (console.warn("planetky a komety:", e), null)) : Promise.resolve(null),
+      this.probesUrl ? get<ProbeData>(this.probesUrl).catch((e) => (console.warn("sondy:", e), null)) : Promise.resolve(null)]);
+    this.data.then(([d, s, p]) => {
+      this.view.open(solarSpec(d, s, p));
+      if (probe) this.view.focusProbe(probe);
+    }).catch((e) => {
       this.data = null;
       alert(`Data Sluneční soustavy se nepodařilo načíst: ${(e as Error).message}`);
     });

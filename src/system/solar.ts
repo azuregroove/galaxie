@@ -1,4 +1,5 @@
 import { STAR_CLASS } from "../core/starClass";
+import type { ProbeData } from "./probes";
 import { smallNotes, type SmallData } from "./small";
 import type { OrbitBody, SystemSpec } from "./types";
 
@@ -66,7 +67,7 @@ function body(el: Elements, kind: OrbitBody["kind"], aKm = false): OrbitBody {
   };
 }
 
-export function solarSpec(d: SolarData, small: SmallData | null = null): SystemSpec {
+export function solarSpec(d: SolarData, small: SmallData | null = null, probes: ProbeData | null = null): SystemSpec {
   const planets = d.planety.map((p) => body(p, "planet"));
   const dwarfs = d.trpaslici.map((p) => body(p, "dwarf"));
   const all = [...planets, ...dwarfs];
@@ -96,8 +97,11 @@ export function solarSpec(d: SolarData, small: SmallData | null = null): SystemS
       `„Skutečné velikosti“ kreslí tělesa v měřítku drah (většinou jen jako tečky). Jinak jsou zvětšená.`,
       `Planeta „Země“ je ve skutečnosti těžiště soustavy Země–Měsíc (liší se o ~4 700 km).`,
       ...(small ? smallNotes(small) : []),
+      ...(probes ? [`Sondy (${probes.sondy.length}): dráhy z JPL Horizons (stav ${probes.stazeno.slice(0, 10)}), zjednodušené na odchylku do 0,01 au; `
+        + `poloha mezi body dopočtená lineárně. Pioneery a New Horizons mají efemeridu do 2050, Voyagery do 2100 (předpověď JPL).`] : []),
     ],
     small: small ?? undefined,
+    probes: probes?.sondy,
     source: `Data: NASA/JPL Solar System Dynamics – přibližné polohy planet, SBDB, Horizons, parametry měsíců (stav ${d.stazeno.slice(0, 10)}).`,
   };
 }

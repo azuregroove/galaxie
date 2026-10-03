@@ -30,6 +30,7 @@ import { escapeHtml, fmtNum } from "../core/units";
 import type { Stage } from "../scene/stage";
 import { fillImage } from "../ui/images";
 import { planeXY } from "./kepler";
+import { eclToScene, probeEcl, type Probe } from "./probes";
 import { SMALL_COLORS, smallBody, type SmallData } from "./small";
 import type { OrbitBody, SystemSpec } from "./types";
 
@@ -119,6 +120,9 @@ export class SystemView {
   private smallTex: Texture | null = null;
   private down: { x: number; y: number } | null = null;
   private returnFocus: HTMLElement | null = null;
+  private probeViews: { bv: BodyView; p: Probe; line: Line; on: boolean }[] = [];
+  private showProbes = true;
+  private ecl: [number, number, number] = [0, 0, 0];
 
   private stage: Stage;
   private glow: Texture;
@@ -151,6 +155,7 @@ export class SystemView {
         <button class="btn" data-a="size" aria-pressed="false">Skutečné velikosti</button>
         <button class="btn" data-a="ref" aria-pressed="false">Sluneční soustava</button>
         <button class="btn" data-a="small" aria-pressed="false">Planetky a komety</button>
+        <button class="btn" data-a="probes" aria-pressed="true">Sondy</button>
         <button class="btn" data-a="notes" aria-pressed="false">Poznámky</button>
       </nav>
       <div class="hud sysNotes" hidden></div>
@@ -282,6 +287,7 @@ export class SystemView {
     this.smallPts = null;
     this.smallSel = null;
     this.small = null;
+    this.probeViews = [];
   }
 
   // ---------- stavba scény ----------
@@ -334,6 +340,7 @@ export class SystemView {
     spec.bodies.forEach((b, i) => this.bodies.push(make(b, i, null, this.scene)));
     this.makeBody = (b) => make(b, 0, null, this.scene);
     this.buildSmall(spec.small ?? null);
+    this.buildProbes(spec.probes ?? null);
 
     if (spec.hz) {
       // mezikruží v rovině drah; optimistická zóna slabší
@@ -381,6 +388,7 @@ export class SystemView {
     this.q<HTMLButtonElement>('[data-a="ref"]').hidden = !spec.solarRef;
     this.q<HTMLButtonElement>('[data-a="small"]').hidden = !spec.small;
     if (!spec.small) this.q(".sysSmall").hidden = true;
+    this.q<HTMLButtonElement>('[data-a="probes"]').hidden = !spec.probes?.length;
     this.q<HTMLButtonElement>('[data-a="home"]').hidden = !spec.bodies.some((b) => b.children?.length);
     if (!spec.solarRef) this.showRef = false;
     this.syncButtons();
@@ -443,6 +451,10 @@ export class SystemView {
         this.t = Math.min(this.spec!.dated!.max, Math.max(this.spec!.dated!.min, jdNow()));
         break;
       case "home": this.home(); break;
+      case "probes":
+        this.showProbes = !this.showProbes;
+        for (const pv of this.probeViews) pv.line.visible = this.showProbes;
+        break;
       case "ref":
         this.showRef = !this.showRef;
         this.refGroup.forEach((r) => (r.visible = this.showRef));
@@ -477,6 +489,7 @@ export class SystemView {
     set("ref", this.showRef);
     set("notes", !this.q(".sysNotes").hidden);
     set("small", !this.q(".sysSmall").hidden);
+    set("probes", this.showProbes);
     this.q(".sysSpeed").textContent = `1 s = ${fmtDays(this.daysPerSec)}`;
   }
 
@@ -510,7 +523,7 @@ export class SystemView {
       const img = document.createElement("div");
       img.className = "imgs";
       this.q(".sysFocus").appendChild(img);
-      void fillImage(img, "slunecni-soustava", bv.b.imgKey, () => this.infoFor === bv && !this.root.hidden);
+      void fillImage(img, bv.b.imgLayer ?? "slunecni-soustava", bv.b.imgKey, () => this.infoFor === bv && !this.root.hidden);
     }
   }
 
@@ -648,6 +661,7 @@ export class SystemView {
       bv.world.copy(bv.mesh.position);
       if (bv.sats) bv.sats.position.copy(bv.world);
     }
+    for (const pv of this.probeViews) this.placeProbe(pv);
 
     // sledování tělesa: posun o jeho pohyb, případně dolet
     if (this.focus) {
@@ -714,6 +728,16 @@ export class SystemView {
       bv.mesh.scale.setScalar(rad);
       labelled.push(bv);
     }
+    for (const pv of this.probeViews) {
+      const show = this.showProbes && pv.on;
+      pv.bv.mesh.visible = show;
+      if (!show) {
+        pv.bv.label.style.display = "none";
+        continue;
+      }
+      pv.bv.mesh.scale.setScalar(3 * pxWorld(pv.bv.world));
+      labelled.push(pv.bv);
+    }
     this.placeLabels(labelled);
     if (this.starLabel) this.place(this.starLabel, star.position, 10);
     for (const r of this.refs) {
@@ -722,6 +746,69 @@ export class SystemView {
     }
     this.renderer!.render(this.scene, cam);
     this.raf = requestAnimationFrame((n) => this.loop(n));
+  }
+
+  // ---------- sondy ----------
+  private buildProbes(list: Probe[] | null): void {
+    if (!list || !this.makeBody) return;
+    for (const p of list) {
+      const v = new Vector3();
+      const pts = new Float32Array(p.drah.xyz.length * 3);
+      p.drah.xyz.forEach((e, k) => pts.set(eclToScene(e, v).toArray(), k * 3));
+      const geo = new BufferGeometry();
+      geo.setAttribute("position", new Float32BufferAttribute(pts, 3));
+      const line = new Line(geo, new LineBasicMaterial({ color: p.barva, transparent: true, opacity: 0.55 }));
+      line.visible = this.showProbes;
+      this.scene.add(line);
+      const b: OrbitBody = { name: p.jmeno, a: 0, e: 0, w: 0, p: 1, r: null, kind: "probe", color: p.barva,
+        imgKey: p.jmeno, imgLayer: "sondy" };
+      const bv = this.makeBody(b);
+      // dráhu kreslí line výše; Kepler se na sondu nepoužívá
+      this.scene.remove(bv.orbit);
+      bv.prio = 20000;
+      bv.label.classList.add("probe");
+      bv.label.onclick = () => this.focusProbeView(pv);
+      const pv = { bv, p, line, on: false };
+      this.probeViews.push(pv);
+    }
+  }
+
+  private placeProbe(pv: { bv: BodyView; p: Probe; on: boolean }): void {
+    pv.on = probeEcl(pv.p, this.t, this.ecl);
+    if (pv.on) eclToScene(this.ecl, pv.bv.world);
+    pv.bv.mesh.position.copy(pv.bv.world);
+  }
+
+  private focusProbeView(pv: { bv: BodyView; p: Probe; on: boolean }): void {
+    this.placeProbe(pv);
+    const r = pv.bv.world.length();
+    pv.bv.b.info = pv.on
+      ? `${fmtNum(r, 1)} au od Slunce k ${fmtJd(this.t)} · start ${pv.p.start.slice(0, 4)} · dráha JPL Horizons`
+      : `k ${fmtJd(this.t)} ještě nestartovala (start ${pv.p.start.slice(0, 4)})`;
+    this.focusOn(pv.bv);
+    // odstup tak, aby bylo vidět i Slunce – samotná tečka v prázdnu nic neřekne
+    this.startFlight(Math.max(r, 1) / Math.tan((FOV * DEG) / 2) * 1.3);
+    // a z boku: při pohledu podél spojnice Slunce–sonda by sonda Slunce zakryla (Voyager 1 z výchozího směru)
+    if (r > 0 && this.flight) {
+      const rh = pv.bv.world.clone().normalize();
+      const up = new Vector3(0, 1, 0).addScaledVector(rh, -rh.y);
+      const side = new Vector3().crossVectors(rh, new Vector3(0, 1, 0));
+      if (up.lengthSq() > 1e-6 && side.lengthSq() > 1e-6) {
+        this.flight.dir.copy(side.normalize().multiplyScalar(0.8).addScaledVector(up.normalize(), 0.6)).normalize();
+      }
+    }
+  }
+
+  /** Otevřená soustava: přelet na sondu podle jména (z karty v mapě Galaxie). */
+  focusProbe(name: string): void {
+    const pv = this.probeViews.find((x) => x.p.jmeno === name);
+    if (!pv) return;
+    if (!this.showProbes) {
+      this.showProbes = true;
+      for (const x of this.probeViews) x.line.visible = true;
+      this.syncButtons();
+    }
+    this.focusProbeView(pv);
   }
 
   // ---------- planetky a komety ----------

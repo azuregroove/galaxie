@@ -103,7 +103,21 @@ Aktualizovat na konci každého sezení.
   - PWA: vlastní runtime cache `galaxie-gaia500` (300 souborů, purgeOnQuotaError)
   - návod k datovému repu: `nasazeni/DATA-REPO.md`
 
+- 2026-10-03 (cloud): **Sondy mířící ze Sluneční soustavy** (Ráďa; build OK, Playwright desktop, bez JS chyb)
+  - `pipeline/sondy.py` → `sondy.json` (28 kB): Pioneer 10, 11, Voyager 1, 2, New Horizons z JPL Horizons (vektory po 5 dnech
+    od začátku efemeridy do konce – 2050, Voyagery 2100 –, zjednodušené RDP na 0,01 au), časové osy misí přeložené ze záhlaví
+    objektů v Horizons (nic navíc); dnes Voyager 1 171,9 au / 16,9 km/s, Voyager 2 144,1 au, New Horizons 65,7 au;
+    směry letu sedí se známými (V1 Hadonoš, V2 Páv, P10 Býk, P11 Orel, NH Střelec – kontrola astropy)
+  - obrázky a popis: Wikidata (Q59103, Q59113, Q48469, Q48475, Q48461) → `obrazky.json`, vrstva „sondy“
+  - mapa Galaxie: vrstva Sondy (tlačítko, výchozí zap), přímky směru letu na 20 000 let s tečkami po 5 000 letech a popisky,
+    vidět do 60 ly od Slunce; karta (vzdálenost, rychlost, směr, start, historie mise, foto, Wikipedie) s tlačítkem
+    „Dráha ve Sluneční soustavě ▸“
+  - pohled Sluneční soustava: skutečné dráhy všech pěti sond, značka podle data na posuvníku, tlačítko Sondy, přelet z boku
+  - **JPL odpověděl (2. 10. 22:56 UTC, J. Giorgini): data bez omezení, použití v pořádku, dodržet fair-use API** →
+    CHECKLIST a licence v manifestu upravené
+
 ## Rozhodnutí
+- 2026-10-03: **svolení JPL SSD přišlo** (e-mail 2. 10.) → nasazení do `main` už neblokuje JPL, rozhodne Ráďa
 - 2026-10-03: **Gaia 500 pc: varianta B** (v kartě jen Gaia ID, zbytek odkazem), **samostatné datové repo `galaxie-data`**
   (přepisované orphan commitem, stejná doména), **GCNS 100 pc zůstává** (z dlaždic vyřazena), **uzel 16 tis. hvězd** (Ráďa)
 - 2026-09-30: Ráďa chce třídu hvězdy s barvou i pohled Soustava s elipsami (ne jen kruhy)
@@ -513,7 +527,7 @@ Aktualizovat na konci každého sezení.
 ## Rozdělané
 - Star Trek – možná vylepšení: (1) ~~MB `planetInfobox` v `startrek.py`~~ (hotovo 2. 10.); (2) výkon raymarchingu území na telefonu neověřen (max. 160 kroků);
   (3) třídy planet z MB někdy jako text („habitable“, „gas giant“) – sjednotit
-- etapa 6: čeká na odpověď JPL (e-mail 2. 10.);
+- etapa 6: JPL schválil 2. 10.;
   po odpovědi sloučit větev do main = první nasazení (viz `nasazeni/CHECKLIST.md`)
 - Gouldův pás: jen pokud se najde zdroj s číselným natočením elipsy (např. tabulka v novější práci) – jinak nechat
 - možné vylepšení: mapa prachu Edenhofer 2024 (Zenodo už povolené) místo / vedle Vergely 2022
@@ -522,7 +536,7 @@ Aktualizovat na konci každého sezení.
 **Aktuální větev: `claude/tender-cori-vkgixr`** (3. 10.: navazuje na happy-albattani + Gaia 500 pc dlaždice; dál bod 0 b–d); předtím `claude/happy-albattani-vecsdh` (3. 10.: Star Trek území a katalog, oprava MB, vyhlazení, hlavička exoplanet, Radcliffeova vlna s kartou, příprava Gaia 500 pc; další krok = bod 0 níže); předtím `claude/busy-hypatia-fvo0mb` (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` je stále na etapě 3.
 Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve.
 Na PC: `git fetch origin`, `git switch claude/tender-cori-vkgixr`, `git pull`, `npm install`, `npm run dev`.
-Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné nasazení) až po odpovědi JPL.
+Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné nasazení) jen s jeho výslovným souhlasem (JPL už schválil).
 
 0. **Gaia 500 pc – zbývá skutečná data (kód hotový 3. 10., viz Hotovo):**
    a) Ráďa na PC: `py -m pip install astroquery`, `cd pipeline`, `py gaia500_stahni.py --dry`, pak `py gaia500_stahni.py`
@@ -532,8 +546,8 @@ Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné
       `npm run dev`, zapnout Gaia 500 pc, plynulost na GPU; případně upravit MIN_PX / BUDGET v `src/scene/gaia500.ts`
    c) s Ráďovým souhlasem: datové repo podle `nasazeni/DATA-REPO.md`, commit manifest.json do pracovní větve
    d) test na telefonu (po nasazení nebo `npm run dev -- --host` v lokální síti); přidat licenci dat Gaia do CHECKLISTu
-1. **Čeká se na odpověď JPL** (e-mail z Gmailu 2. 10., vlákno „Permission request: JPL SSD data…“). Po kladné odpovědi:
-   upravit znění poděkování podle JPL, sloučit větev do `main` → workflow nasadí na https://azuregroove.github.io/galaxie/
+1. **JPL schválil (2. 10.)** – nasazení: s Ráďovým souhlasem sloučit pracovní větev do `main` → workflow nasadí na
+   https://azuregroove.github.io/galaxie/ (předtím zbývající body CHECKLISTu: CDS, DSS, licence dat Gaia)
 2. Pages Source = „GitHub Actions“ už je (Ráďa ověřil 2. 10.); Ráďa: přečíst podmínky CDS, DSS, JPL copyright,
    licence dat Gaia (odkazy v `nasazeni/CHECKLIST.md`)
 3. Ráďa na PC: vyzkoušet Prach (6 kpc / 3 kpc) a Okolí – výkon na GPU a telefonu; ATNF pulsary (`py pipeline\neutronove_hvezdy.py`)
