@@ -116,6 +116,15 @@ Aktualizovat na konci každého sezení.
   - **JPL odpověděl (2. 10. 22:56 UTC, J. Giorgini): data bez omezení, použití v pořádku, dodržet fair-use API** →
     CHECKLIST a licence v manifestu upravené
 
+- 2026-10-03 (PC): **Gaia 500 pc – skutečná data stažená a v aplikaci** (Ráďa: „všecko běhá a je to hustý“, GTX 1050 Ti)
+  - archiv ESA nefungoval (deadlock, pak neodpovídal; přihlášení astroquery vracelo 401 i se správným heslem) →
+    stahování ze zrcadla **ARI Heidelberg** (asynchronní TAP, CSV) – 48 dílů, ~1,25 min na díl, ~0,75 GB CSV.gz
+  - `gaia500.py`: načteno **15 592 482** (odhad ze vzorku VizieR 13,7 mil. byl o 14 % nízký, i pod horní mezí intervalu),
+    vyřazeno z GCNS 324 834 (98 % z 331 312 GCNS spárováno), dalších 71 412 s paralaxou nad 10 mas →
+    **15 196 236 hvězd, 2 480 uzlů, hloubka 5**, body 111,8 MB (7,36 B/hvězdu), karty 93,4 MB, celkem **205 MB**,
+    největší uzel 124 kB; zpracování 41 s
+  - lokálně změněný `public/data/manifest.json` (záznam gaia500) je zatím jen na PC – commitnout s datovým repem
+
 ## Rozhodnutí
 - 2026-10-03: **mapy temné hmoty z Euclidu: počkat na kompletní DR1 (plán ESA: polovina 2027)** – jde o kosmologickou
   strukturu za Galaxií (rozšíření rozsahu jako NAVRHY bod 12), ne o halo Mléčné dráhy; termíny jen z vyhledávání, neověřené u ESA
@@ -540,14 +549,11 @@ Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve.
 Na PC: `git fetch origin`, `git switch claude/tender-cori-vkgixr`, `git pull`, `npm install`, `npm run dev`.
 Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné nasazení) jen s jeho výslovným souhlasem (JPL už schválil).
 
-0. **Gaia 500 pc – zbývá skutečná data (kód hotový 3. 10., viz Hotovo):**
-   a) Ráďa na PC: `py -m pip install astroquery`, `cd pipeline`, `py gaia500_stahni.py --dry`, pak `py gaia500_stahni.py`
-      (když archiv odmítne velkou anonymní úlohu → `Gaia.login()` s účtem ESA Cosmos); `gaia500_stahni.py` zatím
-      neotestovaný proti archivu
-   b) `py gaia500.py` → zkontrolovat výpis (počet hvězd ≈ 13,7 mil.?, uzly, MB, hloubka, žádné „pozor: uzel …“),
-      `npm run dev`, zapnout Gaia 500 pc, plynulost na GPU; případně upravit MIN_PX / BUDGET v `src/scene/gaia500.ts`
-   c) s Ráďovým souhlasem: datové repo podle `nasazeni/DATA-REPO.md`, commit manifest.json do pracovní větve
-   d) test na telefonu (po nasazení nebo `npm run dev -- --host` v lokální síti); přidat licenci dat Gaia do CHECKLISTu
+0. **Gaia 500 pc – zbývá zveřejnění** (data i aplikace na PC fungují 3. 10.):
+   a) Ráďa: založit veřejné repo `azuregroove/galaxie-data`, nahrát dlaždice podle `nasazeni/DATA-REPO.md`, zapnout Pages
+   b) commit `public/data/manifest.json` (záznam gaia500) z PC do pracovní větve
+   c) po nasazení test na telefonu (rozpočet 600 tis. bodů; případně upravit MIN_PX / BUDGET v `src/scene/gaia500.ts`)
+   d) do CHECKLISTu licence dat Gaia (ESA) a citace zrcadla ARI
 1. **JPL schválil (2. 10.)** – nasazení: s Ráďovým souhlasem sloučit pracovní větev do `main` → workflow nasadí na
    https://azuregroove.github.io/galaxie/ (předtím zbývající body CHECKLISTu: CDS, DSS, licence dat Gaia)
 2. Pages Source = „GitHub Actions“ už je (Ráďa ověřil 2. 10.); Ráďa: přečíst podmínky CDS, DSS, JPL copyright,
