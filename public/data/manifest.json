@@ -210,6 +210,18 @@
       "stazeno": "2026-09-30T19:00:16Z"
     },
     {
+      "id": "sondy",
+      "soubor": "sondy.json",
+      "nazev": "Sondy mířící ze Sluneční soustavy",
+      "zdroj": "NASA/JPL Horizons (trajektorie a časové osy misí)",
+      "url": "https://ssd.jpl.nasa.gov/horizons/",
+      "licence": "Data JPL SSD jsou podle JPL bez omezení (J. Giorgini, JPL SSD, e-mail 2. 10. 2026); dodržovat fair-use API",
+      "stazeno": "2026-10-03T15:54:46Z",
+      "objektu": 5,
+      "poznamka": "Za koncem efemeridy (2050, u Voyagerů 2100) je dráha jen přímka podle poslední rychlosti – orientačně.",
+      "vyrez": false
+    },
+    {
       "id": "startrek",
       "soubor": "startrek.json",
       "nazev": "Star Trek – fanouškovská vrstva (fikce)",

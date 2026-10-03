@@ -14,6 +14,8 @@ import { Dust } from "./scene/dust";
 import { type LocalData, LocalStructures } from "./scene/local";
 import { Gaia100 } from "./scene/gaia100";
 import { Gaia500 } from "./scene/gaia500";
+import { ProbeLayer } from "./layers/probes";
+import type { ProbeData } from "./system/probes";
 import { PillarsLayer, type PillarsMeta } from "./scene/pillars";
 import { DarkMatterLayer } from "./scene/darkMatter";
 import { StarTrekLayer, type StarTrekData } from "./scene/startrek";
@@ -85,7 +87,11 @@ async function main() {
     const systemView = new SystemView(stage, stage.glow);
     const solar = manifest.katalogy.find((k) => k.id === "slunecni-soustava");
     const small = manifest.katalogy.find((k) => k.id === "mala-telesa");
-    if (solar) layers.push(new SolarLayer(frame, solar, DATA + solar.soubor, systemView, small ? { meta: small, url: DATA + small.soubor } : null));
+    const solarL = solar ? new SolarLayer(frame, solar, DATA + solar.soubor, systemView, small ? { meta: small, url: DATA + small.soubor } : null) : null;
+    if (solarL) {
+      layers.push(solarL);
+      if (file("sondy")) solarL.probesUrl = DATA + file("sondy");
+    }
     if (exo) {
       const L = new ExoplanetLayer(exo, frame, stage.glow, css);
       L.systemView = systemView;
@@ -124,6 +130,16 @@ async function main() {
       } catch (e) { console.error(e); }
     }
     if (!local) localBtn?.remove();
+    const probeBtn = document.getElementById("probes") as HTMLButtonElement | null;
+    let probesL: ProbeLayer | null = null;
+    if (probeBtn && file("sondy")) {
+      try {
+        probesL = new ProbeLayer(await getJson<ProbeData>(file("sondy")!), frame, labels, stage.glow, probeBtn,
+          (name) => solarL?.openDetail(undefined, name));
+        layers.push(probesL);
+      } catch (e) { console.error(e); }
+    }
+    if (!probesL) probeBtn?.remove();
     const dmBtn = document.getElementById("darkMatter") as HTMLButtonElement | null;
     if (dmBtn) layers.push(new DarkMatterLayer(frame.sun, labels, dmBtn));
     if (file("sloupy")) {

@@ -1,5 +1,6 @@
 import type { HabitableZone } from "../core/hz";
 import type { StarClassResult } from "../core/starClass";
+import type { Probe } from "./probes";
 import type { SmallData } from "./small";
 
 /** Oběžné těleso pro pohled Soustava. Délky v au, periody a čas ve dnech, úhly ve stupních. */
@@ -23,9 +24,11 @@ export interface OrbitBody {
   /** lineární změny elementů za den (planety podle Standishe, stáčení uzlu u měsíců) */
   rates?: { a?: number; e?: number; inc?: number; node?: number; w?: number };
   color?: string;
-  kind?: "planet" | "dwarf" | "moon" | "small";
+  kind?: "planet" | "dwarf" | "moon" | "small" | "probe";
   /** klíč do obrazky.json (vrstva slunecni-soustava): anglické jméno nebo označení z JPL */
   imgKey?: string;
+  /** vrstva v obrazky.json, když to není slunecni-soustava (sondy) */
+  imgLayer?: string;
   /** text do řádku vybraného tělesa místo výchozího (planetky a komety) */
   info?: string;
   /** odkaz na zdroj údajů (např. stránka tělesa v JPL SBDB) */
@@ -71,5 +74,7 @@ export interface SystemSpec {
   solarRef?: boolean;
   /** planetky a komety jako body (jen Sluneční soustava) */
   small?: SmallData;
+  /** sondy mířící ze Sluneční soustavy (dráhy z JPL Horizons) */
+  probes?: Probe[];
   source: string;
 }

@@ -18,7 +18,7 @@ Stav k 2. 10. 2026. ✅ = ověřeno, ⛔ = z cloudu nešlo ověřit (blokovaná 
 | Zdroj | Stav | Co zbývá |
 |---|---|---|
 | NASA Exoplanet Archive | ✅ text poděkování ověřen (acknowledge.html), doplněna citace Christiansen et al. 2025 | – |
-| JPL SSD (planety, měsíce, planetky, Horizons) | ✅ FAQ: k převzetí je potřeba svolení; kontakt contact-ssd@jpl.nasa.gov | e-mail odeslán 2. 10. 2026 → čeká se na odpověď |
+| JPL SSD (planety, měsíce, planetky, Horizons) | ✅ FAQ: k převzetí je potřeba svolení; kontakt contact-ssd@jpl.nasa.gov | ✅ **schváleno** – J. Giorgini (JPL SSD), 2. 10. 2026 22:56 UTC: „The data is unrestricted and the level of usage you describe appears supportable.“ Podmínka: fair-use API (https://ssd-api.jpl.nasa.gov/); znění poděkování nepředepsali |
 | JPL copyright (jpl.nasa.gov/copyrights.cfm) | ⛔ 403 z cloudu | 👤 přečíst v prohlížeči |
 | CDS/VizieR (kupy, mlhoviny, pulsary 2016, BlackCAT, Hipparcos, prach…) | ⛔ rights_uri https://cds.unistra.fr/vizier-org/licences_vizier.html | 👤 přečíst v prohlížeči; citace článků v aplikaci jsou |
 | DSS přes hips2fits (výřezy oblohy) | ⛔ http://archive.stsci.edu/dss/copyright.html | 👤 přečíst; při problému výřezy vypnout |
@@ -36,7 +36,7 @@ Stav k 2. 10. 2026. ✅ = ověřeno, ⛔ = z cloudu nešlo ověřit (blokovaná 
 - ostatní katalogy CDS jsou uzavřené publikace, aktualizace nemá smysl
 
 ## Rozhodnutí před prvním nasazením (👤)
-Svolení JPL zatím není. Možnosti:
+Svolení JPL přišlo 2. 10. 2026 (viz tabulka) – rozhodnutí níže je tím vyřešené. Původní možnosti:
 1. **Počkat na odpověď JPL** a nasadit vše najednou – **zvoleno 2. 10.**
 2. Nasadit hned bez dat JPL (pohled Sluneční soustava by zmizel do odpovědi; exoplanety, kupy, mlhoviny… zůstanou).
 3. Nasadit hned vše – v rozporu s FAQ JPL, nedoporučuji.
