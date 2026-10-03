@@ -226,8 +226,9 @@ def main() -> None:
     if not a.test:
         update_manifest({
             "id": "gaia500", "soubor": "gaia500/index.json", "nazev": "Hvězdy 100–500 pc (Gaia)",
-            "zdroj": "Gaia DR3 (gaiadr3.gaia_source), archiv ESA Gaia; dlaždice v repu galaxie-data",
-            "url": "https://gea.esac.esa.int/archive/",
+            "zdroj": "Gaia DR3 (gaiadr3.gaia_source), staženo ze zrcadla ARI Heidelberg (gaia.ari.uni-heidelberg.de, TAP); "
+                     "dlaždice v repu galaxie-data",
+            "url": "https://gaia.ari.uni-heidelberg.de/",
             "licence": "Data Gaia: ESA/Gaia/DPAC (podmínky ověřit, viz nasazeni/CHECKLIST.md)",
             "citace": "Gaia Collaboration, Vallenari A. et al. 2023, A&A 674, A1",
             "poznamka": "Výběr paralaxa nad 2 mas a s relativní chybou pod 10 %; vzdálenost = 1 / paralaxa. "

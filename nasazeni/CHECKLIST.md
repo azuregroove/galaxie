@@ -1,6 +1,6 @@
 # Etapa 6 – nasazení na GitHub Pages: checklist
 
-Stav k 2. 10. 2026. ✅ = ověřeno, ⛔ = z cloudu nešlo ověřit (blokovaná stránka), 👤 = rozhoduje/ověřuje Ráďa.
+Stav k 3. 10. 2026. ✅ = ověřeno, ⛔ = z cloudu nešlo ověřit (blokovaná stránka), 👤 = rozhoduje/ověřuje Ráďa.
 
 ## Technika
 - ✅ Repozitář `azuregroove/galaxie` je veřejný, Pages jsou v něm zapnuté (`has_pages`); co teď servírují a z jakého
@@ -23,6 +23,7 @@ Stav k 2. 10. 2026. ✅ = ověřeno, ⛔ = z cloudu nešlo ověřit (blokovaná 
 | CDS/VizieR (kupy, mlhoviny, pulsary 2016, BlackCAT, Hipparcos, prach…) | ⛔ rights_uri https://cds.unistra.fr/vizier-org/licences_vizier.html | 👤 přečíst v prohlížeči; citace článků v aplikaci jsou |
 | DSS přes hips2fits (výřezy oblohy) | ⛔ http://archive.stsci.edu/dss/copyright.html | 👤 přečíst; při problému výřezy vypnout |
 | Ramena z Gaia (SpiralMap) | ✅ balík vč. dat pod MIT, citace doplněna | ⛔ licence dat Gaia (ESA, cosmos.esa.int) |
+| Gaia DR3 – hvězdy 100–500 pc (repo `galaxie-data`) | staženo ze zrcadla ARI Heidelberg 3. 10.; citace Vallenari et al. 2023 a odkaz na ARI v manifestu | ⛔ 👤 licence dat Gaia (https://www.cosmos.esa.int/web/gaia-users/license) – vyhledávání uvádí CC BY-SA 3.0 IGO, neověřeno; 👤 zda ARI žádá vlastní poděkování (https://gaia.ari.uni-heidelberg.de/) |
 | Wikimedia Commons / Wikipedie | ✅ autor a licence každého obrázku z Commons API, text CC BY-SA 4.0 s odkazem na autory | – |
 | Wikidata | ✅ CC0 | – |
 | ATNF Pulsar Catalogue | ✅ volně s citací | data jsou verze 2016 → 👤 na PC `py pipeline\neutronove_hvezdy.py` |

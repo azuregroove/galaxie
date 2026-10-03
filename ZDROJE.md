@@ -196,6 +196,16 @@ Evidence katalogů, ze kterých mapa čerpá. Aktualizovat s každým novým kat
 - RUWE nad 1,4 – v kartě poznámka; hranice 1,4 je běžně používaná v dokumentaci Gaia, článek zde neověřen.
 - Velikost: grafika 2,35 MB (.bin.gz, načte se po zapnutí vrstvy), údaje karet 11 kousků po ~0,55 MB (načtou se po kliknutí).
 
+### Hvězdy 100–500 pc – Gaia DR3 (`pipeline/gaia500_stahni.py`, `pipeline/gaia500.py` → dlaždice v repu `galaxie-data`)
+- Gaia Collaboration, Vallenari A. et al. 2023, A&A 674, A1 (Gaia DR3); tabulka `gaiadr3.gaia_source`.
+- Staženo 3. 10. 2026 ze **zrcadla Gaia v ARI Heidelberg** (https://gaia.ari.uni-heidelberg.de/tap, asynchronní TAP),
+  protože archiv ESA neodpovídal. Způsob poděkování zrcadlu ARI (pokud nějaký žádají) z cloudu neověřen – stránka
+  blokovaná; podle výsledků vyhledávání odkazuje web ARI na návod ESA k citaci jednotlivých vydání Gaia.
+- Výběr: parallax > 2 mas a parallax_over_error > 10; vzdálenost = 1 / paralaxa; bez hvězd GCNS a paralaxy nad 10 mas
+  (ty kreslí vrstva Gaia 100 pc). 15 196 236 hvězd, 2 480 uzlů octree, celkem 205 MB.
+- Licence dat Gaia: podle výsledků vyhledávání ESA uvádí „ESA/Gaia/DPAC, CC BY-SA 3.0 IGO“ – **primární stránka
+  (cosmos.esa.int) z cloudu nedostupná, ověřit** (viz `nasazeni/CHECKLIST.md`).
+
 ### Sloupy stvoření – 3D rekonstrukce (`pipeline/sloupy.py` → `sloupy.json`, `sloupy.bin.gz`)
 - **Rekonstrukce, ne měřený tvar.** 83 192 bodů, 469 kB.
 - Obrys: tmavé pixely výřezu Pan-STARRS DR1 (HiPS `CDS/P/PanSTARRS/DR1/color-z-zg-g`, hips2fits 900 × 900 px, 0,36″/px,
