@@ -18,12 +18,14 @@ Historie repa se při každé aktualizaci přepíše jedním commitem (orphan), 
    $d = "$env:TEMP\galaxie-data"; Remove-Item -Recurse -Force $d -ErrorAction SilentlyContinue
    New-Item -ItemType Directory $d | Out-Null
    Copy-Item -Recurse public\data\gaia500 "$d\gaia500"
+   Copy-Item nasazeni\galaxie-data\README.md "$d\README.md"
    New-Item "$d\.nojekyll" -ItemType File | Out-Null
    cd $d; git init -b main; git add -A; git commit -m "Gaia 500 pc: dlaždice"
    git remote add origin https://github.com/azuregroove/galaxie-data.git
    git push --force origin main
    ```
-   `--force` je tu záměrně: repo má jen data a stará verze se zahazuje.
+   `--force` je tu záměrně: repo má jen data a stará verze se zahazuje. README (licence a citace dat Gaia) je
+   v `nasazeni/galaxie-data/README.md` – kopíruje se při každém publikování, jinak by ho orphan commit smazal.
 6. Ověřit: `https://azuregroove.github.io/galaxie-data/gaia500/index.json` vrací JSON a `"test": false`.
 
 ## Limity (GitHub, ověřeno 29. 9.)
