@@ -13,7 +13,7 @@ import type { Frame } from "../core/coords";
 import { STAR_CLASSES, starClass, type StarClassResult } from "../core/starClass";
 import { PointOctree } from "../core/spatial";
 import type { MapObject } from "../core/types";
-import { LY_PER_PC, escapeHtml, fmtLy, fmtNum, fmtPcFromLy } from "../core/units";
+import { LY_PER_PC, escapeHtml, fmt, fmtLy, fmtNum, fmtPcFromLy } from "../core/units";
 import type { Stage } from "../scene/stage";
 import { aFromPeriod, periodFromA } from "../system/kepler";
 import type { OrbitBody, SystemSpec } from "../system/types";
@@ -56,6 +56,8 @@ export interface Sys extends MapObject {
   /** index bodu v geometrii, −1 = bez vzdálenosti */
   point: number;
 }
+
+const planetWord = (n: number) => (n === 1 ? "planeta" : n >= 2 && n <= 4 ? "planety" : "planet");
 
 export class ExoplanetLayer implements Layer {
   readonly id = "exoplanety";
@@ -221,6 +223,14 @@ export class ExoplanetLayer implements Layer {
     }
     cand.sort((a, b) => a[0] - b[0]);
     this.nearby = cand.slice(0, LABEL_BUDGET).map(([, o]) => o);
+  }
+
+  /** Hlavička: bod je soustava, lidé ale čekají počet planet (6 375 planet ve 4 780 soustavách). */
+  countText(visible: MapObject[], filtered: boolean): string {
+    const np = visible.reduce((a, o) => a + (o as Sys).planets.length, 0);
+    const ns = visible.length;
+    const where = ns === 1 ? "v 1 soustavě" : `ve ${fmt(ns)}${filtered ? ` z ${fmt(this.objects.length)}` : ""} soustavách`;
+    return `${fmt(np)} ${planetWord(np)} ${where}`;
   }
 
   labelCandidates(stage: Stage): MapObject[] {

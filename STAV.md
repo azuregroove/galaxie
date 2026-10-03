@@ -465,6 +465,13 @@ Aktualizovat na konci každého sezení.
     100 % = dosavadní vzhled; nová volitelná metoda vrstvy `legendExtra()`
   - pushnuto s Ráďovým souhlasem (2. 10.) spolu s opravou `planetInfobox` do `claude/happy-albattani-vecsdh`
 
+- 2026-10-02 (cloud): **kontrola počtu exoplanet** (Ráďa: „v mapě 4 780, objeveno přes 6 000“) – žádná nechybí:
+  NASA Exoplanet Archive PSCompPars dnes (TAP z cloudu) = **6 375 planet, 4 780 hostitelských soustav, 6 347 se vzdáleností**;
+  `exoplanety.json` (stažen 1. 10.) má totéž – 6 375 planet ve 4 780 soustavách. Číslo 4 780 v hlavičce mapy jsou soustavy
+  (body), ne planety. Bez vzdálenosti 28 soustav po 1 planetě (jen v seznamu).
+  - hlavička teď píše „Exoplanety: 6 375 planet ve 4 780 soustavách“ (s filtrem „… ve N z 4 780 soustavách“);
+    volitelná metoda vrstvy `countText()`; build OK, ověřeno v prohlížeči; pushnuto s Ráďovým souhlasem (3. 10.)
+
 ## Rozdělané
 - Star Trek – možná vylepšení: (1) ~~MB `planetInfobox` v `startrek.py`~~ (hotovo 2. 10.); (2) výkon raymarchingu území na telefonu neověřen (max. 160 kroků);
   (3) třídy planet z MB někdy jako text („habitable“, „gas giant“) – sjednotit
@@ -474,7 +481,7 @@ Aktualizovat na konci každého sezení.
 - možné vylepšení: mapa prachu Edenhofer 2024 (Zenodo už povolené) místo / vedle Vergely 2022
 
 ## Další krok
-**Aktuální větev: `claude/happy-albattani-vecsdh`** (= busy-hypatia + Star Trek území a katalog, 2. 10.); předtím `claude/busy-hypatia-fvo0mb` (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` je stále na etapě 3.
+**Aktuální větev: `claude/happy-albattani-vecsdh`** (poslední commit bf87f1f = Star Trek: planetInfobox z MB, vyhlazená území, posuvník Hranice; = busy-hypatia + Star Trek území a katalog, 2. 10.); předtím `claude/busy-hypatia-fvo0mb` (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` je stále na etapě 3.
 Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve.
 Na PC: `git fetch origin`, `git switch claude/happy-albattani-vecsdh`, `git pull`, `npm install`, `npm run dev`.
 Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné nasazení) až po odpovědi JPL.
@@ -488,7 +495,7 @@ Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné
    „Nainstalovat“ a offline (DevTools → Network → Offline); po nasazení zkusit instalaci na telefonu.
    Ráďa na PC: zapnout „Gaia 100 pc“ v pohledu Okolí Slunce – plynulost na GPU a hlavně na telefonu (331 tis. bodů);
    případně snížit FAR_COUNT / NEAR_LY v `src/scene/gaia100.ts`.
-   Další: Ráďa zkontroluje Star Trek (správnost mocností), hledání hvězd Gaia podle ID, spárování s Jasnými hvězdami, etapa 8 (Capacitor)
+   Další: Ráďa zkontroluje Star Trek (správnost mocností; změny po opravě MB: Gemma → Romulané, Pi CMa → Klingoni, Epsilon Draconis bez příslušnosti; výkon území a posuvník Hranice na telefonu), hledání hvězd Gaia podle ID, spárování s Jasnými hvězdami, etapa 8 (Capacitor)
 5. Cloudové kredity: 2. 10. zbývalo 11 $ ze 100 – šetřit
 
 **Dlouhodobě (z 30. 9.):**

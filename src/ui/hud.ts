@@ -181,7 +181,9 @@ export class Hud {
   private updateSubtitle(): void {
     // vrstva s úplně vypnutými přepínači (např. fanouškovská Star Trek) do podtitulku nepatří
     const parts = this.layers.filter((L) => L.filters.some((f) => f.on)).map((L) => {
-      const n = L.objects.filter((o) => !o.hidden).length;
+      const vis = L.objects.filter((o) => !o.hidden);
+      if (L.countText) return `${L.name}: ${L.countText(vis, this.filters.active)}`;
+      const n = vis.length;
       return this.filters.active ? `${L.name}: ${fmt(n)} z ${fmt(L.objects.length)}` : `${L.name}: ${fmt(n)}`;
     });
     const vyrez = this.manifest.katalogy.some((k) => k.vyrez);

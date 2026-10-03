@@ -48,6 +48,8 @@ export interface Layer {
   applyFilter(f: FilterState): void;
   /** Objekty, které chtějí popisek při daném přiblížení, od nejdůležitějšího. O umístění rozhodnou Labels. */
   labelCandidates(stage: Stage): MapObject[];
+  /** volitelný text počtu do hlavičky místo pouhého počtu bodů (exoplanety: planety i soustavy) */
+  countText?(visible: MapObject[], filtered: boolean): string;
   /** volitelný ovládací prvek na konec řádku legendy (např. síla hranic území) */
   legendExtra?(): HTMLElement | null;
   cardHtml(o: MapObject): string;
