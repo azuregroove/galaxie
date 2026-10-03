@@ -134,6 +134,9 @@ Aktualizovat na konci každého sezení.
 
 ## Rozhodnutí
 - 2026-10-03: **Ráďa prošel licence a schválil sloučení do `main`** (= první veřejné nasazení)
+- 2026-10-03 18:42 UTC: **NASAZENO** – `main` posunut na 6e8e2c8 (fast-forward, 62 commitů), workflow „Nasazení na GitHub
+  Pages“ run 37145201433: build i deploy úspěšné. Web https://azuregroove.github.io/galaxie/ z cloudu neověřen (github.io 403)
+  → Ráďa ověří v prohlížeči.
 - 2026-10-03: **mapy temné hmoty z Euclidu: počkat na kompletní DR1 (plán ESA: polovina 2027)** – jde o kosmologickou
   strukturu za Galaxií (rozšíření rozsahu jako NAVRHY bod 12), ne o halo Mléčné dráhy; termíny jen z vyhledávání, neověřené u ESA
 - 2026-10-03: **svolení JPL SSD přišlo** (e-mail 2. 10.) → nasazení do `main` už neblokuje JPL, rozhodne Ráďa
@@ -552,12 +555,12 @@ Aktualizovat na konci každého sezení.
 - možné vylepšení: mapa prachu Edenhofer 2024 (Zenodo už povolené) místo / vedle Vergely 2022
 
 ## Další krok
-**Aktuální větev: `claude/happy-mccarthy-tjpz6v`** (3. 10.: oprava zdroje Gaia 500 pc → ARI, ZDROJE/CHECKLIST; dál pořád bod 0); předtím `claude/tender-cori-vkgixr` (3. 10.: Gaia 500 pc – 15,2 mil. hvězd v datovém repu, Sondy, svolení JPL; dál bod 0 = nasazení); předtím `claude/happy-albattani-vecsdh` (3. 10.: Star Trek území a katalog, oprava MB, vyhlazení, hlavička exoplanet, Radcliffeova vlna s kartou, příprava Gaia 500 pc; další krok = bod 0 níže); předtím `claude/busy-hypatia-fvo0mb` (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` je stále na etapě 3.
+**Aktuální větev: `claude/happy-mccarthy-tjpz6v`** (3. 10.: oprava zdroje Gaia 500 pc → ARI, ZDROJE/CHECKLIST; dál pořád bod 0); předtím `claude/tender-cori-vkgixr` (3. 10.: Gaia 500 pc – 15,2 mil. hvězd v datovém repu, Sondy, svolení JPL; dál bod 0 = nasazení); předtím `claude/happy-albattani-vecsdh` (3. 10.: Star Trek území a katalog, oprava MB, vyhlazení, hlavička exoplanet, Radcliffeova vlna s kartou, příprava Gaia 500 pc; další krok = bod 0 níže); předtím `claude/busy-hypatia-fvo0mb` (= vigilant-clarke + etapa 7 PWA, pushnuto 2. 10. s Ráďovým souhlasem). `main` = nasazená verze (6e8e2c8, 3. 10.).
 Nový chat: přečíst CLAUDE.md + tento soubor z téhle větve.
 Na PC: `git fetch origin`, `git switch claude/happy-mccarthy-tjpz6v`, `git pull`, `npm install`, `npm run dev`.
 Ráďa smí: commity a push do pracovní větve (2. 10.); do `main` (= veřejné nasazení) jen s jeho výslovným souhlasem (JPL už schválil).
 
-0. **NOVÝ CHAT – nasazení na Pages:** Ráďa prochází licence (CDS, DSS, data Gaia/ESA – odkazy v `nasazeni/CHECKLIST.md`;
+0. **NASAZENO 3. 10.** – zbývá ověřit web a telefon (níže). Původní znění: Ráďa prochází licence (CDS, DSS, data Gaia/ESA – odkazy v `nasazeni/CHECKLIST.md`;
    zdroj ARI u Gaia 500 pc doplněn 3. 10.; Ráďa ještě ověří, zda ARI žádá vlastní poděkování, a licenci Gaia –
    je-li CC BY-SA 3.0 IGO, přidat do repa `galaxie-data` README s uvedením autora a licence dlaždic). Pak **jen s jeho výslovným souhlasem** sloučit
    `claude/happy-mccarthy-tjpz6v` do `main` → workflow nasadí https://azuregroove.github.io/galaxie/. Po nasazení:
