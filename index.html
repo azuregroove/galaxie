@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="description" content="Interaktivní 3D mapa Mléčné dráhy: exoplanety, černé díry a další objekty s polohou vůči Slunci." />
+    <meta name="theme-color" content="#05070d" />
+    <title>Mapa Mléčné dráhy</title>
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <script type="module" crossorigin src="./assets/index-scPkF6XA.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CDsiuk0b.css">
+  <link rel="manifest" href="./manifest.webmanifest"></head>
+  <body>
+    <button class="skip" id="skip">Přejít na hledání a seznam objektů</button>
+    <div id="stage" role="img" aria-label="Trojrozměrná mapa Mléčné dráhy. Všechny objekty najdeš i v seznamu a hledání." aria-describedby="keysHelp"></div>
+    <div id="labels" aria-hidden="true"></div>
+    <div id="announce" class="sr-only" role="status" aria-live="polite"></div>
+    <div id="status" role="status">Načítám data…</div>
+    <div id="toast" role="status" hidden></div>
+    <div class="hud" id="update" role="status" hidden>
+      <span>Je k dispozici nová verze mapy, načte se po skončení letu nebo výletu.</span>
+      <button class="btn small" data-act="reload">Načíst</button>
+      <button class="btn small" data-act="later">Později</button>
+    </div>
+    <div class="hud" id="touchHint" hidden>
+      <p><b>1 prst</b> otáčení · <b>2 prsty</b> zoom a posun<br><b>klep</b> na objekt = přelet · <b>dvojklep</b> = přiblížit<br>kartu zavřeš tahem dolů</p>
+      <button class="btn">Rozumím</button>
+    </div>
+
+    <header class="hud">
+      <h1>Mapa Mléčné dráhy</h1>
+      <button class="btn small" id="listToggle" aria-expanded="false" aria-controls="listPanel">Seznam</button>
+    </header>
+
+    <aside class="hud" id="listPanel" aria-label="Seznam objektů">
+      <div class="listHead">
+        <input id="search" type="search" placeholder="Hledat hvězdu, planetu, černou díru…" autocomplete="off" aria-label="Hledat" />
+        <div class="listMeta">
+          <div class="count" id="listCount"></div>
+          <button class="btn small" id="filtersToggle" aria-expanded="false" aria-controls="filters">Filtry</button>
+        </div>
+      </div>
+      <div id="filters" hidden></div>
+      <div id="list" role="group" aria-label="Objekty"></div>
+    </aside>
+
+    <section class="hud" id="card" hidden aria-labelledby="cardTitle"></section>
+
+    <nav class="hud" id="bar" aria-label="Nástroje">
+      <div class="menuBtns">
+        <button class="btn" data-menu="popView" aria-expanded="false" aria-controls="popView">Pohled</button>
+        <button class="btn" data-menu="popLayers" aria-expanded="false" aria-controls="popLayers">Vrstvy</button>
+        <button class="btn" data-menu="popLook" aria-expanded="false" aria-controls="popLook">Zobrazení</button>
+        <button class="btn" data-menu="popTime" aria-expanded="false" aria-controls="popTime">Čas</button>
+        <button class="btn" data-menu="popExplore" aria-expanded="false" aria-controls="popExplore">Prozkoumat</button>
+        <button class="btn" data-menu="popMore" aria-expanded="false" aria-controls="popMore" aria-label="Další: Star Trek, sdílení, zdroje" title="Star Trek, sdílení, zdroje">⋯</button>
+      </div>
+      <span class="help" id="keysHelp">Tah = otáčení · kolečko = zoom · pravé tl. = posun · WASD/QE = let · klik = přelet · dvojklik = přiblížit<span class="keys"> · / = hledat · šipky = seznam · Esc = zavřít</span></span>
+      <div id="scale"><div id="scaleTxt">–</div><div id="scaleLine"></div><div id="readout"></div></div>
+    </nav>
+
+    <!-- nabídky z lišty; otevřená je vždy jen jedna (src/ui/menus.ts) -->
+    <section class="hud pop" id="popView" hidden aria-label="Pohled">
+      <div class="popHead"><h2>Pohled</h2><button class="popClose" aria-label="Zavřít">×</button></div>
+      <div class="btns">
+        <button class="btn" data-view="near">Okolí Slunce</button>
+        <button class="btn" data-view="sun">Slunce</button>
+        <button class="btn" data-view="top">Shora</button>
+        <button class="btn" data-view="edge">Z boku</button>
+        <button class="btn" data-view="gc">Centrum</button>
+      </div>
+    </section>
+
+    <section class="hud pop wide" id="popLayers" hidden aria-label="Vrstvy">
+      <div class="popHead"><h2>Vrstvy</h2><button class="popClose" aria-label="Zavřít">×</button></div>
+      <h3 class="popSub">Hvězdy Gaia</h3>
+      <div class="btns">
+        <button class="btn" id="gaia100" aria-pressed="false" title="331 tisíc hvězd do ~100 pc z Gaia Catalogue of Nearby Stars (Gaia Collaboration 2021); klik na hvězdu otevře kartu">Gaia 100 pc: vyp</button>
+        <button class="btn" id="gaia500" aria-pressed="false" title="Miliony hvězd 100–500 pc z Gaia DR3 (paralaxa s chybou pod 10 %), načítané po dlaždicích podle kamery; zapne i Gaia 100 pc">Gaia 500 pc: vyp</button>
+        <button class="btn" id="gaiaAll" aria-pressed="false" hidden title="Všechny hvězdy Gaia DR3 s paralaxou (~1,4 mld.), vzdálenosti Bailer-Jones 2021; jen na tomto PC, místo Gaia 500 pc">Gaia vše: vyp</button>
+      </div>
+      <h3 class="popSub">Stavba Galaxie</h3>
+      <div class="btns">
+        <button class="btn" id="gaiaArms" aria-pressed="false" title="Ramena podle dat Gaia: nadhustota mladých hvězd do 6 kpc od Slunce">Ramena Gaia: vyp</button>
+        <button class="btn" id="dust" aria-pressed="false" title="3D mapa mezihvězdného prachu – klikáním: Vergely et al. 2022 6 × 6 kpc, 3 × 3 kpc, pak nejpodrobnější Edenhofer et al. 2024 do 1,25 kpc od Slunce a nakonec táž mapa obarvená podle nejistoty">Prach: vyp</button>
+        <button class="btn" id="local" aria-pressed="false" title="Radcliffeova vlna (Konietzka et al. 2024), obálka Místní bubliny (O'Neill et al. 2024) a sporný Gouldův pás (Dzib et al. 2018)">Okolí: vyp</button>
+        <button class="btn" id="center" aria-pressed="false" title="Příčka a boule (Wegg et al. 2013, 2015), jaderný disk (Launhardt et al. 2002), Fermiho a eROSITA bubliny">Střed: vyp</button>
+        <button class="btn" id="streams" aria-pressed="false" title="141 hvězdných proudů v halu z knihovny galstreams (Mateu 2023); zlatavé z kulových hvězdokup, čárkované bez změřené vzdálenosti">Proudy: vyp</button>
+      </div>
+      <h3 class="popSub">Další</h3>
+      <div class="btns">
+        <button class="btn" id="constellations" aria-pressed="false" title="88 souhvězdí: obrazce ve 3D mezi skutečnými polohami hvězd (Stellarium, Hipparcos), hranice IAU a jména na obloze kolem Slunce">Souhvězdí: vyp</button>
+        <button class="btn" id="encounters" aria-pressed="false" title="Hvězdy, které proletí (nebo prolétly) blízko Slunce: 61 do 1 pc z Gaia DR3 (Bailer-Jones 2022) a dalších ~3 400 do 10 pc z Gaia DR2 (Bailer-Jones et al. 2018)">Průlety: vyp</button>
+        <button class="btn" id="probes" aria-pressed="true" title="Pioneer 10 a 11, Voyager 1 a 2, New Horizons: směr letu na 20 000 let dopředu (vidět po přiblížení ke Slunci); dráhy v pohledu Sluneční soustava">Sondy: zap</button>
+      </div>
+      <h3 class="popSub">Katalogy <span class="dim">· počet zobrazených · ▸ typy</span></h3>
+      <div class="legend" id="legend"></div>
+    </section>
+
+    <section class="hud pop" id="popLook" hidden aria-label="Zobrazení">
+      <div class="popHead"><h2>Zobrazení</h2><button class="popClose" aria-label="Zavřít">×</button></div>
+      <div class="btns">
+        <button class="btn" data-tog="labels" aria-pressed="true">Popisky</button>
+        <button class="btn" data-tog="ecl" aria-pressed="true">Ekliptika</button>
+        <button class="btn" data-tog="rings" aria-pressed="true">Kruhy</button>
+        <button class="btn" data-tog="grid" aria-pressed="true">Mřížka</button>
+        <button class="btn" data-tog="dims" aria-pressed="true">Rozměry</button>
+        <label class="armGain" title="Jas spirálních ramen (schematických)">Ramena <input id="armGain" type="range" min="0" max="7.5" step="0.1" aria-label="Jas ramen Galaxie" /><span id="armGainVal"></span></label>
+      </div>
+    </section>
+
+    <section class="hud pop" id="popTime" hidden aria-label="Čas">
+      <div class="popHead"><h2>Čas</h2><button class="popClose" aria-label="Zavřít">×</button></div>
+      <p class="popNote">Přímočarý pohyb hvězd vůči Slunci (Gaia 100 pc, jasné hvězdy, průlety); ostatní vrstvy stojí.</p>
+      <div class="armGain timeCtl"><button class="btn small" id="timePlay" aria-pressed="false" aria-label="Pustit čas">▶</button><input id="timeT" type="range" min="-1" max="1" step="0.001" value="0" aria-label="Čas v milionech let" /><span id="timeVal">dnes</span><button class="btn small" id="timeNow" data-keep>Dnes</button></div>
+    </section>
+
+    <section class="hud pop" id="popExplore" hidden aria-label="Prozkoumat">
+      <div class="popHead"><h2>Prozkoumat</h2><button class="popClose" aria-label="Zavřít">×</button></div>
+      <div class="btns">
+        <button class="btn" id="tours" title="Prohlídky s komentářem">Výlety ▸</button>
+        <button class="btn" id="timeline" title="Časová osa objevů exoplanet">Objevy</button>
+        <button class="btn" id="compare" title="Porovnání až 4 objektů: vzdálenosti, poloha, velikost; přidávají se tlačítkem v kartě">Porovnat ▸</button>
+      </div>
+    </section>
+
+    <section class="hud pop" id="popMore" hidden aria-label="Další">
+      <div class="popHead"><h2>Další</h2><button class="popClose" aria-label="Zavřít">×</button></div>
+      <div id="trekBox">
+        <h3 class="popSub">Star Trek <span class="dim">· fikce</span></h3>
+        <div class="btns">
+          <button class="btn" id="startrek" aria-pressed="false" title="Fanouškovská vrstva – fikce: území mocností ze Star Treku podle Memory Alpha a Memory Beta">Star Trek: vyp</button>
+          <button class="btn" id="voyage" title="Let hvězdnou lodí Star Treku po skutečné mapě: naplánuj zastávky, vyber loď a warp (fikce)">Let lodí ▸</button>
+          <button class="btn" id="trekCat" title="Katalog všech hvězd, soustav a planet Star Treku z Memory Alpha a Memory Beta (fikce)">Katalog ST</button>
+        </div>
+      </div>
+      <h3 class="popSub">Mapa</h3>
+      <div class="btns">
+        <button class="btn" id="share">Sdílet</button>
+        <button class="btn" id="about">Zdroje</button>
+      </div>
+    </section>
+
+  </body>
+</html>
