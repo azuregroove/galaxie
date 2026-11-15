@@ -1,0 +1,394 @@
+{
+  "schema": 1,
+  "poznamka": "Zástupné značky {d} (ly), {pc}, {voyager} a {z} (výška nad rovinou) doplní aplikace z dat objektu. Kontrola odkazů: pipeline/overit_vylety.py Anglické verze v polích *_en (Ráďa 3. 11.).",
+  "vylety": [
+    {
+      "id": "sousedstvi",
+      "nazev": "Naše sousedství",
+      "popis": "nejbližší hvězdy a jejich planety do 41 ly",
+      "zastavky": [
+        {
+          "o": "slunecni-soustava:Sluneční soustava",
+          "pohled": "near",
+          "nadpis": "Start: Slunce",
+          "text": "Jsme doma. Slunce je v mapě počátkem souřadnic a všechny vzdálenosti se měří od něj. Do centra Galaxie je odsud asi 26 600 světelných let (R₀ = 8,15 kpc).\n\nNa tomhle výletu zůstaneme v těsném okolí: nejvzdálenější zastávka je 40 světelných let daleko, zhruba šestisetina cesty do centra.",
+          "zdroj": "R₀ podle Reid et al. 2019 (ApJ 885, 131)",
+          "nadpis_en": "Start: the Sun",
+          "text_en": "We are home. The Sun is the origin of coordinates on the map and all distances are measured from it. The Galactic centre is about 26,600 light years away (R₀ = 8.15 kpc).\n\nOn this tour we stay close to home: the farthest stop is 40 light years away, roughly one six-hundredth of the way to the centre.",
+          "zdroj_en": "R₀ after Reid et al. 2019 (ApJ 885, 131)"
+        },
+        {
+          "o": "hvezdy:α¹ Cen",
+          "nadpis": "Alfa Centauri A a B",
+          "text": "Nejbližší hvězdná soustava, {d} od nás. Rychlostí sondy Voyager 1 by sem cesta trvala {voyager}.\n\nα Centauri A má spektrální typ G2 V stejně jako Slunce. Její průvodce α Centauri B je typu K1 V, tedy o něco chladnější.",
+          "zdroj": "Hipparcos (van Leeuwen 2007), Yale BSC5; rychlost Voyageru 1 z JPL Horizons",
+          "nadpis_en": "Alpha Centauri A and B",
+          "text_en": "The nearest star system, {d} from us. At the speed of the Voyager 1 probe the journey would take {voyager}.\n\nα Centauri A has spectral type G2 V, just like the Sun. Its companion α Centauri B is of type K1 V, so slightly cooler.",
+          "zdroj_en": "Hipparcos (van Leeuwen 2007), Yale BSC5; Voyager 1 speed from JPL Horizons"
+        },
+        {
+          "o": "exoplanety:Proxima Cen",
+          "nadpis": "Proxima Centauri",
+          "text": "Nejbližší hvězda vůbec, {d}. Červený trpaslík typu M5.5 V, na obloze kousek od Alfy Centauri. Pouhým okem ho neuvidíš, má jasnost jen 11 magnitud.\n\nMá dvě planety. Proxima b (objev 2016) má minimální hmotnost asi 1,1 Země a oběhne hvězdu za 11,2 dne. Proxima d (2025) je ještě lehčí, asi čtvrtina Země. Obě našli metodou radiálních rychlostí, která měří jen spodní mez hmotnosti. Kde leží vůči obyvatelné zóně, ukazuje schéma v kartě.",
+          "zdroj": "NASA Exoplanet Archive (PSCompPars)",
+          "nadpis_en": "Proxima Centauri",
+          "text_en": "The nearest star of all, {d}. A red dwarf of type M5.5 V, close to Alpha Centauri on the sky. You won't see it with the naked eye – its brightness is only magnitude 11.\n\nIt has two planets. Proxima b (discovered 2016) has a minimum mass of about 1.1 Earths and orbits the star in 11.2 days. Proxima d (2025) is even lighter, about a quarter of Earth. Both were found by the radial-velocity method, which measures only a lower limit of the mass. The diagram in the card shows where they lie relative to the habitable zone.",
+          "zdroj_en": "NASA Exoplanet Archive (PSCompPars)"
+        },
+        {
+          "o": "exoplanety:Barnard's star",
+          "nadpis": "Barnardova hvězda",
+          "text": "Červený trpaslík typu M3.5–4 V, {d} od nás. Ze všech hvězd katalogu Hipparcos se po obloze posouvá nejrychleji: 10,4″ za rok, takže vzdálenost rovnou průměru Měsíce urazí zhruba za 180 let.\n\nOd roku 2024 u ní metodou radiálních rychlostí našli čtyři malé planety (b, c, d, e). Všechny jsou lehčí než Země, minimální hmotnosti mají 0,19 až 0,34 Země.",
+          "zdroj": "NASA Exoplanet Archive (PSCompPars); vlastní pohyb Hipparcos (van Leeuwen 2007, VizieR I/311)",
+          "nadpis_en": "Barnard's Star",
+          "text_en": "A red dwarf of type M3.5–4 V, {d} from us. Of all the stars in the Hipparcos catalogue it moves across the sky the fastest: 10.4″ per year, so it covers the diameter of the Moon in about 180 years.\n\nSince 2024 four small planets (b, c, d, e) have been found around it by radial velocities. All are lighter than Earth, with minimum masses of 0.19 to 0.34 Earths.",
+          "zdroj_en": "NASA Exoplanet Archive (PSCompPars); proper motion Hipparcos (van Leeuwen 2007, VizieR I/311)"
+        },
+        {
+          "o": "hvezdy:Sirius A",
+          "nadpis": "Sirius",
+          "text": "Nejjasnější hvězda noční oblohy (V = −1,44), {d} od nás. Je to horká bílá hvězda spektrálního typu A1 V.\n\nMá průvodce Sirius B, bílého trpaslíka (spektrální typ DA1.9). Je to vyhaslé jádro hvězdy, která už svůj život prožila.",
+          "zdroj": "Hipparcos (van Leeuwen 2007), Yale BSC5; Sirius B: SIMBAD",
+          "nadpis_en": "Sirius",
+          "text_en": "The brightest star of the night sky (V = −1.44), {d} from us. It is a hot white star of spectral type A1 V.\n\nIt has a companion, Sirius B, a white dwarf (spectral type DA1.9) – the burnt-out core of a star that has already lived its life.",
+          "zdroj_en": "Hipparcos (van Leeuwen 2007), Yale BSC5; Sirius B: SIMBAD"
+        },
+        {
+          "o": "exoplanety:eps Eri",
+          "nadpis": "Epsilon Eridani",
+          "text": "Hvězda typu K2 V, {d} od nás. S teplotou 5 020 K je chladnější a menší než Slunce (5 772 K).\n\nObíhá ji planeta ε Eridani b s hmotností asi jednoho Jupiteru, jednou za 7,3 roku ve vzdálenosti 3,5 au, tedy blíž, než je Jupiter od Slunce (5,2 au).",
+          "zdroj": "NASA Exoplanet Archive (PSCompPars); teplota Slunce: IAU 2015 B3",
+          "nadpis_en": "Epsilon Eridani",
+          "text_en": "A K2 V star, {d} from us. At 5,020 K it is cooler and smaller than the Sun (5,772 K).\n\nIt is orbited by the planet ε Eridani b, with a mass of about one Jupiter, once every 7.3 years at 3.5 au – closer than Jupiter is to the Sun (5.2 au).",
+          "zdroj_en": "NASA Exoplanet Archive (PSCompPars); Sun's temperature: IAU 2015 B3"
+        },
+        {
+          "o": "exoplanety:TRAPPIST-1",
+          "nadpis": "TRAPPIST-1",
+          "text": "Ultrachladný červený trpaslík typu M8 V, {d} od nás. Má teplotu jen 2 566 K a poloměr 0,12 Slunce.\n\nObíhá ho sedm planet podobné velikosti jako Země (0,76 až 1,13 jejího poloměru), všechny objevené tranzitní metodou v letech 2016–2017. Celá soustava by se vešla dovnitř dráhy Merkuru: nejvzdálenější planeta h obíhá ve vzdálenosti 0,062 au, Merkur ve 0,39 au. Tlačítkem Soustava v kartě si pustíš jejich oběh.",
+          "zdroj": "NASA Exoplanet Archive (PSCompPars); dráha Merkuru: JPL (Standish)",
+          "nadpis_en": "TRAPPIST-1",
+          "text_en": "An ultracool red dwarf of type M8 V, {d} from us. Its temperature is only 2,566 K and its radius 0.12 of the Sun's.\n\nSeven planets of similar size to Earth (0.76 to 1.13 of its radius) orbit it, all discovered by the transit method in 2016–2017. The whole system would fit inside Mercury's orbit: the outermost planet h orbits at 0.062 au, Mercury at 0.39 au. The System button in the card plays their orbits.",
+          "zdroj_en": "NASA Exoplanet Archive (PSCompPars); Mercury's orbit: JPL (Standish)"
+        },
+        {
+          "pohled": "sun",
+          "nadpis": "Zpátky u Slunce",
+          "text": "Všechno, co jsme navštívili, se vejde do koule o poloměru 41 světelných let kolem Slunce. Z tohoto pohledu je vidět, jak malý kousek Galaxie to je: do jejího centra je to 26 600 světelných let.\n\nPokračovat můžeš výletem Černé díry Galaxie.",
+          "zdroj": "R₀ podle Reid et al. 2019",
+          "nadpis_en": "Back at the Sun",
+          "text_en": "Everything we visited fits inside a sphere of 41 light years around the Sun. From this view you can see what a tiny part of the Galaxy that is: its centre is 26,600 light years away.\n\nYou can continue with the tour Black holes of the Galaxy.",
+          "zdroj_en": "R₀ after Reid et al. 2019"
+        }
+      ],
+      "nazev_en": "Our neighbourhood",
+      "popis_en": "the nearest stars and their planets within 41 ly"
+    },
+    {
+      "id": "cerne-diry",
+      "nazev": "Černé díry Galaxie",
+      "popis": "od nejbližší známé po Sagittarius A* v centru",
+      "zastavky": [
+        {
+          "pohled": "top",
+          "nadpis": "Černé díry na mapě",
+          "text": "Vrstva Černé díry obsahuje potvrzené hvězdné černé díry, kandidáty z katalogu BlackCAT a Sagittarius A* v centru Galaxie.\n\nČernou díru samotnou vidět nejde. Většinu známých prozradil průvodce: hvězda, která kolem ní obíhá, nebo hmota, která z průvodce přetéká a padá do ní.",
+          "zdroj": "Wikipedie (údaje v mapě), BlackCAT – Corral-Santana et al. 2016",
+          "nadpis_en": "Black holes on the map",
+          "text_en": "The Black holes layer contains confirmed stellar black holes, candidates from the BlackCAT catalogue and Sagittarius A* at the centre of the Galaxy.\n\nA black hole itself cannot be seen. Most known ones were given away by a companion: a star orbiting it, or matter flowing over from the companion and falling in.",
+          "zdroj_en": "Wikipedia (values in the map), BlackCAT – Corral-Santana et al. 2016"
+        },
+        {
+          "o": "cerne-diry:Gaia BH1",
+          "nadpis": "Gaia BH1: nejbližší známá",
+          "text": "Nejbližší známá černá díra, {d} od nás, s hmotností asi 9,7 Slunce.\n\nJe „spící“: nic do ní nepadá, takže nezáří v rentgenu. Prozradil ji pohyb průvodce, hvězdy podobné Slunci s oběžnou dobou 186 dní, v datech družice Gaia.",
+          "zdroj": "Wikipedie (údaje v mapě); poloha SIMBAD",
+          "nadpis_en": "Gaia BH1: the nearest known",
+          "text_en": "The nearest known black hole, {d} from us, with a mass of about 9.7 Suns.\n\nIt is “dormant”: nothing falls into it, so it does not shine in X-rays. It was given away by the motion of its companion, a Sun-like star with an orbital period of 186 days, in data from the Gaia satellite.",
+          "zdroj_en": "Wikipedia (values in the map); position SIMBAD"
+        },
+        {
+          "o": "cerne-diry:Gaia BH3",
+          "nadpis": "Gaia BH3: nejhmotnější hvězdná",
+          "text": "{d} od nás. S hmotností 32,7 Slunce je to nejhmotnější známá hvězdná černá díra v Galaxii.\n\nTaky spí a taky ji našla Gaia. Průvodce je stará hvězda chudá na kovy (prvky těžší než helium) s oběžnou dobou 11,6 roku.",
+          "zdroj": "Wikipedie (údaje v mapě); poloha SIMBAD",
+          "nadpis_en": "Gaia BH3: the most massive stellar one",
+          "text_en": "{d} from us. With a mass of 32.7 Suns it is the most massive known stellar black hole in the Galaxy.\n\nIt is dormant too, and Gaia found it as well. Its companion is an old metal-poor star (poor in elements heavier than helium) with an orbital period of 11.6 years.",
+          "zdroj_en": "Wikipedia (values in the map); position SIMBAD"
+        },
+        {
+          "o": "cerne-diry:Cygnus X-1",
+          "nadpis": "Cygnus X-1: první objevená",
+          "text": "Historicky první objevená černá díra, hmotnost 15–21 Sluncí. Vzdálenost je jen odhad, 6 000 až 8 000 světelných let.\n\nNa rozdíl od spících ji prozrazuje rentgenové záření. Hmota z průvodce, modrého veleobra, padá k černé díře a přitom se zahřeje tak, že září v rentgenu.",
+          "zdroj": "Wikipedie (údaje v mapě); poloha SIMBAD",
+          "nadpis_en": "Cygnus X-1: the first discovered",
+          "text_en": "Historically the first black hole discovered, with a mass of 15–21 Suns. The distance is only an estimate, 6,000 to 8,000 light years.\n\nUnlike the dormant ones it is given away by X-rays. Matter from its companion, a blue supergiant, falls towards the black hole and heats up so much that it shines in X-rays.",
+          "zdroj_en": "Wikipedia (values in the map); position SIMBAD"
+        },
+        {
+          "o": "cerne-diry:V404 Cygni",
+          "nadpis": "V404 Cygni",
+          "text": "Na obloze kousek od Cygnu X-1, obě leží v souhvězdí Labutě. Hmotnost 9–12 Sluncí, vzdálenost {d}.\n\nTu má změřenou radiovou paralaxou, tedy geometricky, ne odhadem. V roce 2015 prodělala mohutné vzplanutí.",
+          "zdroj": "Wikipedie (údaje v mapě); poloha SIMBAD",
+          "nadpis_en": "V404 Cygni",
+          "text_en": "Close to Cygnus X-1 on the sky; both lie in the constellation Cygnus. Mass 9–12 Suns, distance {d}.\n\nThat distance is measured by radio parallax, i.e. geometrically, not estimated. In 2015 it had a huge outburst.",
+          "zdroj_en": "Wikipedia (values in the map); position SIMBAD"
+        },
+        {
+          "o": "cerne-diry:Omega Centauri (IMBH)",
+          "nadpis": "Omega Centauri: černá díra střední hmotnosti?",
+          "text": "Omega Centauri, {d} od nás, je největší kulová hvězdokupa Galaxie. V jejím středu je od roku 2024 kandidát na černou díru střední hmotnosti, aspoň 8 200 Sluncí.\n\nTakové černé díry by vyplnily mezeru mezi hvězdnými a supermasivními. Výsledek je ale dál zpochybňován, proto je v mapě jako kandidát.",
+          "zdroj": "Wikipedie (údaje v mapě)",
+          "nadpis_en": "Omega Centauri: an intermediate-mass black hole?",
+          "text_en": "Omega Centauri, {d} from us, is the largest globular cluster of the Galaxy. Since 2024 there has been a candidate intermediate-mass black hole at its centre, at least 8,200 Suns.\n\nSuch black holes would fill the gap between stellar and supermassive ones. The result is still disputed, so it is shown on the map as a candidate.",
+          "zdroj_en": "Wikipedia (values in the map)"
+        },
+        {
+          "o": "cerne-diry:Sagittarius A*",
+          "nadpis": "Sagittarius A*: srdce Galaxie",
+          "text": "{d} od nás, v samém centru Galaxie. Supermasivní černá díra o hmotnosti 4,15 milionu Sluncí, asi 127 000krát víc než Gaia BH3.\n\nTady výlet končí. Zpátky ke Slunci tě vrátí tlačítko Slunce v liště.",
+          "zdroj": "Wikipedie (údaje v mapě); R₀ podle Reid et al. 2019",
+          "nadpis_en": "Sagittarius A*: the heart of the Galaxy",
+          "text_en": "{d} from us, at the very centre of the Galaxy. A supermassive black hole of 4.15 million Suns, about 127,000 times more than Gaia BH3.\n\nThe tour ends here. The Sun in the Galaxy button under View takes you back to the Sun.",
+          "zdroj_en": "Wikipedia (values in the map); R₀ after Reid et al. 2019"
+        }
+      ],
+      "nazev_en": "Black holes of the Galaxy",
+      "popis_en": "from the nearest known one to Sagittarius A* at the centre"
+    },
+    {
+      "id": "hvezdy-zivot",
+      "nazev": "Zrození a smrt hvězd",
+      "popis": "od mlhovin, kde hvězdy vznikají, po pulsary",
+      "zastavky": [
+        {
+          "o": "mlhoviny:Orion A",
+          "nadpis": "Mlhovina v Orionu: porodnice hvězd",
+          "text": "Oblast H II Orion A, {d} od nás. Vzdálenost je z paralaxy maserů, s rozpětím zhruba 1 000 až 1 600 ly. Mladé horké hvězdy tu ionizují okolní vodík a ten svítí, proto se jí říká emisní mlhovina.\n\nKolem je obří molekulové mračno Orion (v mapě jako samostatný objekt, 1 370 ly podle Zucker et al. 2020). Z takových chladných mračen plynu a prachu hvězdy vznikají.",
+          "zdroj": "WISE katalog oblastí H II (Anderson et al. 2014); mračno: Zucker et al. 2020",
+          "nadpis_en": "The Orion Nebula: a stellar nursery",
+          "text_en": "The H II region Orion A, {d} from us. The distance comes from maser parallaxes, with a range of roughly 1,000 to 1,600 ly. Young hot stars ionise the surrounding hydrogen, which glows – that is why it is called an emission nebula.\n\nAround it lies the giant Orion molecular cloud (a separate object on the map, 1,370 ly after Zucker et al. 2020). Stars form from such cold clouds of gas and dust.",
+          "zdroj_en": "WISE catalogue of H II regions (Anderson et al. 2014); cloud: Zucker et al. 2020"
+        },
+        {
+          "o": "hvezdokupy:NGC 6611",
+          "nadpis": "Orlí mlhovina: kupa v plenkách",
+          "text": "Hvězdokupa NGC 6611 v Orlí mlhovině, {d} od nás. Je jí jen asi 6 milionů let, v datech Gaia k ní patří 504 hvězd.\n\nHvězdy z jednoho mračna se rodí pohromadě, jako kupa. Nejhmotnější z nich svým zářením mlhovinu kolem sebe postupně rozfoukávají.",
+          "zdroj": "Hunt & Reffert 2023 (Gaia DR3)",
+          "nadpis_en": "The Eagle Nebula: a cluster in its infancy",
+          "text_en": "The star cluster NGC 6611 in the Eagle Nebula, {d} from us. It is only about 6 million years old; in Gaia data it has 504 member stars.\n\nStars from one cloud are born together, as a cluster. The most massive of them gradually blow the surrounding nebula away with their radiation.",
+          "zdroj_en": "Hunt & Reffert 2023 (Gaia DR3)"
+        },
+        {
+          "o": "hvezdokupy:Melotte 22",
+          "nadpis": "Plejády",
+          "text": "Plejády, {d} od nás. Je jim asi 120 milionů let a Gaia k nim přiřadila 1 721 hvězd. Mlhovina, ze které vznikly, už je pryč.",
+          "zdroj": "Hunt & Reffert 2023 (Gaia DR3)",
+          "nadpis_en": "The Pleiades",
+          "text_en": "The Pleiades, {d} from us. They are about 120 million years old and Gaia assigned 1,721 stars to them. The nebula they formed from is already gone.",
+          "zdroj_en": "Hunt & Reffert 2023 (Gaia DR3)"
+        },
+        {
+          "o": "hvezdokupy:Melotte 25",
+          "nadpis": "Hyády: kupa, která se rozchází",
+          "text": "Hyády, {d} od nás, jsou nejbližší z kup, které katalog Hunt & Reffert 2023 označuje za spolehlivé. Je jim asi 580 milionů let, skoro pětkrát víc než Plejádám, a Gaia u nich našla 927 členů.\n\nOtevřené hvězdokupy nejsou napořád. Gravitace Galaxie je postupně rozebírá a jejich hvězdy se rozptýlí mezi ostatní.",
+          "zdroj": "Hunt & Reffert 2023 (Gaia DR3)",
+          "nadpis_en": "The Hyades: a cluster drifting apart",
+          "text_en": "The Hyades, {d} from us, are the nearest of the clusters that the Hunt & Reffert 2023 catalogue marks as reliable. They are about 580 million years old, almost five times older than the Pleiades, and Gaia found 927 members.\n\nOpen clusters do not last forever. The Galaxy's gravity gradually pulls them apart and their stars disperse among the others.",
+          "zdroj_en": "Hunt & Reffert 2023 (Gaia DR3)"
+        },
+        {
+          "o": "hvezdy:Betelgeuze",
+          "nadpis": "Betelgeuze: veleobr na sklonku života",
+          "text": "Rudý veleobr α Orionis, spektrální typ M1-2 Ia-Iab. Podle paralaxy Hipparcos je {d} daleko, ale s nejistotou zhruba 440 až 570 ly. Vzdálenosti veleobrů se měří špatně.\n\nVeleobři jsou hmotné hvězdy v pozdní fázi vývoje. Ty nejhmotnější končí výbuchem supernovy.",
+          "zdroj": "Hipparcos (van Leeuwen 2007), Yale BSC5",
+          "nadpis_en": "Betelgeuse: a supergiant near the end of its life",
+          "text_en": "The red supergiant α Orionis, spectral type M1-2 Ia-Iab. From the Hipparcos parallax it is {d} away, but with an uncertainty of roughly 440 to 570 ly. Distances to supergiants are hard to measure.\n\nSupergiants are massive stars in a late stage of evolution. The most massive end in a supernova explosion.",
+          "zdroj_en": "Hipparcos (van Leeuwen 2007), Yale BSC5"
+        },
+        {
+          "o": "mlhoviny:NGC7293",
+          "nadpis": "Helix: tichý konec",
+          "text": "Planetární mlhovina Helix, {d} od nás, s průměrem asi 2,7 ly. Vzdálenost je z paralaxy centrální hvězdy podle Gaia.\n\nHvězda s hmotností podobnou Slunci na konci života odhodí vnější vrstvy a z jádra zůstane bílý trpaslík. Tak jednou skončí i Slunce.",
+          "zdroj": "González-Santamaría et al. 2021 (Gaia EDR3)",
+          "nadpis_en": "Helix: a quiet end",
+          "text_en": "The Helix planetary nebula, {d} from us, about 2.7 ly across. The distance comes from the Gaia parallax of the central star.\n\nAt the end of its life a star of about the Sun's mass sheds its outer layers and its core is left as a white dwarf. That is how the Sun will end too.",
+          "zdroj_en": "González-Santamaría et al. 2021 (Gaia EDR3)"
+        },
+        {
+          "o": "neutronove-hvezdy:J0534+2200",
+          "nadpis": "Krabí pulsar: po výbuchu",
+          "text": "Neutronová hvězda v Krabí mlhovině, {d} od nás. Vzdálenost je ale z disperzní míry, takže může být o desítky procent vedle. Otočí se zhruba 30krát za sekundu (perioda 0,0334 s).\n\nMlhovina je pozůstatek supernovy z roku 1054 (v katalogu Green jako SN1054). Stáří odvozené z brzdění rotace je 1 260 let, skutečné asi 970 let. Takový odhad je jen přibližný.",
+          "zdroj": "ATNF Pulsar Catalogue 2016 (CDS B/psr); Green 2025 (CDS VII/297)",
+          "nadpis_en": "The Crab Pulsar: after the explosion",
+          "text_en": "A neutron star in the Crab Nebula, {d} from us. The distance, however, comes from the dispersion measure, so it can be off by tens of percent. It spins about 30 times per second (period 0.0334 s).\n\nThe nebula is the remnant of the supernova of 1054 (SN1054 in the Green catalogue). The age derived from the spin-down is 1,260 years, the true age about 970 years – such an estimate is only approximate.",
+          "zdroj_en": "ATNF Pulsar Catalogue 2016 (CDS B/psr); Green 2025 (CDS VII/297)"
+        },
+        {
+          "o": "neutronove-hvezdy:J0835-4510",
+          "nadpis": "Pulsar Vela",
+          "text": "Další neutronová hvězda, {d} od nás (také z disperzní míry). Otočí se 11krát za sekundu a její stáří z brzdění rotace je 11 300 let. Kolem ní je pozůstatek supernovy Vela.\n\nNeutronová hvězda je jádro hmotné hvězdy zhroucené při supernově. Ještě hmotnější hvězdy končí jako černé díry, o těch je výlet Černé díry Galaxie.",
+          "zdroj": "ATNF Pulsar Catalogue 2016 (CDS B/psr)",
+          "nadpis_en": "The Vela Pulsar",
+          "text_en": "Another neutron star, {d} from us (also from the dispersion measure). It spins 11 times per second and its spin-down age is 11,300 years. Around it is the Vela supernova remnant.\n\nA neutron star is the core of a massive star collapsed in a supernova. Even more massive stars end as black holes – see the tour Black holes of the Galaxy.",
+          "zdroj_en": "ATNF Pulsar Catalogue 2016 (CDS B/psr)"
+        }
+      ],
+      "nazev_en": "Birth and death of stars",
+      "popis_en": "from nebulae where stars form to pulsars"
+    },
+    {
+      "id": "stavba",
+      "nazev": "Stavba Galaxie",
+      "popis": "ramena, Slunce v disku, halo a centrum",
+      "zastavky": [
+        {
+          "pohled": "top",
+          "nadpis": "Galaxie shora",
+          "text": "Díváš se na Galaxii shora. Spirální ramena jsou podle modelu Reid et al. 2019, sestaveného z přesných paralax 199 maserů v oblastech, kde vznikají hvězdy. Model má 7 ramen.\n\nPokrývá hlavně tu polovinu Galaxie, kterou z naší polohy vidíme. Ztlumené úseky doložily jen masery mimo rozsah modelu. Příčka uprostřed a výplň disku jsou jen schematické. Jas ramen nastavíš posuvníkem Ramena v liště.",
+          "zdroj": "Reid et al. 2019 (ApJ 885, 131), parametry přes SpiralMap",
+          "nadpis_en": "The Galaxy from above",
+          "text_en": "You are looking at the Galaxy from above. The spiral arms follow the model of Reid et al. 2019, built from precise parallaxes of 199 masers in star-forming regions. The model has 7 arms.\n\nIt mainly covers the half of the Galaxy we can see from our position. The dimmed sections are supported only by masers outside the model's range. The bar in the middle and the disc fill are only schematic. Set the arm brightness with the Arms slider under Display.",
+          "zdroj_en": "Reid et al. 2019 (ApJ 885, 131), parameters via SpiralMap"
+        },
+        {
+          "o": "slunecni-soustava:Sluneční soustava",
+          "pohled": "sun",
+          "nadpis": "Kde jsme my",
+          "text": "Slunce je 26 600 ly od centra, u vnitřního okraje Místního ramene (Orionu). Podle parametrů modelu je střed ramene v našem směru asi 1 200 ly dál od centra než my.\n\nSměrem k centru je asi 4 400 ly daleko rameno Střelce–Kýlu, na opačnou stranu asi 6 300 ly rameno Persea.",
+          "zdroj": "Reid et al. 2019, vzdálenosti spočtené z parametrů modelu",
+          "nadpis_en": "Where we are",
+          "text_en": "The Sun is 26,600 ly from the centre, near the inner edge of the Local (Orion) Arm. By the model's parameters the arm's centre in our direction is about 1,200 ly farther from the centre than we are.\n\nTowards the centre, about 4,400 ly away, lies the Sagittarius–Carina Arm; on the opposite side, about 6,300 ly away, the Perseus Arm.",
+          "zdroj_en": "Reid et al. 2019, distances computed from the model parameters"
+        },
+        {
+          "pohled": "edge",
+          "nadpis": "Z boku: tenký disk",
+          "text": "Z boku je vidět, jak plochý je disk Galaxie, ve kterém leží ramena i Slunce. Slunce klade mapa pro jednoduchost přesně do roviny.\n\nKulové hvězdokupy disk nedodržují. Ze 165 kulových hvězdokup v mapě jich 103 leží víc než 1 kpc (3 260 ly) od roviny a tvoří kolem Galaxie řídké kulové halo.",
+          "zdroj": "Baumgardt & Vasiliev 2021 (počty spočtené z dat mapy)",
+          "nadpis_en": "Edge-on: a thin disc",
+          "text_en": "Edge-on you can see how flat the Galaxy's disc is – the disc in which the arms and the Sun lie. For simplicity the map puts the Sun exactly in the plane.\n\nGlobular clusters do not keep to the disc. Of the 165 globular clusters on the map, 103 lie more than 1 kpc (3,260 ly) from the plane and form a sparse spherical halo around the Galaxy.",
+          "zdroj_en": "Baumgardt & Vasiliev 2021 (counts computed from the map data)"
+        },
+        {
+          "o": "hvezdokupy:NGC 6205",
+          "vzdalenost": 25000,
+          "smer": [
+            0.02,
+            0.05,
+            1
+          ],
+          "nadpis": "M13: hvězdokupa v halu",
+          "text": "Kulová hvězdokupa M13, {d} od nás a {z}. Patří k těm, které leží daleko mimo disk, v halu.",
+          "zdroj": "Baumgardt & Vasiliev 2021",
+          "nadpis_en": "M13: a cluster in the halo",
+          "text_en": "The globular cluster M13, {d} from us and {z}. It is one of those lying far outside the disc, in the halo.",
+          "zdroj_en": "Baumgardt & Vasiliev 2021"
+        },
+        {
+          "o": "cerne-diry:Sagittarius A*",
+          "pohled": "gc",
+          "nadpis": "Centrum Galaxie",
+          "text": "V samém centru je Sagittarius A*, supermasivní černá díra se 4,15 milionu hmotností Slunce.\n\nKolem centra je příčka, protáhlé zhuštění hvězd. V mapě je jen schematická a její úhel (asi 27°) zatím nemám ověřený.",
+          "zdroj": "Wikipedie (údaje v mapě); R₀ podle Reid et al. 2019",
+          "nadpis_en": "The Galactic centre",
+          "text_en": "At the very centre is Sagittarius A*, a supermassive black hole of 4.15 million solar masses.\n\nAround the centre is the bar, an elongated concentration of stars. On the map it is only schematic and its angle (about 27°) is not yet verified.",
+          "zdroj_en": "Wikipedia (values in the map); R₀ after Reid et al. 2019"
+        },
+        {
+          "pohled": "top",
+          "nadpis": "Ramena z dat",
+          "text": "Model ramen je jedna věc, data druhá. Tlačítkem Gaia v liště zapneš mapy nadhustoty mladých hvězd do 6 kpc od Slunce (Poggio et al. 2021 nebo Gaia DR3), tedy ramena tak, jak je vidí přímo Gaia.\n\nPaprsky od Slunce v těch mapách jsou nejspíš vliv chyb ve vzdálenostech a prachu, ne skutečná stavba.",
+          "zdroj": "Poggio et al. 2021; Gaia DR3 (Drimmel et al. 2023)",
+          "nadpis_en": "Arms from data",
+          "text_en": "The arm model is one thing, the data another. The Gaia arms button under Layers turns on maps of the overdensity of young stars within 6 kpc of the Sun (Poggio et al. 2021 or Gaia DR3) – the arms as Gaia sees them directly.\n\nThe rays from the Sun in those maps are most likely the effect of distance errors and dust, not real structure.",
+          "zdroj_en": "Poggio et al. 2021; Gaia DR3 (Drimmel et al. 2023)"
+        }
+      ],
+      "nazev_en": "Structure of the Galaxy",
+      "popis_en": "arms, the Sun in the disc, the halo and the centre"
+    },
+    {
+      "id": "obyvatelne",
+      "nazev": "Obyvatelné světy",
+      "popis": "planety velikosti Země v obyvatelné zóně",
+      "zastavky": [
+        {
+          "pohled": "near",
+          "nadpis": "Co je obyvatelná zóna",
+          "text": "Obyvatelná zóna je pás vzdáleností od hvězdy, kde by na povrchu kamenné planety mohla být kapalná voda. Mapa ji počítá podle Kopparapu et al. 2014 a kreslí ji do schématu v kartě (konzervativní a optimistickou).\n\nK 1. 10. 2026 je v datech v konzervativní zóně 24 planet menších než 2 poloměry Země, 20 z nich u červených trpaslíků. Malé planety u malých hvězd se hledají nejsnáz. Poloha v zóně ale neznamená, že je tam život, ani že má planeta atmosféru.",
+          "zdroj": "Kopparapu et al. 2014; NASA Exoplanet Archive (PSCompPars), počty spočtené z dat mapy",
+          "nadpis_en": "What the habitable zone is",
+          "text_en": "The habitable zone is the range of distances from a star where liquid water could exist on the surface of a rocky planet. The map computes it after Kopparapu et al. 2014 and draws it in the diagram in the card (conservative and optimistic).\n\nAs of 1 October 2026 the data contain 24 planets smaller than 2 Earth radii in the conservative zone, 20 of them around red dwarfs. Small planets around small stars are the easiest to find. Being in the zone does not mean there is life, nor that the planet has an atmosphere.",
+          "zdroj_en": "Kopparapu et al. 2014; NASA Exoplanet Archive (PSCompPars), counts computed from the map data"
+        },
+        {
+          "o": "exoplanety:Proxima Cen",
+          "nadpis": "Proxima b",
+          "text": "Nejbližší planeta v obyvatelné zóně, {d} od nás. Obíhá ve vzdálenosti 0,048 au, zóna je tu mezi 0,037 a 0,074 au. Rovnovážná teplota (bez vlivu atmosféry) je 218 K, asi −55 °C.\n\nPřed hvězdou nepřechází, takže známe jen minimální hmotnost (1,1 Země). Poloměr v datech je odhad z hmotnosti.",
+          "zdroj": "NASA Exoplanet Archive (PSCompPars); zóna Kopparapu et al. 2014",
+          "nadpis_en": "Proxima b",
+          "text_en": "The nearest planet in a habitable zone, {d} from us. It orbits at 0.048 au; the zone here lies between 0.037 and 0.074 au. Its equilibrium temperature (without an atmosphere) is 218 K, about −55 °C.\n\nIt does not pass in front of the star, so only its minimum mass is known (1.1 Earths). The radius in the data is an estimate from the mass.",
+          "zdroj_en": "NASA Exoplanet Archive (PSCompPars); zone Kopparapu et al. 2014"
+        },
+        {
+          "o": "exoplanety:Teegarden's Star",
+          "nadpis": "Teegardenova hvězda c",
+          "text": "Velmi chladný červený trpaslík typu M7 V (3 034 K), {d} od nás. Planetu c našli v roce 2019 radiálními rychlostmi na observatoři Calar Alto. Minimální hmotnost má 1,05 Země, oběhne za 11,4 dne a rovnovážnou teplotu má 209 K.",
+          "zdroj": "NASA Exoplanet Archive (PSCompPars)",
+          "nadpis_en": "Teegarden's Star c",
+          "text_en": "A very cool red dwarf of type M7 V (3,034 K), {d} from us. Planet c was found in 2019 by radial velocities at the Calar Alto Observatory. Its minimum mass is 1.05 Earths, it orbits in 11.4 days and its equilibrium temperature is 209 K.",
+          "zdroj_en": "NASA Exoplanet Archive (PSCompPars)"
+        },
+        {
+          "o": "exoplanety:TRAPPIST-1",
+          "nadpis": "TRAPPIST-1 e, f, g",
+          "text": "Tři ze sedmi planet TRAPPIST-1, {d} od nás, leží v konzervativní obyvatelné zóně: e, f a g. Protože přecházejí před hvězdou, mají změřené poloměry: 0,92, 1,05 a 1,13 poloměru Země.\n\nHvězda má 2 566 K, těsně pod hranicí platnosti výpočtu zóny (2 600 K). Hranice zóny jsou tu proto jen extrapolované.",
+          "zdroj": "NASA Exoplanet Archive (PSCompPars); zóna Kopparapu et al. 2014",
+          "nadpis_en": "TRAPPIST-1 e, f, g",
+          "text_en": "Three of the seven TRAPPIST-1 planets, {d} from us, lie in the conservative habitable zone: e, f and g. Because they transit the star, their radii are measured: 0.92, 1.05 and 1.13 Earth radii.\n\nThe star is 2,566 K, just below the validity limit of the zone calculation (2,600 K), so the zone boundaries here are only extrapolated.",
+          "zdroj_en": "NASA Exoplanet Archive (PSCompPars); zone Kopparapu et al. 2014"
+        },
+        {
+          "o": "exoplanety:LHS 1140",
+          "nadpis": "LHS 1140 b",
+          "text": "Super-Země u červeného trpaslíka, {d} od nás. Objevili ji v roce 2017 přechody přes hvězdu (projekt MEarth). Má poloměr 1,73 a hmotnost 5,6 Země, takže průměrnou hustotu asi 1,1násobek Země. Oběhne za 24,7 dne.",
+          "zdroj": "NASA Exoplanet Archive (PSCompPars), hustota spočtená z poloměru a hmotnosti",
+          "nadpis_en": "LHS 1140 b",
+          "text_en": "A super-Earth around a red dwarf, {d} from us. It was discovered in 2017 from transits (the MEarth project). Its radius is 1.73 and its mass 5.6 Earths, giving a mean density of about 1.1 times Earth's. It orbits in 24.7 days.",
+          "zdroj_en": "NASA Exoplanet Archive (PSCompPars), density computed from radius and mass"
+        },
+        {
+          "o": "exoplanety:TOI-700",
+          "nadpis": "TOI-700 d",
+          "text": "Planeta velikosti Země (1,14 jejího poloměru), {d} od nás. Objevila ji družice TESS v roce 2020. Oběhne červeného trpaslíka za 37,4 dne a rovnovážnou teplotu má 269 K, asi −4 °C.",
+          "zdroj": "NASA Exoplanet Archive (PSCompPars)",
+          "nadpis_en": "TOI-700 d",
+          "text_en": "An Earth-sized planet (1.14 of its radius), {d} from us. It was discovered by the TESS satellite in 2020. It orbits a red dwarf in 37.4 days and its equilibrium temperature is 269 K, about −4 °C.",
+          "zdroj_en": "NASA Exoplanet Archive (PSCompPars)"
+        },
+        {
+          "o": "exoplanety:Kepler-442",
+          "nadpis": "Kepler-442 b",
+          "text": "Daleko, {d} od nás. Družice Kepler tu v roce 2015 našla planetu s poloměrem 1,34 Země. Obíhá oranžovou hvězdu (4 400 K, třída K podle teploty) jednou za 112 dní.\n\nRychlostí Voyageru 1 by sem cesta trvala {voyager}.",
+          "zdroj": "NASA Exoplanet Archive (PSCompPars); rychlost Voyageru 1 z JPL Horizons",
+          "nadpis_en": "Kepler-442 b",
+          "text_en": "Far away, {d} from us. In 2015 the Kepler satellite found a planet here with a radius of 1.34 Earths. It orbits an orange star (4,400 K, class K by temperature) once every 112 days.\n\nAt the speed of Voyager 1 the journey would take {voyager}.",
+          "zdroj_en": "NASA Exoplanet Archive (PSCompPars); Voyager 1 speed from JPL Horizons"
+        },
+        {
+          "o": "slunecni-soustava:Sluneční soustava",
+          "pohled": "near",
+          "nadpis": "A Země?",
+          "text": "Ze všech těchhle světů je zatím jediný, o kterém víme, že je obydlený, ten náš. U ostatních neznáme ani to, jestli mají atmosféru. Odpovědi mají hledat dalekohledy, které měří světlo procházející atmosférami planet.",
+          "zdroj": "bez číselných údajů",
+          "nadpis_en": "And Earth?",
+          "text_en": "Of all these worlds, the only one we know to be inhabited so far is our own. For the others we do not even know whether they have an atmosphere. Answers are to come from telescopes that measure light passing through planetary atmospheres.",
+          "zdroj_en": "no numerical values"
+        }
+      ],
+      "nazev_en": "Habitable worlds",
+      "popis_en": "Earth-sized planets in the habitable zone"
+    }
+  ]
+}
